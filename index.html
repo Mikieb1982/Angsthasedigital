@@ -58,6 +58,10 @@
         #lightbox-overlay {
             transition: opacity 0.3s ease-in-out;
         }
+        /* Ensure lightbox buttons are clickable */
+        #lightbox-overlay button {
+             cursor: pointer;
+        }
     </style>
 </head>
 <body class="bg-white text-gray-800 antialiased">
@@ -206,57 +210,162 @@
         </div>
     </footer>
 
-    <div id="lightbox-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden z-50 p-4 cursor-pointer">
+    <div id="lightbox-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden z-50 p-4 cursor-default"> {/* Changed cursor */}
+        {/* Added Prev/Next Buttons */}
+        <button id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold p-2 bg-black bg-opacity-30 rounded-full hover:bg-opacity-50 focus:outline-none hidden sm:block">&lt;</button> {/* Hide on small screens initially */}
         <img id="lightbox-image" src="" alt="Enlarged View" class="max-w-full max-h-full object-contain block">
+        <button id="lightbox-next" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold p-2 bg-black bg-opacity-30 rounded-full hover:bg-opacity-50 focus:outline-none hidden sm:block">&gt;</button> {/* Hide on small screens initially */}
         <button id="lightbox-close" class="absolute top-5 right-6 text-white text-4xl leading-none font-bold hover:text-gray-300 focus:outline-none">&times;</button>
     </div>
 
     <script>
-        // Get Lightbox Elements
+        // --- Lightbox Functionality ---
+
+        // DOM Elements
         const lightboxOverlay = document.getElementById('lightbox-overlay');
         const lightboxImage = document.getElementById('lightbox-image');
         const lightboxClose = document.getElementById('lightbox-close');
-
-        // Get all clickable gallery images
+        const lightboxPrev = document.getElementById('lightbox-prev');
+        const lightboxNext = document.getElementById('lightbox-next');
         const galleryItems = document.querySelectorAll('.gallery-item-clickable');
+
+        // State Variables
+        let galleryImageSources = [];
+        let currentImageIndex = -1;
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        // --- Initialization ---
+
+        // Populate gallery sources and add index data attribute
+        galleryItems.forEach((item, index) => {
+            galleryImageSources.push(item.src);
+            item.setAttribute('data-index', index);
+            item.addEventListener('click', openLightbox); // Add listener here
+        });
+
+        // --- Core Functions ---
+
+        // Function to display image at a specific index
+        function showImageAtIndex(index) {
+            // Validate index
+            if (index < 0 || index >= galleryImageSources.length) {
+                console.error("Invalid image index requested:", index);
+                return;
+            }
+            // Update image source and current index
+            lightboxImage.src = galleryImageSources[index];
+            currentImageIndex = index;
+
+            // Update button visibility
+            lightboxPrev.classList.toggle('hidden', index === 0); // Hide prev if first image
+            lightboxNext.classList.toggle('hidden', index === galleryImageSources.length - 1); // Hide next if last image
+            // Show buttons on larger screens if not hidden by index logic
+             if (window.innerWidth >= 640) { // sm breakpoint or adjust as needed
+                 if (index > 0) lightboxPrev.classList.remove('hidden');
+                 if (index < galleryImageSources.length - 1) lightboxNext.classList.remove('hidden');
+             } else {
+                 // Ensure buttons stay hidden on small screens if they were hidden by index logic
+                 if (index === 0) lightboxPrev.classList.add('hidden');
+                 if (index === galleryImageSources.length - 1) lightboxNext.classList.add('hidden');
+             }
+        }
 
         // Function to open the lightbox
         function openLightbox(event) {
-            const imgSrc = event.target.src; // Get the src of the clicked image
-            if (imgSrc) {
-                lightboxImage.src = imgSrc; // Set the src for the large image view
+            const clickedIndex = parseInt(event.target.getAttribute('data-index'), 10);
+            if (!isNaN(clickedIndex)) {
+                showImageAtIndex(clickedIndex); // Show the clicked image
                 lightboxOverlay.classList.remove('hidden'); // Show the overlay
+            } else {
+                console.error("Could not get index for clicked item:", event.target);
             }
         }
 
         // Function to close the lightbox
         function closeLightbox() {
             lightboxOverlay.classList.add('hidden'); // Hide the overlay
-            lightboxImage.src = ""; // Clear the image src (optional)
+            lightboxImage.src = ""; // Clear the image src
+            currentImageIndex = -1; // Reset index
         }
 
-        // Add click listeners to gallery items
-        galleryItems.forEach(item => {
-            item.addEventListener('click', openLightbox);
-        });
+        // --- Navigation Functions ---
 
-        // Add click listener for the close button
+        function showPreviousImage() {
+            if (currentImageIndex > 0) {
+                showImageAtIndex(currentImageIndex - 1);
+            }
+        }
+
+        function showNextImage() {
+             if (currentImageIndex < galleryImageSources.length - 1) {
+                showImageAtIndex(currentImageIndex + 1);
+            }
+        }
+
+        // --- Event Listeners ---
+
+        // Close button
         lightboxClose.addEventListener('click', closeLightbox);
 
-        // Add click listener to the overlay background to close it
+        // Previous button
+        lightboxPrev.addEventListener('click', showPreviousImage);
+
+        // Next button
+        lightboxNext.addEventListener('click', showNextImage);
+
+        // Click on overlay background to close
         lightboxOverlay.addEventListener('click', function(event) {
-            // Close only if the click is directly on the overlay, not the image itself
             if (event.target === lightboxOverlay) {
                 closeLightbox();
             }
         });
 
-         // Add keyboard support (Escape key to close)
-         document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape' && !lightboxOverlay.classList.contains('hidden')) {
-                closeLightbox();
+        // Keyboard navigation (Arrows and Escape)
+        document.addEventListener('keydown', function(event) {
+            if (lightboxOverlay.classList.contains('hidden')) return; // Do nothing if lightbox is hidden
+
+            switch (event.key) {
+                case 'Escape':
+                    closeLightbox();
+                    break;
+                case 'ArrowLeft':
+                    showPreviousImage();
+                    break;
+                case 'ArrowRight':
+                    showNextImage();
+                    break;
             }
         });
+
+        // --- Touch Swipe Functionality ---
+
+        lightboxImage.addEventListener('touchstart', (e) => {
+            // Prevent default only if needed, e.g., to stop page scroll while swiping image
+            // e.preventDefault();
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true }); // Use passive listener if preventDefault is not needed
+
+        lightboxImage.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipeGesture();
+        }, { passive: true });
+
+        function handleSwipeGesture() {
+            const swipeThreshold = 50; // Minimum distance for a swipe
+            const distance = touchEndX - touchStartX;
+
+            if (distance > swipeThreshold) {
+                // Swiped Right (Previous image)
+                showPreviousImage();
+            } else if (distance < -swipeThreshold) {
+                // Swiped Left (Next image)
+                showNextImage();
+            }
+            // Reset touch coordinates
+            touchStartX = 0;
+            touchEndX = 0;
+        }
 
     </script>
 
