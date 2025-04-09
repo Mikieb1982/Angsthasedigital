@@ -51,7 +51,7 @@
 </head>
 <body class="bg-white text-gray-800 antialiased">
 
-    <header class="py-6 px-4 md:px-8 border-b border-gray-200 sticky top-0 z-20 bg-white/80 backdrop-blur-sm"> {/* Added sticky positioning and background for header */}
+    <header class="py-6 px-4 md:px-8 border-b border-gray-200 sticky top-0 z-20 bg-white/80 backdrop-blur-sm">
         <div class="container mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png"
@@ -62,10 +62,9 @@
             </div>
             <nav>
                 <ul class="flex space-x-4 md:space-x-6 text-gray-600">
-                    {/* Updated href for Gallery link */}
                     <li><a href="#gallery" class="hover:text-black rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500">Gallery</a></li>
-                    <li><a href="#" class="hover:text-black rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500">About</a></li>
-                    <li><a href="#" class="hover:text-black rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500">Contact</a></li>
+                    <li><a href="#about-style" class="hover:text-black rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500">About</a></li> {/* Updated About link */}
+                    <li><a href="#contact" class="hover:text-black rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500">Contact</a></li> {/* Updated Contact link */}
                 </ul>
             </nav>
         </div>
@@ -73,7 +72,7 @@
 
     <main class="container mx-auto px-4 md:px-8 py-16 relative z-10">
 
-        <section class="mb-20 text-center pt-16"> {/* Added padding-top to account for sticky header */}
+        <section class="mb-20 text-center pt-16">
              <div class="w-full h-64 md:h-96 bg-gray-100 rounded-lg flex items-center justify-center mb-8 overflow-hidden border border-gray-200">
                  <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/2_t9vs7f.png"
                       alt="Hero Artwork"
@@ -118,7 +117,7 @@
            </div>
         </section>
 
-        <section class="mb-20 max-w-4xl mx-auto text-gray-700">
+        <section id="about-style" class="mb-20 max-w-4xl mx-auto text-gray-700 pt-16 -mt-16"> {/* Added id, padding-top and negative margin-top for scroll offset */}
              <h3 class="text-3xl font-bold mb-6 text-center text-black">About My Art Style</h3>
              <p class="mb-4">
                 My digital art originates from my personal photographs, often capturing scenes from familiar places here in Germany – from the streets of Potsdam and the Bad Belzig area to the unique landscapes of the Rügen coast. Each image undergoes extensive digital processing and synthesis, a technique I use to transform these moments from my photographs. My aim is less about strict realism and more focused on evoking a specific mood and atmosphere inherent in the scene.
@@ -131,7 +130,7 @@
              </p>
         </section>
 
-        <section id="gallery" class="mb-20 pt-16 -mt-16"> {/* Added id, padding-top and negative margin-top for scroll offset */}
+        <section id="gallery" class="mb-20 pt-16 -mt-16">
             <h3 class="text-3xl font-bold mb-8 text-center text-black">Gallery</h3>
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                  <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
@@ -164,7 +163,24 @@
                  <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
                     <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209007/10_to7taw.png" alt="Artwork 13" class="gallery-img" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
                 </div>
+                {/* Added featured images to gallery */}
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/2_t9vs7f.png" alt="Artwork 14" class="gallery-img" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/7_eiddxy.png" alt="Café Corner, Potsdam Night" class="gallery-img" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/9_gkmvef.png" alt="Woodhouse, Baabe" class="gallery-img" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
             </div>
+        </section>
+
+        {/* Contact Section Placeholder - Added id="contact" */}
+        <section id="contact" class="mb-20 pt-16 -mt-16">
+             <h3 class="text-3xl font-bold mb-8 text-center text-black">Contact</h3>
+             <p class="text-center text-gray-700">Contact information or form can go here.</p>
+             {/* Example: <p class="text-center text-gray-700">Email: your.email@example.com</p> */}
         </section>
 
     </main>
