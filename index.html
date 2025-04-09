@@ -139,7 +139,6 @@
         <section id="gallery" class="mb-20 pt-16 -mt-16">
             <h3 class="text-3xl font-bold mb-8 text-center text-black">Gallery</h3>
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                 {/* Added class="gallery-item-clickable" to each gallery image */}
                  <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
                     <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/5_ulpq6j.png" alt="Artwork 4" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
                 </div>
@@ -184,8 +183,10 @@
 
         <section id="contact" class="mb-20 pt-16 -mt-16">
              <h3 class="text-3xl font-bold mb-8 text-center text-black">Contact</h3>
-             <p class="text-center text-gray-700">Contact information or form can go here.</p>
-             {/* Example: <p class="text-center text-gray-700">Email: your.email@example.com</p> */}
+             {/* Updated Contact Info */}
+             <p class="text-center text-gray-700">
+                Email: <a href="mailto:angsthasedigitalstudio@gmail.com" class="text-gray-800 hover:text-black underline">angsthasedigitalstudio@gmail.com</a>
+             </p>
         </section>
 
     </main>
