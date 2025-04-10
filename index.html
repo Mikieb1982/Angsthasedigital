@@ -66,12 +66,13 @@
 </head>
 <body class="bg-white text-gray-800 antialiased">
 
-    <header class="py-6 px-4 md:px-8 border-b border-gray-200 sticky top-0 z-20 bg-white/80 backdrop-blur-sm">
+    <header class="py-6 px-4 md:px-8 border-b border-gray-200 sticky top-0 z-30 bg-white/80 backdrop-blur-sm">
         <div class="container mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png"
                      alt="Angsthase Logo"
                      class="w-10 h-10 rounded-full object-cover border border-gray-200">
+
                 <h1 class="text-2xl md:text-3xl font-bold text-black">Angsthase Digital Art</h1>
             </div>
             <nav>
@@ -87,16 +88,38 @@
     <main class="container mx-auto px-4 md:px-8 py-16 relative z-10">
 
         <section class="mb-20 text-center pt-16">
-             <div class="w-full h-64 md:h-96 bg-gray-100 rounded-lg flex items-center justify-center mb-8 overflow-hidden border border-gray-200">
-                 <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/2_t9vs7f.png"
-                      alt="Hero Artwork"
-                      class="w-full h-full object-cover"
-                      onerror="this.onerror=null; this.src='https://placehold.co/1200x400/F3F4F6/1F2937?text=Image+Error'; this.alt='Image failed to load';">
+             {/* Container for the pile */}
+             <div class="relative w-full h-[400px] md:h-[500px] mb-8 flex items-center justify-center">
+                 {/* Image 1 (Bottom) - Smaller, repositioned, new rotation */}
+                 <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/5_ulpq6j.png"
+                      alt="Scattered Artwork 1"
+                      class="absolute w-1/2 sm:w-1/3 lg:w-1/4 max-w-sm h-auto object-contain rounded-lg shadow-lg transform rotate-[6deg] z-0"
+                      style="top: 5%; left: 20%;"
+                      onerror="this.style.display='none';">
+                 {/* Image 2 - Smaller, repositioned, new rotation */}
+                 <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/8_vtftql.png"
+                      alt="Scattered Artwork 2"
+                      class="absolute w-1/2 sm:w-1/3 lg:w-1/4 max-w-sm h-auto object-contain rounded-lg shadow-lg transform rotate-[-3deg] z-10"
+                       style="top: 20%; left: 45%;"
+                      onerror="this.style.display='none';">
+                 {/* Image 3 - Smaller, repositioned, new rotation */}
+                  <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209002/6_typwgx.png"
+                      alt="Scattered Artwork 3"
+                      class="absolute w-1/2 sm:w-1/3 lg:w-1/4 max-w-sm h-auto object-contain rounded-lg shadow-lg transform rotate-[4deg] z-20"
+                       style="top: 35%; left: 15%;"
+                      onerror="this.style.display='none';">
+                 {/* Image 4 (Top) - Smaller, repositioned, new rotation */}
+                 <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/4_null04.png"
+                      alt="Scattered Artwork 4"
+                      class="absolute w-1/2 sm:w-1/3 lg:w-1/4 max-w-sm h-auto object-contain rounded-lg shadow-lg transform rotate-[-5deg] z-30"
+                      style="top: 50%; left: 40%;"
+                      onerror="this.style.display='none';">
              </div>
-            <h2 class="text-3xl md:text-4xl font-bold mb-4 text-black">Welcome to Angsthase Digital Art</h2>
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 text-black mt-8">Welcome to Angsthase Digital Art</h2>
             <p class="text-gray-700 max-w-2xl mx-auto">Exploring themes through digital mediums. Browse the gallery to see the latest creations.</p>
         </section>
 
+        {/* Content Section 1 - Project Spotlight (Image Offset) */}
         <section class="mb-20 flex flex-col md:flex-row items-center gap-8 md:gap-12">
             <div class="md:w-1/2 text-gray-700">
                 <h3 class="text-2xl font-bold mb-4 text-black">Project Spotlight</h3>
@@ -107,13 +130,14 @@
                     The focus is on capturing a specific feeling of quiet solitude often found in illuminated structures after dark. Digital brushwork aims to evoke mood rather than precise detail, blending observed reality with a more expressive interpretation of light and shadow.
                 </p>
             </div>
-            <div class="md:w-1/2">
+            <div class="md:w-1/2 md:-mr-8 lg:-mr-12">
                  <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/7_eiddxy.png"
-                     alt="Artwork Example 1: Café Corner, Potsdam Night" class="w-full h-auto rounded-lg border border-gray-200"
+                     alt="Artwork Example 1: Café Corner, Potsdam Night" class="w-full h-auto rounded-lg border border-gray-200 block"
                      onerror="this.onerror=null; this.src='https://placehold.co/600x400/E5E7EB/1F2937?text=Image+Error'; this.alt='Image failed to load';">
             </div>
         </section>
 
+        {/* Content Section 2 (Image Offset) */}
         <section class="mb-20 flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12">
              <div class="md:w-1/2 text-gray-700">
                 <h3 class="text-2xl font-bold mb-4 text-black">Another Piece / About</h3>
@@ -124,13 +148,14 @@
                     The focus is on the interplay of light on the wooden surfaces and the surrounding environment, rendered with distinct painterly textures characteristic of the digital synthesis process. It aims to convey the quiet feeling of this specific place, blending observed reality with an expressive, atmospheric interpretation.
                  </p>
             </div>
-           <div class="md:w-1/2">
+           <div class="md:w-1/2 md:-ml-8 lg:-ml-12">
                 <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/9_gkmvef.png"
                      alt="Artwork Example 2: Woodhouse, Baabe" class="w-full h-auto rounded-lg border border-gray-200"
                      onerror="this.onerror=null; this.src='https://placehold.co/600x400/E5E7EB/1F2937?text=Image+Error'; this.alt='Image failed to load';">
            </div>
         </section>
 
+        {/* Art Style Section */}
         <section id="about-style" class="mb-20 max-w-4xl mx-auto text-gray-700 pt-16 -mt-16">
              <h3 class="text-3xl font-bold mb-6 text-center text-black">About The Art Style</h3>
              <p class="mb-4">
@@ -144,23 +169,6 @@
              </p>
         </section>
 
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 100 10"
-          preserveAspectRatio="none"
-          style="display: block; width: 100%; height: 20px;" /* Adjust height */
-          aria-hidden="true"
-          role="separator"
-          class="my-12 text-gray-400" /* Tailwind: margin, color. Changed from my-6 text-gray-500 */
-          >
-          <path
-            d="M0 5 L5 4 L10 6 L15 5 L20 4 L25 6 L30 5 L35 4 L40 6 L45 5 L50 4 L55 6 L60 5 L65 4 L70 6 L75 5 L80 4 L85 6 L90 5 L95 4 L100 5"
-            stroke="currentColor"
-            stroke-width="1" /* Adjust line thickness */
-            fill="none"
-            vector-effect="non-scaling-stroke"
-          />
-        </svg>
         <section id="gallery" class="mb-20 pt-16 -mt-16">
             <h3 class="text-3xl font-bold mb-8 text-center text-black">Gallery</h3>
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
@@ -206,23 +214,6 @@
             </div>
         </section>
 
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 100 10"
-          preserveAspectRatio="none"
-          style="display: block; width: 100%; height: 20px;" /* Adjust height */
-          aria-hidden="true"
-          role="separator"
-          class="my-12 text-gray-400" /* Tailwind: margin, color */
-          >
-          <path
-            d="M0 5 L5 4 L10 6 L15 5 L20 4 L25 6 L30 5 L35 4 L40 6 L45 5 L50 4 L55 6 L60 5 L65 4 L70 6 L75 5 L80 4 L85 6 L90 5 L95 4 L100 5"
-            stroke="currentColor"
-            stroke-width="1" /* Adjust line thickness */
-            fill="none"
-            vector-effect="non-scaling-stroke"
-          />
-        </svg>
         <section id="contact" class="mb-20 pt-16 -mt-16">
              <h3 class="text-3xl font-bold mb-8 text-center text-black">Contact</h3>
              <p class="text-center text-gray-700">
@@ -406,4 +397,3 @@
 
 </body>
 </html>
-
