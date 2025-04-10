@@ -72,7 +72,6 @@
                 <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png"
                      alt="Angsthase Logo"
                      class="w-10 h-10 rounded-full object-cover border border-gray-200">
-
                 <h1 class="text-2xl md:text-3xl font-bold text-black">Angsthase Digital Art</h1>
             </div>
             <nav>
@@ -145,6 +144,23 @@
              </p>
         </section>
 
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 100 10"
+          preserveAspectRatio="none"
+          style="display: block; width: 100%; height: 20px;" /* Adjust height */
+          aria-hidden="true"
+          role="separator"
+          class="my-12 text-gray-400" /* Tailwind: margin, color. Changed from my-6 text-gray-500 */
+          >
+          <path
+            d="M0 5 L5 4 L10 6 L15 5 L20 4 L25 6 L30 5 L35 4 L40 6 L45 5 L50 4 L55 6 L60 5 L65 4 L70 6 L75 5 L80 4 L85 6 L90 5 L95 4 L100 5"
+            stroke="currentColor"
+            stroke-width="1" /* Adjust line thickness */
+            fill="none"
+            vector-effect="non-scaling-stroke"
+          />
+        </svg>
         <section id="gallery" class="mb-20 pt-16 -mt-16">
             <h3 class="text-3xl font-bold mb-8 text-center text-black">Gallery</h3>
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
@@ -190,6 +206,23 @@
             </div>
         </section>
 
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 100 10"
+          preserveAspectRatio="none"
+          style="display: block; width: 100%; height: 20px;" /* Adjust height */
+          aria-hidden="true"
+          role="separator"
+          class="my-12 text-gray-400" /* Tailwind: margin, color */
+          >
+          <path
+            d="M0 5 L5 4 L10 6 L15 5 L20 4 L25 6 L30 5 L35 4 L40 6 L45 5 L50 4 L55 6 L60 5 L65 4 L70 6 L75 5 L80 4 L85 6 L90 5 L95 4 L100 5"
+            stroke="currentColor"
+            stroke-width="1" /* Adjust line thickness */
+            fill="none"
+            vector-effect="non-scaling-stroke"
+          />
+        </svg>
         <section id="contact" class="mb-20 pt-16 -mt-16">
              <h3 class="text-3xl font-bold mb-8 text-center text-black">Contact</h3>
              <p class="text-center text-gray-700">
@@ -210,11 +243,10 @@
         </div>
     </footer>
 
-    <div id="lightbox-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden z-50 p-4 cursor-default"> {/* Changed cursor */}
-        {/* Added Prev/Next Buttons */}
-        <button id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold p-2 bg-black bg-opacity-30 rounded-full hover:bg-opacity-50 focus:outline-none hidden sm:block">&lt;</button> {/* Hide on small screens initially */}
+    <div id="lightbox-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden z-50 p-4 cursor-default">
+        <button id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold p-2 bg-black bg-opacity-30 rounded-full hover:bg-opacity-50 focus:outline-none hidden sm:block">&lt;</button>
         <img id="lightbox-image" src="" alt="Enlarged View" class="max-w-full max-h-full object-contain block">
-        <button id="lightbox-next" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold p-2 bg-black bg-opacity-30 rounded-full hover:bg-opacity-50 focus:outline-none hidden sm:block">&gt;</button> {/* Hide on small screens initially */}
+        <button id="lightbox-next" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold p-2 bg-black bg-opacity-30 rounded-full hover:bg-opacity-50 focus:outline-none hidden sm:block">&gt;</button>
         <button id="lightbox-close" class="absolute top-5 right-6 text-white text-4xl leading-none font-bold hover:text-gray-300 focus:outline-none">&times;</button>
     </div>
 
@@ -257,18 +289,11 @@
             lightboxImage.src = galleryImageSources[index];
             currentImageIndex = index;
 
-            // Update button visibility
-            lightboxPrev.classList.toggle('hidden', index === 0); // Hide prev if first image
-            lightboxNext.classList.toggle('hidden', index === galleryImageSources.length - 1); // Hide next if last image
-            // Show buttons on larger screens if not hidden by index logic
-             if (window.innerWidth >= 640) { // sm breakpoint or adjust as needed
-                 if (index > 0) lightboxPrev.classList.remove('hidden');
-                 if (index < galleryImageSources.length - 1) lightboxNext.classList.remove('hidden');
-             } else {
-                 // Ensure buttons stay hidden on small screens if they were hidden by index logic
-                 if (index === 0) lightboxPrev.classList.add('hidden');
-                 if (index === galleryImageSources.length - 1) lightboxNext.classList.add('hidden');
-             }
+            // Update button visibility based on index and screen size
+            const isSmallScreen = window.innerWidth < 640; // Tailwind 'sm' breakpoint
+
+            lightboxPrev.classList.toggle('hidden', index === 0 || isSmallScreen);
+            lightboxNext.classList.toggle('hidden', index === galleryImageSources.length - 1 || isSmallScreen);
         }
 
         // Function to open the lightbox
@@ -277,6 +302,7 @@
             if (!isNaN(clickedIndex)) {
                 showImageAtIndex(clickedIndex); // Show the clicked image
                 lightboxOverlay.classList.remove('hidden'); // Show the overlay
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
             } else {
                 console.error("Could not get index for clicked item:", event.target);
             }
@@ -287,6 +313,7 @@
             lightboxOverlay.classList.add('hidden'); // Hide the overlay
             lightboxImage.src = ""; // Clear the image src
             currentImageIndex = -1; // Reset index
+            document.body.style.overflow = ''; // Restore background scrolling
         }
 
         // --- Navigation Functions ---
@@ -341,31 +368,39 @@
         // --- Touch Swipe Functionality ---
 
         lightboxImage.addEventListener('touchstart', (e) => {
-            // Prevent default only if needed, e.g., to stop page scroll while swiping image
-            // e.preventDefault();
+            // Record starting X position of touch
             touchStartX = e.changedTouches[0].screenX;
-        }, { passive: true }); // Use passive listener if preventDefault is not needed
+        }, { passive: true }); // Use passive listener for better scroll performance
 
         lightboxImage.addEventListener('touchend', (e) => {
+            // Record ending X position of touch
             touchEndX = e.changedTouches[0].screenX;
-            handleSwipeGesture();
+            handleSwipeGesture(); // Process the swipe
         }, { passive: true });
 
         function handleSwipeGesture() {
-            const swipeThreshold = 50; // Minimum distance for a swipe
+            const swipeThreshold = 50; // Minimum horizontal distance to be considered a swipe
             const distance = touchEndX - touchStartX;
 
             if (distance > swipeThreshold) {
-                // Swiped Right (Previous image)
+                // Swiped Right (show previous image)
                 showPreviousImage();
             } else if (distance < -swipeThreshold) {
-                // Swiped Left (Next image)
+                // Swiped Left (show next image)
                 showNextImage();
             }
-            // Reset touch coordinates
+            // Reset touch coordinates for the next swipe
             touchStartX = 0;
             touchEndX = 0;
         }
+
+        // --- Window Resize Listener ---
+        // Re-evaluate button visibility on resize (e.g., rotating a tablet)
+        window.addEventListener('resize', () => {
+            if (!lightboxOverlay.classList.contains('hidden')) {
+                 showImageAtIndex(currentImageIndex); // Re-run logic to show/hide buttons based on new size
+            }
+        });
 
     </script>
 
