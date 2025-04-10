@@ -52,7 +52,6 @@
             background-size: contain; /* Show whole logo, scaled down */
             background-attachment: fixed; /* Keep in place on scroll */
             opacity: 0.25; /* Set fixed opacity to 25% */
-            /* Removed transition - no longer needed for fixed opacity */
         }
 
         /* Basic transition for lightbox */
@@ -79,7 +78,6 @@
 <body class="bg-white text-gray-800 antialiased">
 
     <header class="py-6 px-4 md:px-8 border-b border-gray-200 sticky top-0 z-30 bg-white/80 backdrop-blur-sm">
-        {/* Header content remains the same */}
         <div class="container mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png"
@@ -98,27 +96,22 @@
         </div>
     </header>
 
-    {/* Hero Section - Moved outside main container for full width, adjusted padding */}
-    <section class="mb-20 text-center pt-16"> {/* Reduced top padding */}
-         {/* Container for the single hero image - now full width */}
+    <section class="mb-20 text-center pt-16">
          <div class="w-full h-64 md:h-96 bg-gray-100 flex items-center justify-center mb-8 overflow-hidden">
-             {/* Single hero image */}
+             {/* Changed object-cover to object-contain */}
              <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744274602/hero_yjoq8w.png"
                   alt="Hero Artwork"
-                  class="w-full h-full object-cover"
+                  class="w-full h-full object-contain"
                   onerror="this.onerror=null; this.src='https://placehold.co/1200x400/F3F4F6/1F2937?text=Image+Error'; this.alt='Image failed to load';">
          </div>
-         {/* Welcome text remains constrained */}
          <div class="container mx-auto px-4 md:px-8">
              <h2 class="text-3xl md:text-4xl font-bold mb-4 text-black mt-8">Welcome to Angsthase Digital Art</h2>
              <p class="text-gray-700 max-w-2xl mx-auto">Exploring themes through digital mediums. Browse the gallery to see the latest creations.</p>
         </div>
     </section>
 
-    {/* Main content container starts here */}
     <main class="container mx-auto px-4 md:px-8 py-16 relative z-10">
 
-        {/* Content Section 1 - Project Spotlight (Image Offset) */}
         <section class="fade-in-section mb-20 flex flex-col md:flex-row items-center gap-8 md:gap-12">
             <div class="md:w-1/2 text-gray-700">
                 <h3 class="text-2xl font-bold mb-4 text-black">Project Spotlight</h3>
@@ -136,7 +129,6 @@
             </div>
         </section>
 
-        {/* Content Section 2 (Image Offset) */}
         <section class="fade-in-section mb-20 flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12">
              <div class="md:w-1/2 text-gray-700">
                 <h3 class="text-2xl font-bold mb-4 text-black">Another Piece / About</h3>
@@ -154,7 +146,6 @@
            </div>
         </section>
 
-        {/* Art Style Section */}
         <section id="about-style" class="fade-in-section mb-20 max-w-4xl mx-auto text-gray-700 pt-16 -mt-16">
              <h3 class="text-3xl font-bold mb-6 text-center text-black">About The Art Style</h3>
              <p class="mb-4">
@@ -168,7 +159,6 @@
              </p>
         </section>
 
-        {/* Gallery Section */}
         <section id="gallery" class="fade-in-section mb-20 pt-16 -mt-16">
             <h3 class="text-3xl font-bold mb-8 text-center text-black">Gallery</h3>
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
