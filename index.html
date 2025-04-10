@@ -12,32 +12,35 @@
         html { scroll-behavior: smooth; }
         body { font-family: 'Lato', sans-serif; position: relative; min-height: 100vh; }
         h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', sans-serif; }
-        img { background-color: #f3f4f6; }
+        img { background-color: #f3f4f6; } /* Added subtle bg to images */
         .gallery-img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
 
+        /* Subtle background pattern */
         body::before {
             content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1;
             background-image: url('https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png');
-            background-repeat: no-repeat; background-position: center center; background-size: contain;
-            background-attachment: fixed; opacity: 0.25;
+            background-repeat: no-repeat; background-position: center center; background-size: contain; /* Changed to contain */
+            background-attachment: fixed; opacity: 0.15; /* Slightly reduced opacity */
         }
 
         #lightbox-overlay { transition: opacity 0.3s ease-in-out; }
         #lightbox-overlay button { cursor: pointer; }
 
+        /* Fade-in animation */
         .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
         .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
 
+        /* Divider animation */
         .divider-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 1.5s ease-in-out; }
         .fade-in-section.is-visible .divider-line { stroke-dashoffset: 0; }
 
-        /* --- Interactive Hero Styles --- */
+        /* Interactive Hero Styles */
         #hero-image-container {
-             perspective: 1000px; /* Enable 3D perspective for child */
+             perspective: 1000px;
         }
         #hero-image {
-            transition: transform 0.1s ease-out; /* Smooth transition for transform */
-            will-change: transform; /* Optimize animation */
+            transition: transform 0.1s ease-out;
+            will-change: transform;
         }
     </style>
 </head>
@@ -51,6 +54,7 @@
                      class="w-10 h-10 rounded-full object-cover border border-gray-200">
                 <h1 class="text-2xl md:text-3xl font-bold text-black">Angsthase Digital Art</h1>
             </div>
+            {/* Basic Navigation - Consider Off-Canvas for further mobile improvement */}
             <nav>
                 <ul class="flex space-x-4 md:space-x-6 text-gray-600">
                     <li><a href="#gallery" class="hover:text-black rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500">Gallery</a></li>
@@ -61,10 +65,9 @@
         </div>
     </header>
 
+    {/* --- Hero Section --- */}
     <section class="mb-20 text-center pt-16">
-         {/* Added ID and overflow-hidden to container */}
          <div id="hero-image-container" class="w-full h-48 md:h-72 bg-gray-100 flex items-center justify-center mb-8 overflow-hidden">
-             {/* Added ID to image */}
              <img id="hero-image" src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744274602/hero_yjoq8w.png"
                   alt="Hero Artwork"
                   class="w-full h-full object-contain"
@@ -76,16 +79,21 @@
         </div>
     </section>
 
+    {/* --- Divider --- */}
     <div class="fade-in-section container mx-auto px-4 md:px-8 my-16">
          <svg width="100%" height="5" viewBox="0 0 1000 5" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-gray-300 block">
-            <line class="divider-line" x1="0" y1="2.5" x2="1000" y2="2.5" stroke="currentColor" stroke-width="1"/>
+            {/* Changed to dashed line for subtle visual difference */}
+            <line class="divider-line" x1="0" y1="2.5" x2="1000" y2="2.5" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5"/>
         </svg>
     </div>
 
     <main class="container mx-auto px-4 md:px-8 py-16 relative z-10 -mt-16">
 
-        <section class="fade-in-section mb-20 flex flex-col md:flex-row items-center gap-8 md:gap-12">
-            <div class="md:w-7/12 text-gray-700">
+        {/* --- Section 1: Project Spotlight (Text over Image on Mobile) --- */}
+        {/* Increased bottom margin mb-24 */}
+        <section class="fade-in-section mb-24 flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            {/* Text block: Added bg-white, padding, rounded, shadow, relative, z-index */}
+            <div class="md:w-7/12 text-gray-700 bg-white p-6 rounded shadow relative z-10">
                 <h3 class="text-2xl font-bold mb-4 text-black">Project Spotlight</h3>
                 <p class="mb-4">
                     Titled 'Café Corner, Potsdam Night', this piece highlights the contrast between the warm, inviting light spilling from the windows and the cool darkness of the surrounding night. Developed from photographic source material, the scene undergoes digital processing to enhance the atmospheric quality and painterly textures, particularly noticeable in the rendering of the reflections and the sky.
@@ -94,15 +102,19 @@
                     The focus is on capturing a specific feeling of quiet solitude often found in illuminated structures after dark. Digital brushwork aims to evoke mood rather than precise detail, blending observed reality with a more expressive interpretation of light and shadow.
                 </p>
             </div>
-            <div class="md:w-5/12 md:-mr-6 lg:-mr-10">
+            {/* Image block: Added negative top margin for mobile overlap */}
+            <div class="md:w-5/12 md:-mr-6 lg:-mr-10 -mt-10 md:-mt-0">
                  <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/7_eiddxy.png"
-                     alt="Artwork Example 1: Café Corner, Potsdam Night" class="w-full h-auto rounded-lg border border-gray-200 block"
+                     alt="Artwork Example 1: Café Corner, Potsdam Night" class="w-full h-auto rounded-lg border border-gray-200 block shadow-lg" /* Added shadow-lg for depth */
                      onerror="this.onerror=null; this.src='https://placehold.co/600x400/E5E7EB/1F2937?text=Image+Error'; this.alt='Image failed to load';">
             </div>
         </section>
 
-        <section class="fade-in-section mb-20 flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12">
-             <div class="md:w-7/12 text-gray-700">
+        {/* --- Section 2: Another Piece / About (Image over Text on Mobile) --- */}
+        {/* Increased bottom margin mb-24 */}
+        <section class="fade-in-section mb-24 flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12">
+             {/* Text block: Added bg-white, padding, rounded, shadow, relative, z-index, and negative top margin for mobile overlap */}
+             <div class="md:w-7/12 text-gray-700 bg-white p-6 rounded shadow relative z-10 -mt-10 md:-mt-0">
                 <h3 class="text-2xl font-bold mb-4 text-black">Another Piece / About</h3>
                  <p class="mb-4">
                     Titled 'Woodhouse, Baabe', this artwork captures a structure within the unique landscape of the Rügen coast. Developed from a photograph, the image has been digitally transformed to emphasize mood and atmosphere over strict realism.
@@ -111,13 +123,15 @@
                     The focus is on the interplay of light on the wooden surfaces and the surrounding environment, rendered with distinct painterly textures characteristic of the digital synthesis process. It aims to convey the quiet feeling of this specific place, blending observed reality with an expressive, atmospheric interpretation.
                  </p>
             </div>
+           {/* Image block: Added shadow-lg for depth */}
            <div class="md:w-5/12 md:-ml-6 lg:-ml-10">
                 <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/9_gkmvef.png"
-                     alt="Artwork Example 2: Woodhouse, Baabe" class="w-full h-auto rounded-lg border border-gray-200"
+                     alt="Artwork Example 2: Woodhouse, Baabe" class="w-full h-auto rounded-lg border border-gray-200 block shadow-lg"
                      onerror="this.onerror=null; this.src='https://placehold.co/600x400/E5E7EB/1F2937?text=Image+Error'; this.alt='Image failed to load';">
            </div>
         </section>
 
+        {/* --- About The Art Style --- */}
         <section id="about-style" class="fade-in-section mb-20 max-w-4xl mx-auto text-gray-700 pt-16 -mt-16">
              <h3 class="text-3xl font-bold mb-6 text-center text-black">About The Art Style</h3>
              <p class="mb-4">
@@ -131,9 +145,11 @@
              </p>
         </section>
 
+        {/* --- Gallery --- */}
         <section id="gallery" class="fade-in-section mb-20 pt-16 -mt-16">
             <h3 class="text-3xl font-bold mb-8 text-center text-black">Gallery</h3>
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                 {/* Gallery items remain the same */}
                  <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
                     <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/5_ulpq6j.png" alt="Artwork 4" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
                 </div>
@@ -176,6 +192,7 @@
             </div>
         </section>
 
+        {/* --- Contact --- */}
         <section id="contact" class="fade-in-section mb-20 pt-16 -mt-16">
              <h3 class="text-3xl font-bold mb-8 text-center text-black">Contact</h3>
              <p class="text-center text-gray-700">
@@ -188,6 +205,7 @@
     <footer class="bg-gray-100 py-8 px-4 md:px-8 mt-16">
         <div class="container mx-auto text-center text-gray-600">
             <div class="mb-4">
+                {/* Add actual links later */}
                 <a href="#" class="hover:text-black px-2">Privacy Policy</a> |
                 <a href="#" class="hover:text-black px-2">Terms of Service</a> |
                 <a href="#" class="hover:text-black px-2">Impressum</a>
@@ -196,6 +214,7 @@
         </div>
     </footer>
 
+    {/* --- Lightbox --- */}
     <div id="lightbox-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden z-50 p-4 cursor-default">
         <button id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold p-2 bg-black bg-opacity-30 rounded-full hover:bg-opacity-50 focus:outline-none hidden sm:block">&lt;</button>
         <img id="lightbox-image" src="" alt="Enlarged View" class="max-w-full max-h-full object-contain block">
@@ -205,21 +224,14 @@
 
     <script>
         // --- Scroll Fade-In Functionality ---
+        // (Same as before)
         const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
         const observerCallback = (entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('is-visible');
-                    const line = entry.target.querySelector('.divider-line');
-                    if (line) {
-                       // Transition handled by CSS
-                    }
-                     if (!entry.target.querySelector('.divider-line')) {
-                         observer.unobserve(entry.target);
-                     }
-                     if (entry.target.querySelector('.divider-line')) {
-                         observer.unobserve(entry.target);
-                     }
+                    // No specific line animation needed for the dashed line currently
+                    observer.unobserve(entry.target); // Unobserve after first fade-in
                 }
             });
         };
@@ -228,6 +240,7 @@
         elementsToAnimate.forEach(el => { scrollObserver.observe(el); });
 
         // --- Lightbox Functionality ---
+        // (Same as before, includes swipe functionality)
         const lightboxOverlay = document.getElementById('lightbox-overlay');
         const lightboxImage = document.getElementById('lightbox-image');
         const lightboxClose = document.getElementById('lightbox-close');
@@ -239,96 +252,133 @@
         let touchStartX = 0;
         let touchEndX = 0;
 
+        // Populate gallery sources and add click listeners
         galleryItems.forEach((item, index) => {
             galleryImageSources.push(item.src);
             item.setAttribute('data-index', index);
-            item.addEventListener('click', openLightbox);
+            item.addEventListener('click', () => openLightbox(index)); // Pass index directly
         });
 
         function showImageAtIndex(index) {
             if (index < 0 || index >= galleryImageSources.length) return;
             lightboxImage.src = galleryImageSources[index];
             currentImageIndex = index;
-            const isSmallScreen = window.innerWidth < 640;
+            const isSmallScreen = window.innerWidth < 640; // sm breakpoint
             lightboxPrev.classList.toggle('hidden', index === 0 || isSmallScreen);
             lightboxNext.classList.toggle('hidden', index === galleryImageSources.length - 1 || isSmallScreen);
         }
 
-        function openLightbox(event) {
-            const clickedIndex = parseInt(event.target.getAttribute('data-index'), 10);
-            if (!isNaN(clickedIndex)) {
-                showImageAtIndex(clickedIndex);
-                lightboxOverlay.classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
+        function openLightbox(index) {
+            if(index === undefined || index < 0 || index >= galleryImageSources.length) {
+                 // Fallback if index isn't passed correctly, maybe from a non-image click context
+                 // Although the event listener setup should prevent this.
+                 console.error("Invalid index for lightbox:", index);
+                 // Optionally find index from clicked element src if needed as a fallback
+                 // const clickedSrc = event.target.src;
+                 // index = galleryImageSources.findIndex(src => src === clickedSrc);
+                 // if (index === -1) return; // Still couldn't find it
+                 return; // Prevent opening if index is bad
             }
+            lightboxOverlay.classList.remove('hidden');
+            lightboxOverlay.style.opacity = '0'; // Start transparent for fade-in
+            requestAnimationFrame(() => { // Ensure fade starts after display:flex
+                lightboxOverlay.style.opacity = '1';
+            });
+            showImageAtIndex(index);
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
         }
 
         function closeLightbox() {
-            lightboxOverlay.classList.add('hidden');
-            lightboxImage.src = "";
-            currentImageIndex = -1;
-            document.body.style.overflow = '';
+            lightboxOverlay.style.opacity = '0'; // Start fade-out
+             // Wait for transition to finish before hiding
+             setTimeout(() => {
+                lightboxOverlay.classList.add('hidden');
+             }, 300); // Match transition duration
+            document.body.style.overflow = ''; // Restore scrolling
         }
 
-        function showPreviousImage() { if (currentImageIndex > 0) showImageAtIndex(currentImageIndex - 1); }
-        function showNextImage() { if (currentImageIndex < galleryImageSources.length - 1) showImageAtIndex(currentImageIndex + 1); }
+        function showNextImage() {
+            showImageAtIndex(currentImageIndex + 1);
+        }
 
+        function showPrevImage() {
+            showImageAtIndex(currentImageindex - 1);
+        }
+
+        // Event Listeners
         lightboxClose.addEventListener('click', closeLightbox);
-        lightboxPrev.addEventListener('click', showPreviousImage);
         lightboxNext.addEventListener('click', showNextImage);
-        lightboxOverlay.addEventListener('click', (event) => { if (event.target === lightboxOverlay) closeLightbox(); });
-        document.addEventListener('keydown', (event) => {
-            if (lightboxOverlay.classList.contains('hidden')) return;
-            switch (event.key) {
-                case 'Escape': closeLightbox(); break;
-                case 'ArrowLeft': showPreviousImage(); break;
-                case 'ArrowRight': showNextImage(); break;
+        lightboxPrev.addEventListener('click', showPrevImage);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (!lightboxOverlay.classList.contains('hidden')) {
+                if (e.key === 'Escape') closeLightbox();
+                if (e.key === 'ArrowRight' && currentImageIndex < galleryImageSources.length - 1) showNextImage();
+                if (e.key === 'ArrowLeft' && currentImageIndex > 0) showPrevImage();
             }
         });
 
-        lightboxImage.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
-        lightboxImage.addEventListener('touchend', (e) => { touchEndX = e.changedTouches[0].screenX; handleSwipeGesture(); }, { passive: true });
+        // Close lightbox if clicking the background overlay itself
+        lightboxOverlay.addEventListener('click', (e) => {
+            if (e.target === lightboxOverlay) {
+                closeLightbox();
+            }
+        });
+
+         // Touch swipe functionality for lightbox on mobile
+        lightboxOverlay.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true }); // Use passive for performance if not preventing default
+
+        lightboxOverlay.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipeGesture();
+        });
+
         function handleSwipeGesture() {
-            const swipeThreshold = 50;
-            const distance = touchEndX - touchStartX;
-            if (distance > swipeThreshold) showPreviousImage();
-            else if (distance < -swipeThreshold) showNextImage();
-            touchStartX = 0; touchEndX = 0;
-        }
+             const threshold = 50; // Minimum swipe distance in pixels
+             if (touchEndX < touchStartX - threshold) {
+                 // Swiped left (show next)
+                 if (currentImageIndex < galleryImageSources.length - 1) {
+                     showNextImage();
+                 }
+             } else if (touchEndX > touchStartX + threshold) {
+                 // Swiped right (show previous)
+                  if (currentImageIndex > 0) {
+                     showPrevImage();
+                 }
+             }
+             // Reset touch points
+             touchStartX = 0;
+             touchEndX = 0;
+         }
 
-        window.addEventListener('resize', () => { if (!lightboxOverlay.classList.contains('hidden')) showImageAtIndex(currentImageIndex); });
+        // --- Optional: Hero Image Tilt Effect (Simple Example) ---
+        // const heroImage = document.getElementById('hero-image');
+        // const heroContainer = document.getElementById('hero-image-container');
 
-        // --- Interactive Hero Image ---
-        const heroImage = document.getElementById('hero-image');
-        const heroContainer = document.getElementById('hero-image-container');
+        // heroContainer.addEventListener('mousemove', (e) => {
+        //     const rect = heroContainer.getBoundingClientRect();
+        //     const x = e.clientX - rect.left;
+        //     const y = e.clientY - rect.top;
+        //     const centerX = rect.width / 2;
+        //     const centerY = rect.height / 2;
+        //     const rotateX = (y - centerY) / centerY * -5; // Max rotation 5 degrees
+        //     const rotateY = (x - centerX) / centerX * 5;  // Max rotation 5 degrees
 
-        if (heroImage && heroContainer) {
-            heroContainer.addEventListener('mousemove', (e) => {
-                const rect = heroContainer.getBoundingClientRect();
-                // Calculate mouse position relative to the center of the container
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
+        //     heroImage.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`; // Slight scale on hover
+        // });
 
-                // Define max rotation angle
-                const maxRot = 4; // Max rotation in degrees
+        // heroContainer.addEventListener('mouseleave', () => {
+        //     heroImage.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)'; // Reset on mouse leave
+        // });
 
-                // Calculate rotation based on mouse position (more movement further from center)
-                // Normalize position from -1 to 1 relative to half-width/height
-                const rotY = (x / (rect.width / 2)) * maxRot;
-                const rotX = (-y / (rect.height / 2)) * maxRot; // Invert Y for natural tilt
-
-                // Apply the transform
-                heroImage.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.05)`; // Slight scale for effect
-            });
-
-            heroContainer.addEventListener('mouseleave', () => {
-                // Reset transform when mouse leaves
-                heroImage.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
-            });
-        }
+        // Note: The tilt effect above is mouse-based. Adapting it smoothly for touch/device orientation
+        // requires more complex event handling (deviceorientation, touchmove) and potentially throttling
+        // for performance. Consider implementing this as a next step if desired.
 
     </script>
 
 </body>
 </html>
-
