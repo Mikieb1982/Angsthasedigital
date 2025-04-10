@@ -51,7 +51,10 @@
             background-position: center center;
             background-size: contain; /* Show whole logo, scaled down */
             background-attachment: fixed; /* Keep in place on scroll */
-            opacity: 0.25; /* Set opacity to 25% */
+            /* Use CSS variable for opacity, default to 1 (100%) */
+            opacity: var(--bg-opacity, 1);
+            /* Add transition for smooth fading */
+            transition: opacity 0.3s ease-out;
         }
 
         /* Basic transition for lightbox */
@@ -61,6 +64,17 @@
         /* Ensure lightbox buttons are clickable */
         #lightbox-overlay button {
              cursor: pointer;
+        }
+
+        /* --- Scroll Animation Styles --- */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px); /* Start slightly lower */
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0); /* Move to original position */
         }
     </style>
 </head>
@@ -87,28 +101,24 @@
 
     <main class="container mx-auto px-4 md:px-8 py-16 relative z-10">
 
+        {/* Sections remain the same */}
         <section class="mb-20 text-center pt-16">
-             {/* Container for the pile */}
              <div class="relative w-full h-[400px] md:h-[500px] mb-8 flex items-center justify-center">
-                 {/* Image 1 (Bottom) - Smaller, repositioned, new rotation */}
                  <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/5_ulpq6j.png"
                       alt="Scattered Artwork 1"
                       class="absolute w-1/2 sm:w-1/3 lg:w-1/4 max-w-sm h-auto object-contain rounded-lg shadow-lg transform rotate-[6deg] z-0"
                       style="top: 5%; left: 20%;"
                       onerror="this.style.display='none';">
-                 {/* Image 2 - Smaller, repositioned, new rotation */}
                  <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/8_vtftql.png"
                       alt="Scattered Artwork 2"
                       class="absolute w-1/2 sm:w-1/3 lg:w-1/4 max-w-sm h-auto object-contain rounded-lg shadow-lg transform rotate-[-3deg] z-10"
                        style="top: 20%; left: 45%;"
                       onerror="this.style.display='none';">
-                 {/* Image 3 - Smaller, repositioned, new rotation */}
                   <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209002/6_typwgx.png"
                       alt="Scattered Artwork 3"
                       class="absolute w-1/2 sm:w-1/3 lg:w-1/4 max-w-sm h-auto object-contain rounded-lg shadow-lg transform rotate-[4deg] z-20"
                        style="top: 35%; left: 15%;"
                       onerror="this.style.display='none';">
-                 {/* Image 4 (Top) - Smaller, repositioned, new rotation */}
                  <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/4_null04.png"
                       alt="Scattered Artwork 4"
                       class="absolute w-1/2 sm:w-1/3 lg:w-1/4 max-w-sm h-auto object-contain rounded-lg shadow-lg transform rotate-[-5deg] z-30"
@@ -119,8 +129,7 @@
             <p class="text-gray-700 max-w-2xl mx-auto">Exploring themes through digital mediums. Browse the gallery to see the latest creations.</p>
         </section>
 
-        {/* Content Section 1 - Project Spotlight (Image Offset) */}
-        <section class="mb-20 flex flex-col md:flex-row items-center gap-8 md:gap-12">
+        <section class="fade-in-section mb-20 flex flex-col md:flex-row items-center gap-8 md:gap-12">
             <div class="md:w-1/2 text-gray-700">
                 <h3 class="text-2xl font-bold mb-4 text-black">Project Spotlight</h3>
                 <p class="mb-4">
@@ -137,8 +146,7 @@
             </div>
         </section>
 
-        {/* Content Section 2 (Image Offset) */}
-        <section class="mb-20 flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12">
+        <section class="fade-in-section mb-20 flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12">
              <div class="md:w-1/2 text-gray-700">
                 <h3 class="text-2xl font-bold mb-4 text-black">Another Piece / About</h3>
                  <p class="mb-4">
@@ -155,8 +163,7 @@
            </div>
         </section>
 
-        {/* Art Style Section */}
-        <section id="about-style" class="mb-20 max-w-4xl mx-auto text-gray-700 pt-16 -mt-16">
+        <section id="about-style" class="fade-in-section mb-20 max-w-4xl mx-auto text-gray-700 pt-16 -mt-16">
              <h3 class="text-3xl font-bold mb-6 text-center text-black">About The Art Style</h3>
              <p class="mb-4">
                 The digital art originates from photographs, often capturing scenes from familiar places in Germany – from the streets of Potsdam and the Bad Belzig area to the unique landscapes of the Rügen coast. Each image undergoes extensive digital processing and synthesis, transforming these photographic moments. The aim is less about strict realism and more focused on evoking a specific mood and atmosphere inherent in the scene.
@@ -169,7 +176,7 @@
              </p>
         </section>
 
-        <section id="gallery" class="mb-20 pt-16 -mt-16">
+        <section id="gallery" class="fade-in-section mb-20 pt-16 -mt-16">
             <h3 class="text-3xl font-bold mb-8 text-center text-black">Gallery</h3>
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                  <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
@@ -214,7 +221,7 @@
             </div>
         </section>
 
-        <section id="contact" class="mb-20 pt-16 -mt-16">
+        <section id="contact" class="fade-in-section mb-20 pt-16 -mt-16">
              <h3 class="text-3xl font-bold mb-8 text-center text-black">Contact</h3>
              <p class="text-center text-gray-700">
                 Email: <a href="mailto:angsthasedigitalstudio@gmail.com" class="text-gray-800 hover:text-black underline">angsthasedigitalstudio@gmail.com</a>
@@ -242,156 +249,117 @@
     </div>
 
     <script>
-        // --- Lightbox Functionality ---
+        // --- Scroll Fade-In Functionality ---
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+        const observerCallback = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        };
+        const scrollObserver = new IntersectionObserver(observerCallback, observerOptions);
+        const sectionsToAnimate = document.querySelectorAll('.fade-in-section');
+        sectionsToAnimate.forEach(section => { scrollObserver.observe(section); });
 
-        // DOM Elements
+        // --- Background Opacity Fade Functionality ---
+        const targetOpacity = 0.25; // Final opacity when scrolled down
+        const fadeDistance = 150; // Distance in pixels over which to fade
+
+        function handleScrollOpacity() {
+            const scrollY = window.scrollY;
+            let calculatedOpacity;
+
+            if (scrollY <= 0) {
+                calculatedOpacity = 1; // Fully visible at top
+            } else if (scrollY >= fadeDistance) {
+                calculatedOpacity = targetOpacity; // Fully faded after distance
+            } else {
+                // Interpolate between 1 and targetOpacity
+                calculatedOpacity = 1 - (scrollY / fadeDistance) * (1 - targetOpacity);
+            }
+            // Clamp value just in case
+            calculatedOpacity = Math.max(targetOpacity, Math.min(1, calculatedOpacity));
+            // Set CSS custom property
+            document.documentElement.style.setProperty('--bg-opacity', calculatedOpacity);
+        }
+        // Add scroll listener
+        window.addEventListener('scroll', handleScrollOpacity);
+        // Call once on load to set initial state
+        handleScrollOpacity();
+
+
+        // --- Lightbox Functionality ---
         const lightboxOverlay = document.getElementById('lightbox-overlay');
         const lightboxImage = document.getElementById('lightbox-image');
         const lightboxClose = document.getElementById('lightbox-close');
         const lightboxPrev = document.getElementById('lightbox-prev');
         const lightboxNext = document.getElementById('lightbox-next');
         const galleryItems = document.querySelectorAll('.gallery-item-clickable');
-
-        // State Variables
         let galleryImageSources = [];
         let currentImageIndex = -1;
         let touchStartX = 0;
         let touchEndX = 0;
 
-        // --- Initialization ---
-
-        // Populate gallery sources and add index data attribute
         galleryItems.forEach((item, index) => {
             galleryImageSources.push(item.src);
             item.setAttribute('data-index', index);
-            item.addEventListener('click', openLightbox); // Add listener here
+            item.addEventListener('click', openLightbox);
         });
 
-        // --- Core Functions ---
-
-        // Function to display image at a specific index
         function showImageAtIndex(index) {
-            // Validate index
-            if (index < 0 || index >= galleryImageSources.length) {
-                console.error("Invalid image index requested:", index);
-                return;
-            }
-            // Update image source and current index
+            if (index < 0 || index >= galleryImageSources.length) return;
             lightboxImage.src = galleryImageSources[index];
             currentImageIndex = index;
-
-            // Update button visibility based on index and screen size
-            const isSmallScreen = window.innerWidth < 640; // Tailwind 'sm' breakpoint
-
+            const isSmallScreen = window.innerWidth < 640;
             lightboxPrev.classList.toggle('hidden', index === 0 || isSmallScreen);
             lightboxNext.classList.toggle('hidden', index === galleryImageSources.length - 1 || isSmallScreen);
         }
 
-        // Function to open the lightbox
         function openLightbox(event) {
             const clickedIndex = parseInt(event.target.getAttribute('data-index'), 10);
             if (!isNaN(clickedIndex)) {
-                showImageAtIndex(clickedIndex); // Show the clicked image
-                lightboxOverlay.classList.remove('hidden'); // Show the overlay
-                document.body.style.overflow = 'hidden'; // Prevent background scrolling
-            } else {
-                console.error("Could not get index for clicked item:", event.target);
+                showImageAtIndex(clickedIndex);
+                lightboxOverlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
             }
         }
 
-        // Function to close the lightbox
         function closeLightbox() {
-            lightboxOverlay.classList.add('hidden'); // Hide the overlay
-            lightboxImage.src = ""; // Clear the image src
-            currentImageIndex = -1; // Reset index
-            document.body.style.overflow = ''; // Restore background scrolling
+            lightboxOverlay.classList.add('hidden');
+            lightboxImage.src = "";
+            currentImageIndex = -1;
+            document.body.style.overflow = '';
         }
 
-        // --- Navigation Functions ---
+        function showPreviousImage() { if (currentImageIndex > 0) showImageAtIndex(currentImageIndex - 1); }
+        function showNextImage() { if (currentImageIndex < galleryImageSources.length - 1) showImageAtIndex(currentImageIndex + 1); }
 
-        function showPreviousImage() {
-            if (currentImageIndex > 0) {
-                showImageAtIndex(currentImageIndex - 1);
-            }
-        }
-
-        function showNextImage() {
-             if (currentImageIndex < galleryImageSources.length - 1) {
-                showImageAtIndex(currentImageIndex + 1);
-            }
-        }
-
-        // --- Event Listeners ---
-
-        // Close button
         lightboxClose.addEventListener('click', closeLightbox);
-
-        // Previous button
         lightboxPrev.addEventListener('click', showPreviousImage);
-
-        // Next button
         lightboxNext.addEventListener('click', showNextImage);
-
-        // Click on overlay background to close
-        lightboxOverlay.addEventListener('click', function(event) {
-            if (event.target === lightboxOverlay) {
-                closeLightbox();
-            }
-        });
-
-        // Keyboard navigation (Arrows and Escape)
-        document.addEventListener('keydown', function(event) {
-            if (lightboxOverlay.classList.contains('hidden')) return; // Do nothing if lightbox is hidden
-
+        lightboxOverlay.addEventListener('click', (event) => { if (event.target === lightboxOverlay) closeLightbox(); });
+        document.addEventListener('keydown', (event) => {
+            if (lightboxOverlay.classList.contains('hidden')) return;
             switch (event.key) {
-                case 'Escape':
-                    closeLightbox();
-                    break;
-                case 'ArrowLeft':
-                    showPreviousImage();
-                    break;
-                case 'ArrowRight':
-                    showNextImage();
-                    break;
+                case 'Escape': closeLightbox(); break;
+                case 'ArrowLeft': showPreviousImage(); break;
+                case 'ArrowRight': showNextImage(); break;
             }
         });
 
-        // --- Touch Swipe Functionality ---
-
-        lightboxImage.addEventListener('touchstart', (e) => {
-            // Record starting X position of touch
-            touchStartX = e.changedTouches[0].screenX;
-        }, { passive: true }); // Use passive listener for better scroll performance
-
-        lightboxImage.addEventListener('touchend', (e) => {
-            // Record ending X position of touch
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipeGesture(); // Process the swipe
-        }, { passive: true });
-
+        lightboxImage.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+        lightboxImage.addEventListener('touchend', (e) => { touchEndX = e.changedTouches[0].screenX; handleSwipeGesture(); }, { passive: true });
         function handleSwipeGesture() {
-            const swipeThreshold = 50; // Minimum horizontal distance to be considered a swipe
+            const swipeThreshold = 50;
             const distance = touchEndX - touchStartX;
-
-            if (distance > swipeThreshold) {
-                // Swiped Right (show previous image)
-                showPreviousImage();
-            } else if (distance < -swipeThreshold) {
-                // Swiped Left (show next image)
-                showNextImage();
-            }
-            // Reset touch coordinates for the next swipe
-            touchStartX = 0;
-            touchEndX = 0;
+            if (distance > swipeThreshold) showPreviousImage();
+            else if (distance < -swipeThreshold) showNextImage();
+            touchStartX = 0; touchEndX = 0;
         }
 
-        // --- Window Resize Listener ---
-        // Re-evaluate button visibility on resize (e.g., rotating a tablet)
-        window.addEventListener('resize', () => {
-            if (!lightboxOverlay.classList.contains('hidden')) {
-                 showImageAtIndex(currentImageIndex); // Re-run logic to show/hide buttons based on new size
-            }
-        });
+        window.addEventListener('resize', () => { if (!lightboxOverlay.classList.contains('hidden')) showImageAtIndex(currentImageIndex); });
 
     </script>
 
