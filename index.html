@@ -2,215 +2,226 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Three.js + Cannon.js + Touch Controls</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angsthase Digital Art</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&family=Raleway:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { margin: 0; overflow: hidden; background-color: #f0f0f0; }
-        canvas { display: block; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Lato', sans-serif; position: relative; min-height: 100vh; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', sans-serif; }
+        img { background-color: #f3f4f6; }
+        .gallery-img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
+
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1;
+            background-image: url('https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png');
+            background-repeat: no-repeat; background-position: center center; background-size: contain;
+            background-attachment: fixed; opacity: 0.25;
+        }
+
+        #lightbox-overlay { transition: opacity 0.3s ease-in-out; }
+        #lightbox-overlay button { cursor: pointer; }
+
+        .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
+
+        .divider-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 1.5s ease-in-out; }
+        .fade-in-section.is-visible .divider-line { stroke-dashoffset: 0; }
+
+        /* --- Hotspot Styles --- */
+        .hotspot {
+            position: absolute;
+            width: 1.25rem; /* w-5 */
+            height: 1.25rem; /* h-5 */
+            background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+            border-radius: 9999px; /* rounded-full */
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .hotspot:hover {
+            transform: scale(1.2);
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+         /* Simple plus icon inside hotspot */
+        .hotspot::after {
+            content: '+';
+            font-size: 0.875rem; /* text-sm */
+            color: rgba(0, 0, 0, 0.6);
+            line-height: 1;
+        }
+
+        /* --- Tooltip Styles --- */
+        .hotspot-tooltip {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.8); /* bg-black/80 */
+            color: white;
+            padding: 0.5rem 0.75rem; /* p-2 px-3 */
+            border-radius: 0.375rem; /* rounded-md */
+            font-size: 0.75rem; /* text-xs */
+            line-height: 1rem; /* leading-4 */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+            white-space: nowrap;
+            z-index: 10; /* Ensure tooltip is above image */
+             pointer-events: none; /* Allow clicks to pass through tooltip */
+             transform: translate(-50%, -120%); /* Position above hotspot */
+        }
+        .hotspot-tooltip.is-visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
     </style>
 </head>
-<body>
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.163.0/build/three.module.js",
-                "cannon-es": "https://unpkg.com/cannon-es@0.20.0/dist/cannon-es.js"
-            }
-        }
-    </script>
-    <script type="module">
-        import * as THREE from 'three';
-        import * as CANNON from 'cannon-es';
+<body class="bg-white text-gray-800 antialiased">
 
-        // --- Scene Setup (Three.js) ---
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xeeeeee);
+    <header class="py-6 px-4 md:px-8 border-b border-gray-200 sticky top-0 z-30 bg-white/80 backdrop-blur-sm">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png"
+                     alt="Angsthase Logo"
+                     class="w-10 h-10 rounded-full object-cover border border-gray-200">
+                <h1 class="text-2xl md:text-3xl font-bold text-black">Angsthase Digital Art</h1>
+            </div>
+            <nav>
+                <ul class="flex space-x-4 md:space-x-6 text-gray-600">
+                    <li><a href="#gallery" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500">Gallery</a></li>
+                    <li><a href="#about-style" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500">About</a></li>
+                    <li><a href="#contact" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(0, 2, 5); // Position camera to see the scene
-        camera.lookAt(0, 0, 0);
+    <section class="mb-20 text-center pt-16">
+         <div id="hero-image-container" class="w-full h-48 md:h-72 bg-gray-100 flex items-center justify-center mb-8 overflow-hidden">
+             <img id="hero-image" src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744274602/hero_yjoq8w.png"
+                  alt="Hero Artwork"
+                  class="w-full h-full object-contain"
+                  onerror="this.onerror=null; this.src='https://placehold.co/1200x400/F3F4F6/1F2937?text=Image+Error'; this.alt='Image failed to load';">
+         </div>
+         <div class="container mx-auto px-4 md:px-8">
+             <h2 class="text-3xl md:text-4xl font-bold mb-4 text-black mt-8">Welcome to Angsthase Digital Art</h2>
+             <p class="text-gray-700 max-w-2xl mx-auto">Exploring themes through digital mediums. Browse the gallery to see the latest creations.</p>
+        </div>
+    </section>
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMap.enabled = true; // Enable shadows
-        document.body.appendChild(renderer.domElement);
+    <div class="fade-in-section container mx-auto px-4 md:px-8 my-16">
+         <svg width="100%" height="5" viewBox="0 0 1000 5" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-slate-500 block">
+            <line class="divider-line" x1="0" y1="2.5" x2="1000" y2="2.5" stroke="currentColor" stroke-width="1"/>
+        </svg>
+    </div>
 
-        // --- Lighting (Three.js) ---
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-        scene.add(ambientLight);
+    <main class="container mx-auto px-4 md:px-8 py-16 relative z-10 -mt-16">
 
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-        directionalLight.position.set(5, 10, 7.5);
-        directionalLight.castShadow = true;
-        scene.add(directionalLight);
+        {/* Content Section 1 - Added Hotspots */}
+        <section class="fade-in-section mb-20 flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            <div class="md:w-7/12 text-gray-700">
+                <h3 class="text-2xl font-bold mb-4 text-black">Project Spotlight</h3>
+                <p class="mb-4">
+                    Titled 'Café Corner, Potsdam Night', this piece highlights the contrast between the warm, inviting light spilling from the windows and the cool darkness of the surrounding night. Developed from photographic source material, the scene undergoes digital processing to enhance the atmospheric quality and painterly textures, particularly noticeable in the rendering of the reflections and the sky.
+                </p>
+                <p>
+                    The focus is on capturing a specific feeling of quiet solitude often found in illuminated structures after dark. Digital brushwork aims to evoke mood rather than precise detail, blending observed reality with a more expressive interpretation of light and shadow.
+                </p>
+            </div>
+            {/* Image container set to relative for absolute positioning of hotspots */}
+            <div class="md:w-5/12 md:-mr-6 lg:-mr-10 relative">
+                 <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/7_eiddxy.png"
+                     alt="Artwork Example 1: Café Corner, Potsdam Night" class="w-full h-auto rounded-lg border border-gray-200 block"
+                     onerror="this.onerror=null; this.src='https://placehold.co/600x400/E5E7EB/1F2937?text=Image+Error'; this.alt='Image failed to load';">
 
-        // --- Physics Setup (Cannon.js) ---
-        const world = new CANNON.World({
-            gravity: new CANNON.Vec3(0, -9.82, 0) // Earth's gravity
-        });
-        world.broadphase = new CANNON.NaiveBroadphase(); // Simple broadphase
-        world.solver.iterations = 10; // Physics solver iterations
+                 {/* --- Hotspot Examples --- */}
+                 {/* Hotspot 1: Positioned using top/left percentages */}
+                 <button class="hotspot" style="top: 30%; left: 40%;" data-tooltip-target="tooltip-1"></button>
+                 <div id="tooltip-1" class="hotspot-tooltip" style="left: 40%;">Focus on window light</div>
 
-        // Physics materials
-        const groundMaterial = new CANNON.Material('groundMaterial');
-        const sphereMaterial = new CANNON.Material('sphereMaterial');
-        const groundSphereContactMaterial = new CANNON.ContactMaterial(
-            groundMaterial,
-            sphereMaterial,
-            {
-                restitution: 0.5, // Bounciness
-                friction: 0.1
-            }
-        );
-        world.addContactMaterial(groundSphereContactMaterial);
+                 {/* Hotspot 2: Positioned using top/left percentages */}
+                 <button class="hotspot" style="top: 75%; left: 60%;" data-tooltip-target="tooltip-2"></button>
+                 <div id="tooltip-2" class="hotspot-tooltip" style="left: 60%;">Painterly reflections</div>
+                 {/* Add more hotspots as needed */}
 
-        // --- Ground Plane ---
-        // Physics Body (Infinite Plane)
-        const groundBody = new CANNON.Body({
-            type: CANNON.Body.STATIC, // Static object
-            shape: new CANNON.Plane(),
-            material: groundMaterial
-        });
-        groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0); // Rotate plane to be horizontal
-        world.addBody(groundBody);
+            </div>
+        </section>
 
-        // Visual Mesh (Three.js)
-        const groundGeometry = new THREE.PlaneGeometry(20, 20);
-        const groundMeshMaterial = new THREE.MeshStandardMaterial({ color: 0xaaaaaa, side: THREE.DoubleSide });
-        const groundMesh = new THREE.Mesh(groundGeometry, groundMeshMaterial);
-        groundMesh.rotation.x = -Math.PI / 2; // Align visual plane with physics plane
-        groundMesh.receiveShadow = true;
-        scene.add(groundMesh);
+        {/* Content Section 2 (Image Offset) */}
+        <section class="fade-in-section mb-20 flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12">
+             <div class="md:w-7/12 text-gray-700">
+                <h3 class="text-2xl font-bold mb-4 text-black">Another Piece / About</h3>
+                 <p class="mb-4">
+                    Titled 'Woodhouse, Baabe', this artwork captures a structure within the unique landscape of the Rügen coast. Developed from a photograph, the image has been digitally transformed to emphasize mood and atmosphere over strict realism.
+                 </p>
+                 <p>
+                    The focus is on the interplay of light on the wooden surfaces and the surrounding environment, rendered with distinct painterly textures characteristic of the digital synthesis process. It aims to convey the quiet feeling of this specific place, blending observed reality with an expressive, atmospheric interpretation.
+                 </p>
+            </div>
+           <div class="md:w-5/12 md:-ml-6 lg:-ml-10">
+                <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/9_gkmvef.png"
+                     alt="Artwork Example 2: Woodhouse, Baabe" class="w-full h-auto rounded-lg border border-gray-200"
+                     onerror="this.onerror=null; this.src='https://placehold.co/600x400/E5E7EB/1F2937?text=Image+Error'; this.alt='Image failed to load';">
+           </div>
+        </section>
 
-        // --- Sphere ---
-        const sphereRadius = 0.5; // meters
-        // Physics Body
-        const sphereBody = new CANNON.Body({
-            mass: 1, // kg
-            shape: new CANNON.Sphere(sphereRadius),
-            position: new CANNON.Vec3(0, 5, 0), // Initial position (high up)
-            material: sphereMaterial
-        });
-        world.addBody(sphereBody);
+        <section id="about-style" class="fade-in-section mb-20 max-w-4xl mx-auto text-gray-700 pt-16 -mt-16">
+             <h3 class="text-3xl font-bold mb-6 text-center text-black">About The Art Style</h3>
+             <p class="mb-4">
+                The digital art originates from photographs, often capturing scenes from familiar places in Germany – from the streets of Potsdam and the Bad Belzig area to the unique landscapes of the Rügen coast. Each image undergoes extensive digital processing and synthesis, transforming these photographic moments. The aim is less about strict realism and more focused on evoking a specific mood and atmosphere inherent in the scene.
+             </p>
+             <p class="mb-4">
+                The resulting style is distinctly painterly, characterized by visible digital textures and brushwork that are particularly noticeable in skies, water, and shadow areas. There is a strong focus on the interplay of light – whether it's the warm glow of a window against the cool night, the transitional colours of dusk and dawn, or the quality of daylight on different surfaces. This digital synthesis process allows blending the observed reality captured in the source photograph with a more expressive, atmospheric interpretation.
+             </p>
+             <p>
+                Through subjects often featuring architecture, streetscapes, and landscapes, themes of quiet, solitude, and the unique feeling of a place at a particular moment are explored. The goal is to create atmospheric digital paintings that invite contemplation and offer a distinctive view of these locations, filtered through this artistic process.
+             </p>
+        </section>
 
-        // Visual Mesh (Three.js)
-        const sphereGeometry = new THREE.SphereGeometry(sphereRadius, 32, 32);
-        const sphereMeshMaterial = new THREE.MeshStandardMaterial({ color: 0x0077ff });
-        const sphereMesh = new THREE.Mesh(sphereGeometry, sphereMeshMaterial);
-        sphereMesh.castShadow = true;
-        scene.add(sphereMesh);
+        <section id="gallery" class="fade-in-section mb-20 pt-16 -mt-16">
+            <h3 class="text-3xl font-bold mb-8 text-center text-black">Gallery</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/5_ulpq6j.png" alt="Artwork 4" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/8_vtftql.png" alt="Artwork 5" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209002/6_typwgx.png" alt="Artwork 6" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/4_null04.png" alt="Artwork 7" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/3_cyiqpk.png" alt="Artwork 8" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/1_sbzyhy.png" alt="Artwork 9" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209000/13_at5ibg.png" alt="Artwork 10" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209009/14_lnxo5n.png" alt="Artwork 11" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209008/11_wcbenb.png" alt="Artwork 12" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209007/10_to7taw.png" alt="Artwork 13" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/2_t9vs7f.png" alt="Artwork 14" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/7_eiddxy.png" alt="Café Corner, Potsdam Night" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/9_gkmvef.png" alt="Woodhouse, Baabe" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error
 
-
-        // --- Camera Control Variables ---
-        let isDragging = false;
-        const previousPointerPosition = { x: 0, y: 0 };
-
-        // --- Mouse Event Listeners ---
-        renderer.domElement.addEventListener('mousedown', (event) => {
-            isDragging = true;
-            previousPointerPosition.x = event.clientX;
-            previousPointerPosition.y = event.clientY;
-        });
-
-        renderer.domElement.addEventListener('mousemove', (event) => {
-            if (!isDragging) return;
-            const deltaMove = {
-                x: event.clientX - previousPointerPosition.x,
-                y: event.clientY - previousPointerPosition.y
-            };
-            rotateCamera(deltaMove.x, deltaMove.y);
-            previousPointerPosition.x = event.clientX;
-            previousPointerPosition.y = event.clientY;
-        });
-
-        document.addEventListener('mouseup', () => { // Listen on document to catch mouseup outside canvas
-            isDragging = false;
-        });
-
-        renderer.domElement.addEventListener('mouseleave', () => {
-             isDragging = false;
-        });
-
-        // --- Touch Event Listeners ---
-        renderer.domElement.addEventListener('touchstart', (event) => {
-            if (event.touches.length === 1) {
-                // event.preventDefault(); // Uncomment if needed to prevent scrolling
-                isDragging = true;
-                previousPointerPosition.x = event.touches[0].clientX;
-                previousPointerPosition.y = event.touches[0].clientY;
-            }
-        }, { passive: true }); // Set passive: true if preventDefault is NOT used
-
-        renderer.domElement.addEventListener('touchmove', (event) => {
-            if (!isDragging || event.touches.length !== 1) return;
-            // event.preventDefault(); // Uncomment if needed to prevent scrolling
-            const deltaMove = {
-                x: event.touches[0].clientX - previousPointerPosition.x,
-                y: event.touches[0].clientY - previousPointerPosition.y
-            };
-            rotateCamera(deltaMove.x, deltaMove.y);
-            previousPointerPosition.x = event.touches[0].clientX;
-            previousPointerPosition.y = event.touches[0].clientY;
-        }, { passive: true }); // Set passive: true if preventDefault is NOT used
-
-        renderer.domElement.addEventListener('touchend', (event) => {
-             if (event.touches.length < 1) {
-                 isDragging = false;
-             }
-        });
-
-        // --- Camera Rotation Logic ---
-        function rotateCamera(deltaX, deltaY) {
-            const sensitivity = 0.5; // Adjust sensitivity as needed
-            const deltaRotationQuaternion = new THREE.Quaternion()
-                .setFromEuler(new THREE.Euler(
-                    toRadians(deltaY * sensitivity),
-                    toRadians(deltaX * sensitivity),
-                    0,
-                    'XYZ'
-                ));
-            camera.quaternion.multiplyQuaternions(deltaRotationQuaternion, camera.quaternion);
-        }
-
-        // --- Utility Function ---
-        function toRadians(degrees) {
-            return degrees * (Math.PI / 180);
-        }
-
-        // --- Animation Loop ---
-        const clock = new THREE.Clock();
-        let oldElapsedTime = 0;
-
-        function animate() {
-            requestAnimationFrame(animate);
-
-            const elapsedTime = clock.getElapsedTime();
-            const deltaTime = elapsedTime - oldElapsedTime;
-            oldElapsedTime = elapsedTime;
-
-            // Update physics world
-            // Use fixed timestep for stability if needed, or variable like this
-            world.step(1 / 60, deltaTime, 3); // Fixed timestep, delta time, max sub-steps
-
-            // Update visual meshes from physics bodies
-            sphereMesh.position.copy(sphereBody.position);
-            sphereMesh.quaternion.copy(sphereBody.quaternion);
-            // Ground plane is static, no update needed
-
-            // Render the scene
-            renderer.render(scene, camera);
-        }
-
-        // --- Handle Window Resize ---
-         window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        // --- Start Animation ---
-        animate();
-
-    </script>
-</body>
-</html>
