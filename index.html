@@ -31,14 +31,6 @@
         .divider-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 1.5s ease-in-out; }
         .fade-in-section.is-visible .divider-line { stroke-dashoffset: 0; }
 
-        /* --- Interactive Hero Styles --- */
-        #hero-image-container {
-             perspective: 1000px; /* Enable 3D perspective for child */
-        }
-        #hero-image {
-            transition: transform 0.1s ease-out; /* Smooth transition for transform */
-            will-change: transform; /* Optimize animation */
-        }
     </style>
 </head>
 <body class="bg-white text-gray-800 antialiased">
@@ -52,19 +44,18 @@
                 <h1 class="text-2xl md:text-3xl font-bold text-black">Angsthase Digital Art</h1>
             </div>
             <nav>
+                 {/* Updated link hover color */}
                 <ul class="flex space-x-4 md:space-x-6 text-gray-600">
-                    <li><a href="#gallery" class="hover:text-black rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500">Gallery</a></li>
-                    <li><a href="#about-style" class="hover:text-black rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500">About</a></li>
-                    <li><a href="#contact" class="hover:text-black rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500">Contact</a></li>
+                    <li><a href="#gallery" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500">Gallery</a></li>
+                    <li><a href="#about-style" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500">About</a></li>
+                    <li><a href="#contact" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500">Contact</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <section class="mb-20 text-center pt-16">
-         {/* Added ID and overflow-hidden to container */}
-         <div id="hero-image-container" class="w-full h-48 md:h-72 bg-gray-100 flex items-center justify-center mb-8 overflow-hidden">
-             {/* Added ID to image */}
+         <div class="w-full h-48 md:h-72 bg-gray-100 flex items-center justify-center mb-8 overflow-hidden">
              <img id="hero-image" src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744274602/hero_yjoq8w.png"
                   alt="Hero Artwork"
                   class="w-full h-full object-contain"
@@ -76,16 +67,15 @@
         </div>
     </section>
 
+    {/* Animated SVG Divider - Updated color */}
     <div class="fade-in-section container mx-auto px-4 md:px-8 my-16">
-         <svg width="100%" height="5" viewBox="0 0 1000 5" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-gray-300 block">
-            {/* Solid divider line (original state) */}
+         <svg width="100%" height="5" viewBox="0 0 1000 5" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-slate-500 block"> {/* Changed color */}
             <line class="divider-line" x1="0" y1="2.5" x2="1000" y2="2.5" stroke="currentColor" stroke-width="1"/>
         </svg>
     </div>
 
     <main class="container mx-auto px-4 md:px-8 py-16 relative z-10 -mt-16">
 
-        {/* Section 1: Project Spotlight (Original state) */}
         <section class="fade-in-section mb-20 flex flex-col md:flex-row items-center gap-8 md:gap-12">
             <div class="md:w-7/12 text-gray-700">
                 <h3 class="text-2xl font-bold mb-4 text-black">Project Spotlight</h3>
@@ -103,7 +93,6 @@
             </div>
         </section>
 
-        {/* Section 2: Another Piece / About (Original state) */}
         <section class="fade-in-section mb-20 flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12">
              <div class="md:w-7/12 text-gray-700">
                 <h3 class="text-2xl font-bold mb-4 text-black">Another Piece / About</h3>
@@ -137,7 +126,6 @@
         <section id="gallery" class="fade-in-section mb-20 pt-16 -mt-16">
             <h3 class="text-3xl font-bold mb-8 text-center text-black">Gallery</h3>
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                 {/* Gallery items remain the same */}
                  <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
                     <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/5_ulpq6j.png" alt="Artwork 4" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
                 </div>
@@ -183,7 +171,8 @@
         <section id="contact" class="fade-in-section mb-20 pt-16 -mt-16">
              <h3 class="text-3xl font-bold mb-8 text-center text-black">Contact</h3>
              <p class="text-center text-gray-700">
-                Email: <a href="mailto:angsthasedigitalstudio@gmail.com" class="text-gray-800 hover:text-black underline">angsthasedigitalstudio@gmail.com</a>
+                 {/* Updated mailto link hover color */}
+                Email: <a href="mailto:angsthasedigitalstudio@gmail.com" class="text-gray-800 hover:text-slate-600 underline">angsthasedigitalstudio@gmail.com</a>
              </p>
         </section>
 
@@ -192,9 +181,10 @@
     <footer class="bg-gray-100 py-8 px-4 md:px-8 mt-16">
         <div class="container mx-auto text-center text-gray-600">
             <div class="mb-4">
-                <a href="#" class="hover:text-black px-2">Privacy Policy</a> |
-                <a href="#" class="hover:text-black px-2">Terms of Service</a> |
-                <a href="#" class="hover:text-black px-2">Impressum</a>
+                 {/* Updated footer link hover color */}
+                <a href="#" class="hover:text-slate-600 px-2">Privacy Policy</a> |
+                <a href="#" class="hover:text-slate-600 px-2">Terms of Service</a> |
+                <a href="#" class="hover:text-slate-600 px-2">Impressum</a>
             </div>
             <p>&copy; 2025 Angsthase Digital Art. All rights reserved.</p>
         </div>
@@ -215,11 +205,9 @@
                 if (entry.isIntersecting) {
                     entry.target.classList.add('is-visible');
                     const line = entry.target.querySelector('.divider-line');
-                    if (line) {
-                       // Transition handled by CSS
-                    }
-                     // Simplified unobserve logic
-                     observer.unobserve(entry.target);
+                    if (line) { } // Transition handled by CSS
+                     if (!entry.target.querySelector('.divider-line')) { observer.unobserve(entry.target); }
+                     if (entry.target.querySelector('.divider-line')) { observer.unobserve(entry.target); }
                 }
             });
         };
@@ -242,110 +230,97 @@
         galleryItems.forEach((item, index) => {
             galleryImageSources.push(item.src);
             item.setAttribute('data-index', index);
-            // Updated event listener to pass index directly
-            item.addEventListener('click', () => openLightbox(index));
+            item.addEventListener('click', openLightbox);
         });
 
         function showImageAtIndex(index) {
             if (index < 0 || index >= galleryImageSources.length) return;
             lightboxImage.src = galleryImageSources[index];
             currentImageIndex = index;
-            const isSmallScreen = window.innerWidth < 640; // sm breakpoint in Tailwind
+            const isSmallScreen = window.innerWidth < 640;
             lightboxPrev.classList.toggle('hidden', index === 0 || isSmallScreen);
             lightboxNext.classList.toggle('hidden', index === galleryImageSources.length - 1 || isSmallScreen);
         }
 
-        // Updated openLightbox to accept index directly
-        function openLightbox(index) {
-             if (index === undefined || index < 0 || index >= galleryImageSources.length) {
-                console.error("Cannot open lightbox with invalid index:", index);
-                return; // Exit if index is invalid
+        function openLightbox(event) {
+            const clickedIndex = parseInt(event.target.getAttribute('data-index'), 10);
+            if (!isNaN(clickedIndex)) {
+                showImageAtIndex(clickedIndex);
+                lightboxOverlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
             }
-            lightboxOverlay.classList.remove('hidden');
-            lightboxOverlay.style.opacity = '0';
-            requestAnimationFrame(() => { // Fade in
-                 lightboxOverlay.style.opacity = '1';
-            });
-            showImageAtIndex(index);
-            document.body.style.overflow = 'hidden'; // Prevent background scroll
         }
 
         function closeLightbox() {
-             lightboxOverlay.style.opacity = '0'; // Fade out
-             setTimeout(() => { // Wait for transition
-                 lightboxOverlay.classList.add('hidden');
-            }, 300); // Match transition duration
-            document.body.style.overflow = ''; // Restore scroll
+            lightboxOverlay.classList.add('hidden');
+            lightboxImage.src = "";
+            currentImageIndex = -1;
+            document.body.style.overflow = '';
         }
 
-        function showNextImage() {
-            showImageAtIndex(currentImageIndex + 1);
-        }
+        function showPreviousImage() { if (currentImageIndex > 0) showImageAtIndex(currentImageIndex - 1); }
+        function showNextImage() { if (currentImageIndex < galleryImageSources.length - 1) showImageAtIndex(currentImageIndex + 1); }
 
-        function showPrevImage() {
-            showImageAtIndex(currentImageIndex - 1);
-        }
-
-        // Event listeners for lightbox
         lightboxClose.addEventListener('click', closeLightbox);
+        lightboxPrev.addEventListener('click', showPreviousImage);
         lightboxNext.addEventListener('click', showNextImage);
-        lightboxPrev.addEventListener('click', showPrevImage);
-        lightboxOverlay.addEventListener('click', (e) => { // Close on overlay click
-            if (e.target === lightboxOverlay) {
-                closeLightbox();
+        lightboxOverlay.addEventListener('click', (event) => { if (event.target === lightboxOverlay) closeLightbox(); });
+        document.addEventListener('keydown', (event) => {
+            if (lightboxOverlay.classList.contains('hidden')) return;
+            switch (event.key) {
+                case 'Escape': closeLightbox(); break;
+                case 'ArrowLeft': showPreviousImage(); break;
+                case 'ArrowRight': showNextImage(); break;
             }
         });
 
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (!lightboxOverlay.classList.contains('hidden')) {
-                if (e.key === 'Escape') closeLightbox();
-                if (e.key === 'ArrowRight') showNextImage(); // Simplified condition
-                if (e.key === 'ArrowLeft') showPrevImage();  // Simplified condition
-            }
-        });
-
-        // Touch swipe for lightbox
-        lightboxOverlay.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
-        lightboxOverlay.addEventListener('touchend', e => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipeGesture();
-        });
-
+        lightboxImage.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+        lightboxImage.addEventListener('touchend', (e) => { touchEndX = e.changedTouches[0].screenX; handleSwipeGesture(); }, { passive: true });
         function handleSwipeGesture() {
-            const threshold = 50; // Min swipe distance
-            if (touchEndX < touchStartX - threshold) { // Swipe left
-                showNextImage();
-            } else if (touchEndX > touchStartX + threshold) { // Swipe right
-                showPrevImage();
-            }
-            touchStartX = 0; // Reset points
-            touchEndX = 0;
+            const swipeThreshold = 50;
+            const distance = touchEndX - touchStartX;
+            if (distance > swipeThreshold) showPreviousImage();
+            else if (distance < -swipeThreshold) showNextImage();
+            touchStartX = 0; touchEndX = 0;
         }
 
-        // --- Interactive Hero Image Script (Example, currently commented out) ---
-        /*
+        window.addEventListener('resize', () => { if (!lightboxOverlay.classList.contains('hidden')) showImageAtIndex(currentImageIndex); });
+
+        // --- Interactive Hero Image ---
         const heroImage = document.getElementById('hero-image');
-        const heroContainer = document.getElementById('hero-image-container');
+        const heroContainer = document.getElementById('hero-image-container'); // Assumes container has this ID - needs adding
+
+        // Need to add ID to hero container in HTML:
+        // <div id="hero-image-container" class="w-full h-48 md:h-72 bg-gray-100 flex items-center justify-center mb-8 overflow-hidden">
+
         if (heroImage && heroContainer) {
             heroContainer.addEventListener('mousemove', (e) => {
                 const rect = heroContainer.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const rotateX = (y - centerY) / centerY * -3; // Reduced max rotation
-                const rotateY = (x - centerX) / centerX * 3;  // Reduced max rotation
-
-                heroImage.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.01)`; // Reduced scale
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                const maxRot = 3; // Reduced max rotation
+                const rotY = (x / (rect.width / 2)) * maxRot;
+                const rotX = (-y / (rect.height / 2)) * maxRot;
+                heroImage.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.03)`; // Reduced scale
             });
 
             heroContainer.addEventListener('mouseleave', () => {
                 heroImage.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
             });
+        } else {
+            // Add error handling or check if elements exist
+             console.error("Hero image or container not found for interactive effect.");
+             // Find the hero image container div and add the ID if it doesn't exist
+             const potentialHeroContainer = document.querySelector('section > div > img#hero-image')?.parentElement;
+             if (potentialHeroContainer && !potentialHeroContainer.id) {
+                 potentialHeroContainer.id = 'hero-image-container';
+                 // Re-run the event listener setup if needed, or ensure it runs after potential ID addition
+                 // This dynamic ID addition is complex and might be better done by adding the ID directly to the HTML template
+             }
         }
-        */
+
     </script>
 
 </body>
 </html>
+
