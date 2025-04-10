@@ -9,56 +9,38 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&family=Raleway:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        html {
-            scroll-behavior: smooth;
-        }
-        body {
-            font-family: 'Lato', sans-serif;
-            position: relative;
-            min-height: 100vh;
-        }
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Raleway', sans-serif;
-        }
-        img {
-            background-color: #f3f4f6;
-        }
-        .gallery-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            cursor: pointer;
-        }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Lato', sans-serif; position: relative; min-height: 100vh; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', sans-serif; }
+        img { background-color: #f3f4f6; }
+        .gallery-img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
+
         body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: -1;
+            content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1;
             background-image: url('https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png');
-            background-repeat: no-repeat;
-            background-position: center center;
-            background-size: contain;
-            background-attachment: fixed;
-            opacity: 0.25;
+            background-repeat: no-repeat; background-position: center center; background-size: contain;
+            background-attachment: fixed; opacity: 0.25;
         }
-        #lightbox-overlay {
-            transition: opacity 0.3s ease-in-out;
+
+        #lightbox-overlay { transition: opacity 0.3s ease-in-out; }
+        #lightbox-overlay button { cursor: pointer; }
+
+        .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
+
+        /* --- Animated Divider Styles --- */
+        .divider-line {
+            stroke-dasharray: 1000; /* Approx length of line */
+            stroke-dashoffset: 1000; /* Start with line hidden */
+            transition: stroke-dashoffset 1.5s ease-in-out; /* Control animation speed */
         }
-        #lightbox-overlay button {
-             cursor: pointer;
+        .fade-in-section.is-visible .divider-line {
+            stroke-dashoffset: 0; /* Animate to full line */
         }
-        .fade-in-section {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .fade-in-section.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        /* Alternative using @keyframes */
+        /* @keyframes drawLine { to { stroke-dashoffset: 0; } }
+        .fade-in-section.is-visible .divider-line { animation: drawLine 1.5s ease-in-out forwards; } */
+
     </style>
 </head>
 <body class="bg-white text-gray-800 antialiased">
@@ -94,7 +76,14 @@
         </div>
     </section>
 
-    <main class="container mx-auto px-4 md:px-8 py-16 relative z-10">
+    {/* Animated SVG Divider */}
+    <div class="fade-in-section container mx-auto px-4 md:px-8 my-16"> {/* Apply fade-in to the divider container */}
+         <svg width="100%" height="5" viewBox="0 0 1000 5" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-gray-300 block">
+            <line class="divider-line" x1="0" y1="2.5" x2="1000" y2="2.5" stroke="currentColor" stroke-width="1"/>
+        </svg>
+    </div>
+
+    <main class="container mx-auto px-4 md:px-8 py-16 relative z-10 -mt-16"> {/* Adjusted padding */}
 
         <section class="fade-in-section mb-20 flex flex-col md:flex-row items-center gap-8 md:gap-12">
             <div class="md:w-7/12 text-gray-700">
@@ -216,19 +205,36 @@
     </div>
 
     <script>
+        // --- Scroll Fade-In Functionality ---
         const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
         const observerCallback = (entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('is-visible');
-                    observer.unobserve(entry.target);
+                     // Check if the target has the divider line and trigger its animation
+                    const line = entry.target.querySelector('.divider-line');
+                    if (line) {
+                       // The transition is handled by CSS when is-visible is added
+                    }
+                    // We only want the fade-in sections to trigger once
+                    // Keep observing the divider if we use keyframes, otherwise unobserve
+                     if (!entry.target.querySelector('.divider-line')) {
+                         observer.unobserve(entry.target);
+                     }
+                     // If using transition only for line, unobserve divider too
+                     if (entry.target.querySelector('.divider-line')) {
+                         observer.unobserve(entry.target);
+                     }
+
                 }
             });
         };
         const scrollObserver = new IntersectionObserver(observerCallback, observerOptions);
-        const sectionsToAnimate = document.querySelectorAll('.fade-in-section');
-        sectionsToAnimate.forEach(section => { scrollObserver.observe(section); });
+        const elementsToAnimate = document.querySelectorAll('.fade-in-section'); // Observe sections and dividers
+        elementsToAnimate.forEach(el => { scrollObserver.observe(el); });
 
+
+        // --- Lightbox Functionality ---
         const lightboxOverlay = document.getElementById('lightbox-overlay');
         const lightboxImage = document.getElementById('lightbox-image');
         const lightboxClose = document.getElementById('lightbox-close');
