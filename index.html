@@ -16,7 +16,331 @@
         /* Apply Lato as the default body font */
         body {
             font-family: 'Lato', sans-serif;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angsthase Digital Art</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Add smooth scrolling behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Apply Lato as the default body font */
+        body {
+            font-family: 'Lato', sans-serif;
             position: relative; /* Needed for z-index stacking */
+            min-height: 100vh; /* Ensure body takes at least full viewport height */
+        }
+        /* Apply Raleway to headings */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Raleway', sans-serif;
+        }
+
+        /* Style for potentially slow-loading images */
+        img {
+            background-color: #f3f4f6; /* bg-gray-100 */
+        }
+
+        /* Ensure gallery images cover their container */
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Fill container without distorting aspect ratio */
+            cursor: pointer; /* Add pointer cursor to clickable gallery images */
+        }
+
+        /* Faint background logo using pseudo-element */
+        body::before {
+            content: '';
+            position: fixed; /* Fixed position like a watermark */
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1; /* Place behind content */
+            background-image: url('https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: contain; /* Show whole logo, scaled down */
+            background-attachment: fixed; /* Keep in place on scroll */
+            opacity: 0.25; /* Set fixed opacity to 25% */
+        }
+
+        /* Basic transition for lightbox */
+        #lightbox-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
+        /* Ensure lightbox buttons are clickable */
+        #lightbox-overlay button {
+             cursor: pointer;
+        }
+
+        /* --- Scroll Animation Styles --- */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px); /* Start slightly lower */
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0); /* Move to original position */
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-800 antialiased">
+
+    <header class="py-6 px-4 md:px-8 border-b border-gray-200 sticky top-0 z-30 bg-white/80 backdrop-blur-sm">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png"
+                     alt="Angsthase Logo"
+                     class="w-10 h-10 rounded-full object-cover border border-gray-200">
+
+                <h1 class="text-2xl md:text-3xl font-bold text-black">Angsthase Digital Art</h1>
+            </div>
+            <nav>
+                <ul class="flex space-x-4 md:space-x-6 text-gray-600">
+                    <li><a href="#gallery" class="hover:text-black rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500">Gallery</a></li>
+                    <li><a href="#about-style" class="hover:text-black rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500">About</a></li>
+                    <li><a href="#contact" class="hover:text-black rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="mb-20 text-center pt-16">
+         {/* Container for the single hero image - reduced height */}
+         <div class="w-full h-48 md:h-72 bg-gray-100 flex items-center justify-center mb-8 overflow-hidden">
+             <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744274602/hero_yjoq8w.png"
+                  alt="Hero Artwork"
+                  class="w-full h-full object-contain"
+                  onerror="this.onerror=null; this.src='https://placehold.co/1200x400/F3F4F6/1F2937?text=Image+Error'; this.alt='Image failed to load';">
+         </div>
+         <div class="container mx-auto px-4 md:px-8">
+             <h2 class="text-3xl md:text-4xl font-bold mb-4 text-black mt-8">Welcome to Angsthase Digital Art</h2>
+             <p class="text-gray-700 max-w-2xl mx-auto">Exploring themes through digital mediums. Browse the gallery to see the latest creations.</p>
+        </div>
+    </section>
+
+    <main class="container mx-auto px-4 md:px-8 py-16 relative z-10">
+
+        <section class="fade-in-section mb-20 flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            <div class="md:w-1/2 text-gray-700">
+                <h3 class="text-2xl font-bold mb-4 text-black">Project Spotlight</h3>
+                <p class="mb-4">
+                    Titled 'Café Corner, Potsdam Night', this piece highlights the contrast between the warm, inviting light spilling from the windows and the cool darkness of the surrounding night. Developed from photographic source material, the scene undergoes digital processing to enhance the atmospheric quality and painterly textures, particularly noticeable in the rendering of the reflections and the sky.
+                </p>
+                <p>
+                    The focus is on capturing a specific feeling of quiet solitude often found in illuminated structures after dark. Digital brushwork aims to evoke mood rather than precise detail, blending observed reality with a more expressive interpretation of light and shadow.
+                </p>
+            </div>
+            <div class="md:w-1/2 md:-mr-8 lg:-mr-12">
+                 <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/7_eiddxy.png"
+                     alt="Artwork Example 1: Café Corner, Potsdam Night" class="w-full h-auto rounded-lg border border-gray-200 block"
+                     onerror="this.onerror=null; this.src='https://placehold.co/600x400/E5E7EB/1F2937?text=Image+Error'; this.alt='Image failed to load';">
+            </div>
+        </section>
+
+        <section class="fade-in-section mb-20 flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12">
+             <div class="md:w-1/2 text-gray-700">
+                <h3 class="text-2xl font-bold mb-4 text-black">Another Piece / About</h3>
+                 <p class="mb-4">
+                    Titled 'Woodhouse, Baabe', this artwork captures a structure within the unique landscape of the Rügen coast. Developed from a photograph, the image has been digitally transformed to emphasize mood and atmosphere over strict realism.
+                 </p>
+                 <p>
+                    The focus is on the interplay of light on the wooden surfaces and the surrounding environment, rendered with distinct painterly textures characteristic of the digital synthesis process. It aims to convey the quiet feeling of this specific place, blending observed reality with an expressive, atmospheric interpretation.
+                 </p>
+            </div>
+           <div class="md:w-1/2 md:-ml-8 lg:-ml-12">
+                <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/9_gkmvef.png"
+                     alt="Artwork Example 2: Woodhouse, Baabe" class="w-full h-auto rounded-lg border border-gray-200"
+                     onerror="this.onerror=null; this.src='https://placehold.co/600x400/E5E7EB/1F2937?text=Image+Error'; this.alt='Image failed to load';">
+           </div>
+        </section>
+
+        <section id="about-style" class="fade-in-section mb-20 max-w-4xl mx-auto text-gray-700 pt-16 -mt-16">
+             <h3 class="text-3xl font-bold mb-6 text-center text-black">About The Art Style</h3>
+             <p class="mb-4">
+                The digital art originates from photographs, often capturing scenes from familiar places in Germany – from the streets of Potsdam and the Bad Belzig area to the unique landscapes of the Rügen coast. Each image undergoes extensive digital processing and synthesis, transforming these photographic moments. The aim is less about strict realism and more focused on evoking a specific mood and atmosphere inherent in the scene.
+             </p>
+             <p class="mb-4">
+                The resulting style is distinctly painterly, characterized by visible digital textures and brushwork that are particularly noticeable in skies, water, and shadow areas. There is a strong focus on the interplay of light – whether it's the warm glow of a window against the cool night, the transitional colours of dusk and dawn, or the quality of daylight on different surfaces. This digital synthesis process allows blending the observed reality captured in the source photograph with a more expressive, atmospheric interpretation.
+             </p>
+             <p>
+                Through subjects often featuring architecture, streetscapes, and landscapes, themes of quiet, solitude, and the unique feeling of a place at a particular moment are explored. The goal is to create atmospheric digital paintings that invite contemplation and offer a distinctive view of these locations, filtered through this artistic process.
+             </p>
+        </section>
+
+        <section id="gallery" class="fade-in-section mb-20 pt-16 -mt-16">
+            <h3 class="text-3xl font-bold mb-8 text-center text-black">Gallery</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/5_ulpq6j.png" alt="Artwork 4" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/8_vtftql.png" alt="Artwork 5" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209002/6_typwgx.png" alt="Artwork 6" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/4_null04.png" alt="Artwork 7" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/3_cyiqpk.png" alt="Artwork 8" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/1_sbzyhy.png" alt="Artwork 9" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209000/13_at5ibg.png" alt="Artwork 10" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209009/14_lnxo5n.png" alt="Artwork 11" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209008/11_wcbenb.png" alt="Artwork 12" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209007/10_to7taw.png" alt="Artwork 13" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/2_t9vs7f.png" alt="Artwork 14" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/7_eiddxy.png" alt="Café Corner, Potsdam Night" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/9_gkmvef.png" alt="Woodhouse, Baabe" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="fade-in-section mb-20 pt-16 -mt-16">
+             <h3 class="text-3xl font-bold mb-8 text-center text-black">Contact</h3>
+             <p class="text-center text-gray-700">
+                Email: <a href="mailto:angsthasedigitalstudio@gmail.com" class="text-gray-800 hover:text-black underline">angsthasedigitalstudio@gmail.com</a>
+             </p>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-100 py-8 px-4 md:px-8 mt-16">
+        <div class="container mx-auto text-center text-gray-600">
+            <div class="mb-4">
+                <a href="#" class="hover:text-black px-2">Privacy Policy</a> |
+                <a href="#" class="hover:text-black px-2">Terms of Service</a> |
+                <a href="#" class="hover:text-black px-2">Impressum</a>
+            </div>
+            <p>&copy; 2025 Angsthase Digital Art. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div id="lightbox-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden z-50 p-4 cursor-default">
+        <button id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold p-2 bg-black bg-opacity-30 rounded-full hover:bg-opacity-50 focus:outline-none hidden sm:block">&lt;</button>
+        <img id="lightbox-image" src="" alt="Enlarged View" class="max-w-full max-h-full object-contain block">
+        <button id="lightbox-next" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold p-2 bg-black bg-opacity-30 rounded-full hover:bg-opacity-50 focus:outline-none hidden sm:block">&gt;</button>
+        <button id="lightbox-close" class="absolute top-5 right-6 text-white text-4xl leading-none font-bold hover:text-gray-300 focus:outline-none">&times;</button>
+    </div>
+
+    <script>
+        // --- Scroll Fade-In Functionality ---
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+        const observerCallback = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        };
+        const scrollObserver = new IntersectionObserver(observerCallback, observerOptions);
+        const sectionsToAnimate = document.querySelectorAll('.fade-in-section');
+        sectionsToAnimate.forEach(section => { scrollObserver.observe(section); });
+
+        // Removed Background Opacity Fade Functionality
+
+        // --- Lightbox Functionality ---
+        const lightboxOverlay = document.getElementById('lightbox-overlay');
+        const lightboxImage = document.getElementById('lightbox-image');
+        const lightboxClose = document.getElementById('lightbox-close');
+        const lightboxPrev = document.getElementById('lightbox-prev');
+        const lightboxNext = document.getElementById('lightbox-next');
+        const galleryItems = document.querySelectorAll('.gallery-item-clickable');
+        let galleryImageSources = [];
+        let currentImageIndex = -1;
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        galleryItems.forEach((item, index) => {
+            galleryImageSources.push(item.src);
+            item.setAttribute('data-index', index);
+            item.addEventListener('click', openLightbox);
+        });
+
+        function showImageAtIndex(index) {
+            if (index < 0 || index >= galleryImageSources.length) return;
+            lightboxImage.src = galleryImageSources[index];
+            currentImageIndex = index;
+            const isSmallScreen = window.innerWidth < 640;
+            lightboxPrev.classList.toggle('hidden', index === 0 || isSmallScreen);
+            lightboxNext.classList.toggle('hidden', index === galleryImageSources.length - 1 || isSmallScreen);
+        }
+
+        function openLightbox(event) {
+            const clickedIndex = parseInt(event.target.getAttribute('data-index'), 10);
+            if (!isNaN(clickedIndex)) {
+                showImageAtIndex(clickedIndex);
+                lightboxOverlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeLightbox() {
+            lightboxOverlay.classList.add('hidden');
+            lightboxImage.src = "";
+            currentImageIndex = -1;
+            document.body.style.overflow = '';
+        }
+
+        function showPreviousImage() { if (currentImageIndex > 0) showImageAtIndex(currentImageIndex - 1); }
+        function showNextImage() { if (currentImageIndex < galleryImageSources.length - 1) showImageAtIndex(currentImageIndex + 1); }
+
+        lightboxClose.addEventListener('click', closeLightbox);
+        lightboxPrev.addEventListener('click', showPreviousImage);
+        lightboxNext.addEventListener('click', showNextImage);
+        lightboxOverlay.addEventListener('click', (event) => { if (event.target === lightboxOverlay) closeLightbox(); });
+        document.addEventListener('keydown', (event) => {
+            if (lightboxOverlay.classList.contains('hidden')) return;
+            switch (event.key) {
+                case 'Escape': closeLightbox(); break;
+                case 'ArrowLeft': showPreviousImage(); break;
+                case 'ArrowRight': showNextImage(); break;
+            }
+        });
+
+        lightboxImage.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+        lightboxImage.addEventListener('touchend', (e) => { touchEndX = e.changedTouches[0].screenX; handleSwipeGesture(); }, { passive: true });
+        function handleSwipeGesture() {
+            const swipeThreshold = 50;
+            const distance = touchEndX - touchStartX;
+            if (distance > swipeThreshold) showPreviousImage();
+            else if (distance < -swipeThreshold) showNextImage();
+            touchStartX = 0; touchEndX = 0;
+        }
+
+        window.addEventListener('resize', () => { if (!lightboxOverlay.classList.contains('hidden')) showImageAtIndex(currentImageIndex); });
+
+    </script>
+
+</body>
+</html>
             min-height: 100vh; /* Ensure body takes at least full viewport height */
         }
         /* Apply Raleway to headings */
