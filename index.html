@@ -28,19 +28,17 @@
         .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
         .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
 
-        /* --- Animated Divider Styles --- */
-        .divider-line {
-            stroke-dasharray: 1000; /* Approx length of line */
-            stroke-dashoffset: 1000; /* Start with line hidden */
-            transition: stroke-dashoffset 1.5s ease-in-out; /* Control animation speed */
-        }
-        .fade-in-section.is-visible .divider-line {
-            stroke-dashoffset: 0; /* Animate to full line */
-        }
-        /* Alternative using @keyframes */
-        /* @keyframes drawLine { to { stroke-dashoffset: 0; } }
-        .fade-in-section.is-visible .divider-line { animation: drawLine 1.5s ease-in-out forwards; } */
+        .divider-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 1.5s ease-in-out; }
+        .fade-in-section.is-visible .divider-line { stroke-dashoffset: 0; }
 
+        /* --- Interactive Hero Styles --- */
+        #hero-image-container {
+             perspective: 1000px; /* Enable 3D perspective for child */
+        }
+        #hero-image {
+            transition: transform 0.1s ease-out; /* Smooth transition for transform */
+            will-change: transform; /* Optimize animation */
+        }
     </style>
 </head>
 <body class="bg-white text-gray-800 antialiased">
@@ -64,8 +62,10 @@
     </header>
 
     <section class="mb-20 text-center pt-16">
-         <div class="w-full h-48 md:h-72 bg-gray-100 flex items-center justify-center mb-8 overflow-hidden">
-             <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744274602/hero_yjoq8w.png"
+         {/* Added ID and overflow-hidden to container */}
+         <div id="hero-image-container" class="w-full h-48 md:h-72 bg-gray-100 flex items-center justify-center mb-8 overflow-hidden">
+             {/* Added ID to image */}
+             <img id="hero-image" src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744274602/hero_yjoq8w.png"
                   alt="Hero Artwork"
                   class="w-full h-full object-contain"
                   onerror="this.onerror=null; this.src='https://placehold.co/1200x400/F3F4F6/1F2937?text=Image+Error'; this.alt='Image failed to load';">
@@ -76,14 +76,13 @@
         </div>
     </section>
 
-    {/* Animated SVG Divider */}
-    <div class="fade-in-section container mx-auto px-4 md:px-8 my-16"> {/* Apply fade-in to the divider container */}
+    <div class="fade-in-section container mx-auto px-4 md:px-8 my-16">
          <svg width="100%" height="5" viewBox="0 0 1000 5" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-gray-300 block">
             <line class="divider-line" x1="0" y1="2.5" x2="1000" y2="2.5" stroke="currentColor" stroke-width="1"/>
         </svg>
     </div>
 
-    <main class="container mx-auto px-4 md:px-8 py-16 relative z-10 -mt-16"> {/* Adjusted padding */}
+    <main class="container mx-auto px-4 md:px-8 py-16 relative z-10 -mt-16">
 
         <section class="fade-in-section mb-20 flex flex-col md:flex-row items-center gap-8 md:gap-12">
             <div class="md:w-7/12 text-gray-700">
@@ -211,28 +210,22 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('is-visible');
-                     // Check if the target has the divider line and trigger its animation
                     const line = entry.target.querySelector('.divider-line');
                     if (line) {
-                       // The transition is handled by CSS when is-visible is added
+                       // Transition handled by CSS
                     }
-                    // We only want the fade-in sections to trigger once
-                    // Keep observing the divider if we use keyframes, otherwise unobserve
                      if (!entry.target.querySelector('.divider-line')) {
                          observer.unobserve(entry.target);
                      }
-                     // If using transition only for line, unobserve divider too
                      if (entry.target.querySelector('.divider-line')) {
                          observer.unobserve(entry.target);
                      }
-
                 }
             });
         };
         const scrollObserver = new IntersectionObserver(observerCallback, observerOptions);
-        const elementsToAnimate = document.querySelectorAll('.fade-in-section'); // Observe sections and dividers
+        const elementsToAnimate = document.querySelectorAll('.fade-in-section');
         elementsToAnimate.forEach(el => { scrollObserver.observe(el); });
-
 
         // --- Lightbox Functionality ---
         const lightboxOverlay = document.getElementById('lightbox-overlay');
@@ -304,6 +297,35 @@
         }
 
         window.addEventListener('resize', () => { if (!lightboxOverlay.classList.contains('hidden')) showImageAtIndex(currentImageIndex); });
+
+        // --- Interactive Hero Image ---
+        const heroImage = document.getElementById('hero-image');
+        const heroContainer = document.getElementById('hero-image-container');
+
+        if (heroImage && heroContainer) {
+            heroContainer.addEventListener('mousemove', (e) => {
+                const rect = heroContainer.getBoundingClientRect();
+                // Calculate mouse position relative to the center of the container
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+
+                // Define max rotation angle
+                const maxRot = 4; // Max rotation in degrees
+
+                // Calculate rotation based on mouse position (more movement further from center)
+                // Normalize position from -1 to 1 relative to half-width/height
+                const rotY = (x / (rect.width / 2)) * maxRot;
+                const rotX = (-y / (rect.height / 2)) * maxRot; // Invert Y for natural tilt
+
+                // Apply the transform
+                heroImage.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.05)`; // Slight scale for effect
+            });
+
+            heroContainer.addEventListener('mouseleave', () => {
+                // Reset transform when mouse leaves
+                heroImage.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+            });
+        }
 
     </script>
 
