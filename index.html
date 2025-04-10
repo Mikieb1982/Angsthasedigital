@@ -51,7 +51,8 @@
             background-position: center center;
             background-size: contain; /* Show whole logo, scaled down */
             background-attachment: fixed; /* Keep in place on scroll */
-            opacity: 0.25; /* Set opacity to 25% */
+            opacity: var(--bg-opacity, 1); /* Use CSS variable, default 1 */
+            transition: opacity 0.3s ease-out; /* Add transition */
         }
 
         /* Basic transition for lightbox */
@@ -98,37 +99,47 @@
 
     <main class="container mx-auto px-4 md:px-8 py-16 relative z-10">
 
-        <section class="mb-20 text-center pt-16">
-             <div class="relative w-full h-[250px] md:h-[300px] mb-8 flex items-center justify-center">
+        <section class="mb-20 text-center pt-32">
+             <div class="relative w-full h-[350px] md:h-[450px] mb-8 flex items-center justify-center">
                  <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/5_ulpq6j.png"
                       alt="Scattered Artwork 1"
-                      class="absolute w-1/3 sm:w-1/4 lg:w-1/5 max-w-[180px] h-auto object-contain rounded-lg shadow-lg transform rotate-[2deg] z-0"
-                      style="top: 50%; left: 5%; transform: translateY(-50%) rotate(2deg);"
+                      class="absolute w-1/3 sm:w-1/4 lg:w-1/5 max-w-[180px] h-auto object-contain rounded-lg shadow-lg transform rotate-[4deg] z-0"
+                      style="top: 48%; left: 10%; transform: translateY(-50%) rotate(4deg);"
                       onerror="this.style.display='none';">
                  <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/1_sbzyhy.png"
                       alt="Scattered Artwork 2"
-                      class="absolute w-1/3 sm:w-1/4 lg:w-1/5 max-w-[180px] h-auto object-contain rounded-lg shadow-lg transform rotate-[-4deg] z-10"
-                      style="top: 45%; left: 18%; transform: translateY(-50%) rotate(-4deg);"
+                      class="absolute w-1/3 sm:w-1/4 lg:w-1/5 max-w-[180px] h-auto object-contain rounded-lg shadow-lg transform rotate-[-2deg] z-10"
+                      style="top: 52%; left: 18%; transform: translateY(-50%) rotate(-2deg);"
                       onerror="this.style.display='none';">
                   <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209002/6_typwgx.png"
                       alt="Scattered Artwork 3"
                       class="absolute w-1/3 sm:w-1/4 lg:w-1/5 max-w-[180px] h-auto object-contain rounded-lg shadow-lg transform rotate-[3deg] z-20"
-                       style="top: 55%; left: 31%; transform: translateY(-50%) rotate(3deg);"
+                       style="top: 45%; left: 26%; transform: translateY(-50%) rotate(3deg);"
                       onerror="this.style.display='none';">
                  <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/3_cyiqpk.png"
                       alt="Scattered Artwork 4"
                       class="absolute w-1/3 sm:w-1/4 lg:w-1/5 max-w-[180px] h-auto object-contain rounded-lg shadow-lg transform rotate-[-1deg] z-30"
-                      style="top: 50%; left: 44%; transform: translateY(-50%) rotate(-1deg);"
+                      style="top: 55%; left: 34%; transform: translateY(-50%) rotate(-1deg);"
                       onerror="this.style.display='none';">
                  <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/8_vtftql.png"
                       alt="Scattered Artwork 5"
                       class="absolute w-1/3 sm:w-1/4 lg:w-1/5 max-w-[180px] h-auto object-contain rounded-lg shadow-lg transform rotate-[5deg] z-40"
-                      style="top: 48%; left: 57%; transform: translateY(-50%) rotate(5deg);"
+                      style="top: 47%; left: 42%; transform: translateY(-50%) rotate(5deg);"
                       onerror="this.style.display='none';">
                  <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/2_t9vs7f.png"
                       alt="Scattered Artwork 6"
-                      class="absolute w-1/3 sm:w-1/4 lg:w-1/5 max-w-[180px] h-auto object-contain rounded-lg shadow-lg transform rotate-[-2deg] z-50"
-                      style="top: 52%; left: 70%; transform: translateY(-50%) rotate(-2deg);"
+                      class="absolute w-1/3 sm:w-1/4 lg:w-1/5 max-w-[180px] h-auto object-contain rounded-lg shadow-lg transform rotate-[-3deg] z-50"
+                      style="top: 53%; left: 50%; transform: translateY(-50%) rotate(-3deg);"
+                      onerror="this.style.display='none';">
+                 <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/4_null04.png"
+                      alt="Scattered Artwork 7"
+                      class="absolute w-1/3 sm:w-1/4 lg:w-1/5 max-w-[180px] h-auto object-contain rounded-lg shadow-lg transform rotate-[1deg] z-10"
+                      style="top: 49%; left: 58%; transform: translateY(-50%) rotate(1deg);"
+                      onerror="this.style.display='none';">
+                 <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209007/10_to7taw.png"
+                      alt="Scattered Artwork 8"
+                      class="absolute w-1/3 sm:w-1/4 lg:w-1/5 max-w-[180px] h-auto object-contain rounded-lg shadow-lg transform rotate-[-4deg] z-20"
+                      style="top: 51%; left: 66%; transform: translateY(-50%) rotate(-4deg);"
                       onerror="this.style.display='none';">
              </div>
             <h2 class="text-3xl md:text-4xl font-bold mb-4 text-black mt-8">Welcome to Angsthase Digital Art</h2>
