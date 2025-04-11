@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    {/* Add Favicon Link - Replace HREF with your hosted favicon URL */}
+    <link rel="icon" type="image/png" href="YOUR_FAVICON_URL_HERE.png">
     <style>
         html { scroll-behavior: smooth; }
         body { font-family: 'Lato', sans-serif; position: relative; min-height: 100vh; }
@@ -20,22 +22,8 @@
             background-repeat: no-repeat; background-position: center center; background-size: contain;
             background-attachment: fixed; opacity: 0.25;
         }
-        #lightbox-overlay {
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease-in-out;
-            z-index: 100;
-        }
-        #lightbox-overlay.is-active {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        #lightbox-overlay { transition: opacity 0.3s ease-in-out; }
         #lightbox-overlay button { cursor: pointer; }
-        #lightbox-image {
-            opacity: 1;
-            transform: scale(1);
-            transition: none;
-        }
         .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
         .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
         .divider-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 1.5s ease-in-out; }
@@ -107,11 +95,12 @@
             </div>
             <nav>
                 <ul class="flex space-x-4 md:space-x-6 text-gray-600 items-center">
-                    <li><a href="#gallery" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 translatable" data-key="nav-gallery" data-en="Gallery" data-de="Galerie">Gallery</a></li>
-                    <li><a href="#about-style" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 translatable" data-key="nav-about" data-en="About" data-de="Über">About</a></li>
-                    <li><a href="#contact" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 translatable" data-key="nav-contact" data-en="Contact" data-de="Kontakt">Contact</a></li>
+                     {/* Added focus states */}
+                    <li><a href="#gallery" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-500 translatable" data-key="nav-gallery" data-en="Gallery" data-de="Galerie">Gallery</a></li>
+                    <li><a href="#about-style" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-500 translatable" data-key="nav-about" data-en="About" data-de="Über">About</a></li>
+                    <li><a href="#contact" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-500 translatable" data-key="nav-contact" data-en="Contact" data-de="Kontakt">Contact</a></li>
                     <li>
-                        <button id="lang-toggle" class="ml-2 px-3 py-1 border border-gray-400 rounded-md text-xs hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <button id="lang-toggle" class="ml-2 px-3 py-1 border border-gray-400 rounded-md text-xs hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-500">
                             DE / EN
                         </button>
                     </li>
@@ -259,7 +248,7 @@
                  If you have any questions about these artworks, would like to buy any, or wish to commission a piece, please contact me at:
              </p>
              <p class="text-center text-gray-700">
-                Email: <a href="mailto:angsthasedigitalstudio@gmail.com" class="text-gray-800 hover:text-slate-600 underline">angsthasedigitalstudio@gmail.com</a>
+                Email: <a href="mailto:angsthasedigitalstudio@gmail.com" class="text-gray-800 hover:text-slate-600 underline focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-500 rounded">angsthasedigitalstudio@gmail.com</a>
              </p>
         </section>
 
@@ -268,9 +257,9 @@
     <footer class="bg-gray-100 py-8 px-4 md:px-8 mt-16">
         <div class="container mx-auto text-center text-gray-600">
             <div class="mb-4">
-                <a href="#" class="hover:text-slate-600 px-2 translatable" data-key="footer-privacy" data-en="Privacy Policy" data-de="Datenschutzrichtlinie">Privacy Policy</a> |
-                <a href="#" class="hover:text-slate-600 px-2 translatable" data-key="footer-terms" data-en="Terms of Service" data-de="Nutzungsbedingungen">Terms of Service</a> |
-                <a href="#" class="hover:text-slate-600 px-2 translatable" data-key="footer-imprint" data-en="Impressum" data-de="Impressum">Impressum</a>
+                <a href="#" class="hover:text-slate-600 px-2 translatable focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-500 rounded" data-key="footer-privacy" data-en="Privacy Policy" data-de="Datenschutzrichtlinie">Privacy Policy</a> |
+                <a href="#" class="hover:text-slate-600 px-2 translatable focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-500 rounded" data-key="footer-terms" data-en="Terms of Service" data-de="Nutzungsbedingungen">Terms of Service</a> |
+                <a href="#" class="hover:text-slate-600 px-2 translatable focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-500 rounded" data-key="footer-imprint" data-en="Impressum" data-de="Impressum">Impressum</a>
             </div>
             <p data-key="footer-copy" class="translatable" data-en="&copy; 2025 Angsthase Digital Art. All rights reserved." data-de="© 2025 Angsthase Digital Art. Alle Rechte vorbehalten.">&copy; 2025 Angsthase Digital Art. All rights reserved.</p>
         </div>
@@ -346,14 +335,10 @@
                 showImageAtIndex(clickedIndex);
                 lightboxOverlay.classList.add('is-active');
                 document.body.style.overflow = 'hidden';
-                console.log('Opening lightbox with index:', clickedIndex);
-            } else {
-                 console.error("Could not get index for clicked item:", event.target);
             }
         }
 
         function closeLightbox() {
-            console.log('Closing lightbox');
             lightboxOverlay.classList.remove('is-active');
              setTimeout(() => {
                 lightboxImage.src = "";
