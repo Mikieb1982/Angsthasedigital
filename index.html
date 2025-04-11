@@ -24,9 +24,8 @@
         #lightbox-overlay {
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease-in-out;
-            /* Increased z-index */
-            z-index: 60;
+            transition: opacity 0.3s ease-in-out; /* Keep fade for overlay */
+            z-index: 60; /* Ensure overlay is high enough */
         }
         #lightbox-overlay.is-active {
             opacity: 1;
@@ -34,16 +33,13 @@
         }
         #lightbox-overlay button { cursor: pointer; }
 
-        /* Lightbox Image Animation */
+        /* Lightbox Image: Remove animation styles for now */
         #lightbox-image {
-            opacity: 0;
-            transform: scale(0.95);
-            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+            /* opacity: 1; */ /* Default visible when overlay is active */
+            /* transform: scale(1); */
+            /* transition: none; */ /* Remove transitions */
         }
-        #lightbox-image.is-visible {
-            opacity: 1;
-            transform: scale(1);
-        }
+        /* Removed .is-visible class styles */
 
         .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
         .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
@@ -291,30 +287,24 @@
         function openLightbox(event) {
             const clickedIndex = parseInt(event.target.getAttribute('data-index'), 10);
             if (!isNaN(clickedIndex)) {
-                lightboxImage.classList.remove('is-visible'); // Ensure animation resets
+                lightboxImage.classList.remove('is-visible'); // Simplified open logic
                 showImageAtIndex(clickedIndex);
                 lightboxOverlay.classList.add('is-active');
-                // Use rAF to ensure display is set before transition starts
-                requestAnimationFrame(() => {
-                   lightboxImage.classList.add('is-visible');
-                });
+                lightboxImage.classList.add('is-visible'); // Apply directly
                 document.body.style.overflow = 'hidden';
-                console.log('Opening lightbox with src:', lightboxImage.src); // Debug log
+                console.log('Opening lightbox with src:', lightboxImage.src);
             } else {
                  console.error("Could not get index for clicked item:", event.target);
             }
         }
 
         function closeLightbox() {
-            console.log('Closing lightbox'); // Debug log
-            lightboxImage.classList.remove('is-visible');
+            console.log('Closing lightbox');
+            lightboxImage.classList.remove('is-visible'); // Simplified close logic
             lightboxOverlay.classList.remove('is-active');
-            // Wait for transitions before clearing src and resetting scroll
-             setTimeout(() => {
-                lightboxImage.src = "";
-                currentImageIndex = -1;
-                document.body.style.overflow = '';
-            }, 300); // Match CSS transition duration
+            lightboxImage.src = "";
+            currentImageIndex = -1;
+            document.body.style.overflow = '';
         }
 
         function showPreviousImage() { if (currentImageIndex > 0) showImageAtIndex(currentImageIndex - 1); }
@@ -325,7 +315,7 @@
         lightboxNext.addEventListener('click', showNextImage);
         lightboxOverlay.addEventListener('click', (event) => { if (event.target === lightboxOverlay) closeLightbox(); });
         document.addEventListener('keydown', (event) => {
-            if (!lightboxOverlay.classList.contains('is-active')) return; // Check active class
+            if (!lightboxOverlay.classList.contains('is-active')) return;
             switch (event.key) {
                 case 'Escape': closeLightbox(); break;
                 case 'ArrowLeft': showPreviousImage(); break;
