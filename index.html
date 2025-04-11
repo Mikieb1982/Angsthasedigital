@@ -20,25 +20,22 @@
             background-repeat: no-repeat; background-position: center center; background-size: contain;
             background-attachment: fixed; opacity: 0.25;
         }
-        /* Lightbox Overlay: Use opacity and pointer-events, high z-index */
         #lightbox-overlay {
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease-in-out;
-            z-index: 100; /* Increased z-index */
+            z-index: 100;
         }
         #lightbox-overlay.is-active {
             opacity: 1;
             pointer-events: auto;
         }
         #lightbox-overlay button { cursor: pointer; }
-        /* Lightbox Image: No animation styles for now */
         #lightbox-image {
             opacity: 1;
             transform: scale(1);
             transition: none;
         }
-
         .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
         .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
         .divider-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 1.5s ease-in-out; }
@@ -64,43 +61,38 @@
             background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
             pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); display: none; mix-blend-mode: screen;
         }
-        /* --- Scrollable Carousel Styles --- */
         .carousel-viewport {
             width: 100%;
-            overflow-x: auto; /* Enable horizontal scrolling */
-            white-space: nowrap; /* Keep items in one line */
-            padding-bottom: 1rem; /* Space for scrollbar */
-            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+            overflow-x: auto;
+            white-space: nowrap;
+            padding-bottom: 1rem;
+            -webkit-overflow-scrolling: touch;
         }
-         /* Hide scrollbar visually (optional, but common) */
-        .carousel-viewport::-webkit-scrollbar { display: none; } /* Chrome, Safari, Opera */
-        .carousel-viewport { -ms-overflow-style: none; scrollbar-width: none; } /* IE, Edge, Firefox */
-
+        .carousel-viewport::-webkit-scrollbar { display: none; }
+        .carousel-viewport { -ms-overflow-style: none; scrollbar-width: none; }
         .carousel-item {
-            display: inline-block; /* Layout items inline */
+            display: inline-block;
             flex-shrink: 0;
             width: auto;
-            height: 6rem; /* h-24 - Smaller height */
-            margin-right: 1rem; /* gap-4 */
-            border: 1px solid #e5e7eb; /* border-gray-200 */
-            border-radius: 0.5rem; /* rounded-lg */
+            height: 6rem;
+            margin-right: 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
             overflow: hidden;
-            vertical-align: top; /* Align items nicely */
+            vertical-align: top;
         }
          .carousel-item img {
              width: auto;
              height: 100%;
              object-fit: cover;
          }
-         /* --- Static Grid Styles --- */
          .gallery-grid-item {
-             aspect-ratio: 297 / 210; /* A4 Landscape */
-             background-color: #f3f4f6; /* bg-gray-100 */
-             border-radius: 0.5rem; /* rounded-lg */
+             aspect-ratio: 297 / 210;
+             background-color: #f3f4f6;
+             border-radius: 0.5rem;
              overflow: hidden;
-             border: 1px solid #e5e7eb; /* border-gray-200 */
+             border: 1px solid #e5e7eb;
          }
-
     </style>
 </head>
 <body class="bg-white text-gray-800 antialiased">
@@ -199,14 +191,10 @@
              </p>
         </section>
 
-        {/* Gallery Section - Now with Carousel and Grid */}
         <section id="gallery" class="fade-in-section mb-20 pt-16 -mt-16">
             <h3 data-key="gallery-title" class="translatable text-3xl font-bold mb-8 text-center text-black" data-en="Gallery" data-de="Galerie">Gallery</h3>
-
-             {/* Scrollable Carousel */}
-             <div class="carousel-viewport mb-8">
-                 {/* Track contains only one set now */}
-                 <div class="carousel-track-to-be-removed"> {/* Remove this div later if carousel is removed */}
+            <div class="carousel-viewport mb-8">
+                 <div class="carousel-track-to-be-removed">
                      <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/5_ulpq6j.png" alt="Pedestrians walk past brightly lit modern shopfronts on a street at night." class="gallery-img gallery-item-clickable"></div>
                      <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/8_vtftql.png" alt="Illuminated building with a tower and adjacent structures on a street at night." class="gallery-img gallery-item-clickable"></div>
                      <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209002/6_typwgx.png" alt="Street intersection at night with glowing streetlights and dark buildings." class="gallery-img gallery-item-clickable"></div>
@@ -222,8 +210,6 @@
                      <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/9_gkmvef.png" alt="Woodhouse, Baabe" class="gallery-img gallery-item-clickable"></div>
                  </div>
              </div>
-
-            {/* Static Grid */}
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                  <div class="gallery-grid-item">
                     <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/5_ulpq6j.png" alt="Pedestrians walk past brightly lit modern shopfronts on a street at night." class="gallery-img gallery-item-clickable">
@@ -321,20 +307,17 @@
         const lightboxClose = document.getElementById('lightbox-close');
         const lightboxPrev = document.getElementById('lightbox-prev');
         const lightboxNext = document.getElementById('lightbox-next');
-        // Select ALL clickable items (carousel + grid)
         const galleryItems = document.querySelectorAll('.gallery-item-clickable');
-        let galleryImageSources = []; // Will store unique sources from the grid
+        let galleryImageSources = [];
         let currentImageIndex = -1;
         let touchStartX = 0;
         let touchEndX = 0;
 
-        // Populate sources from the GRID only, and set data-index on ALL items
         const gridItems = document.querySelectorAll('#gallery .grid .gallery-item-clickable');
         gridItems.forEach((item, index) => {
-            galleryImageSources.push(item.src); // Store unique source
-            item.setAttribute('data-index', index); // Set index for grid item
+            galleryImageSources.push(item.src);
+            item.setAttribute('data-index', index);
         });
-        // Now set correct index for carousel items (pointing to the same source in the unique list)
         const carouselItems = document.querySelectorAll('.carousel-viewport .gallery-item-clickable');
         carouselItems.forEach(item => {
             const itemSrc = item.src;
@@ -342,28 +325,26 @@
             if (uniqueIndex !== -1) {
                 item.setAttribute('data-index', uniqueIndex);
             }
-            item.addEventListener('click', openLightbox); // Add listener to carousel items
         });
-         // Add listener to grid items too
-         gridItems.forEach(item => {
+         galleryItems.forEach(item => {
              item.addEventListener('click', openLightbox);
          });
 
 
         function showImageAtIndex(index) {
-            if (index < 0 || index >= galleryImageSources.length) return; // Use unique sources length
-            lightboxImage.src = galleryImageSources[index]; // Use unique sources array
+            if (index < 0 || index >= galleryImageSources.length) return;
+            lightboxImage.src = galleryImageSources[index];
             currentImageIndex = index;
             const isSmallScreen = window.innerWidth < 640;
             lightboxPrev.classList.toggle('hidden', index === 0 || isSmallScreen);
-            lightboxNext.classList.toggle('hidden', index === galleryImageSources.length - 1 || isSmallScreen); // Use unique sources length
+            lightboxNext.classList.toggle('hidden', index === galleryImageSources.length - 1 || isSmallScreen);
         }
 
         function openLightbox(event) {
             const clickedIndex = parseInt(event.target.getAttribute('data-index'), 10);
             if (!isNaN(clickedIndex)) {
                 showImageAtIndex(clickedIndex);
-                lightboxOverlay.classList.add('is-active'); // Show overlay (opacity/pointer-events)
+                lightboxOverlay.classList.add('is-active');
                 document.body.style.overflow = 'hidden';
                 console.log('Opening lightbox with index:', clickedIndex);
             } else {
@@ -373,17 +354,16 @@
 
         function closeLightbox() {
             console.log('Closing lightbox');
-            lightboxOverlay.classList.remove('is-active'); // Hide overlay
-            // Clear src after transition (optional, but good practice)
-            setTimeout(() => {
+            lightboxOverlay.classList.remove('is-active');
+             setTimeout(() => {
                 lightboxImage.src = "";
                 currentImageIndex = -1;
-            }, 300); // Match overlay transition
-            document.body.style.overflow = ''; // Restore scroll immediately
+            }, 300);
+            document.body.style.overflow = '';
         }
 
         function showPreviousImage() { if (currentImageIndex > 0) showImageAtIndex(currentImageIndex - 1); }
-        function showNextImage() { if (currentImageIndex < galleryImageSources.length - 1) showImageAtIndex(currentImageIndex + 1); } // Use unique sources length
+        function showNextImage() { if (currentImageIndex < galleryImageSources.length - 1) showImageAtIndex(currentImageIndex + 1); }
 
         lightboxClose.addEventListener('click', closeLightbox);
         lightboxPrev.addEventListener('click', showPreviousImage);
