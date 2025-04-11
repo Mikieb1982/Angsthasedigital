@@ -20,8 +20,29 @@
             background-repeat: no-repeat; background-position: center center; background-size: contain;
             background-attachment: fixed; opacity: 0.25;
         }
-        #lightbox-overlay { transition: opacity 0.3s ease-in-out; }
+        /* Lightbox Overlay: Use opacity and pointer-events for visibility */
+        #lightbox-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+        }
+        #lightbox-overlay.is-active {
+            opacity: 1;
+            pointer-events: auto;
+        }
         #lightbox-overlay button { cursor: pointer; }
+
+        /* Lightbox Image Animation */
+        #lightbox-image {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        }
+        #lightbox-image.is-visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
         .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
         .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
         .divider-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 1.5s ease-in-out; }
@@ -46,15 +67,6 @@
             position: fixed; width: 300px; height: 300px; border-radius: 50%;
             background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
             pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); display: none; mix-blend-mode: screen;
-        }
-        #lightbox-image {
-            opacity: 0;
-            transform: scale(0.95);
-            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-        }
-        #lightbox-image.is-visible {
-            opacity: 1;
-            transform: scale(1);
         }
     </style>
 </head>
@@ -277,18 +289,28 @@
         function openLightbox(event) {
             const clickedIndex = parseInt(event.target.getAttribute('data-index'), 10);
             if (!isNaN(clickedIndex)) {
+                lightboxImage.classList.remove('is-visible'); // Reset animation state
                 showImageAtIndex(clickedIndex);
-                lightboxOverlay.classList.remove('hidden');
+                lightboxOverlay.classList.add('is-active'); // Use class for overlay visibility
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => { // Double rAF for robustness
+                       lightboxImage.classList.add('is-visible'); // Trigger image animation
+                    });
+                });
                 document.body.style.overflow = 'hidden';
             }
         }
 
         function closeLightbox() {
-            lightboxOverlay.classList.add('hidden');
-            lightboxImage.src = "";
-            currentImageIndex = -1;
-            document.body.style.overflow = '';
+            lightboxImage.classList.remove('is-visible'); // Start fade out animation
+            lightboxOverlay.classList.remove('is-active'); // Start overlay fade out
+            setTimeout(() => { // Wait for transition before clearing
+                lightboxImage.src = "";
+                currentImageIndex = -1;
+                document.body.style.overflow = '';
+            }, 300); // Match CSS transition duration
         }
+
 
         function showPreviousImage() { if (currentImageIndex > 0) showImageAtIndex(currentImageIndex - 1); }
         function showNextImage() { if (currentImageIndex < galleryImageSources.length - 1) showImageAtIndex(currentImageIndex + 1); }
@@ -298,7 +320,7 @@
         lightboxNext.addEventListener('click', showNextImage);
         lightboxOverlay.addEventListener('click', (event) => { if (event.target === lightboxOverlay) closeLightbox(); });
         document.addEventListener('keydown', (event) => {
-            if (lightboxOverlay.classList.contains('hidden')) return;
+            if (!lightboxOverlay.classList.contains('is-active')) return; // Check active class
             switch (event.key) {
                 case 'Escape': closeLightbox(); break;
                 case 'ArrowLeft': showPreviousImage(); break;
@@ -316,7 +338,7 @@
             touchStartX = 0; touchEndX = 0;
         }
 
-        window.addEventListener('resize', () => { if (!lightboxOverlay.classList.contains('hidden')) showImageAtIndex(currentImageIndex); });
+        window.addEventListener('resize', () => { if (lightboxOverlay.classList.contains('is-active')) showImageAtIndex(currentImageIndex); });
 
         const heroImage = document.getElementById('hero-image');
         const heroContainer = document.getElementById('hero-image-container');
