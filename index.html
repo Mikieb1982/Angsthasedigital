@@ -13,17 +13,32 @@
         body { font-family: 'Lato', sans-serif; position: relative; min-height: 100vh; }
         h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', sans-serif; }
         img { background-color: #f3f4f6; }
-        /* Keep gallery-img for lightbox compatibility, but size is controlled by carousel-item */
-        .gallery-img { cursor: pointer; }
-
+        .gallery-img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
         body::before {
             content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1;
             background-image: url('https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png');
             background-repeat: no-repeat; background-position: center center; background-size: contain;
             background-attachment: fixed; opacity: 0.25;
         }
-        #lightbox-overlay { transition: opacity 0.3s ease-in-out; }
+        /* Lightbox Overlay: Use opacity and pointer-events, high z-index */
+        #lightbox-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+            z-index: 100; /* Increased z-index */
+        }
+        #lightbox-overlay.is-active {
+            opacity: 1;
+            pointer-events: auto;
+        }
         #lightbox-overlay button { cursor: pointer; }
+        /* Lightbox Image: No animation styles for now */
+        #lightbox-image {
+            opacity: 1;
+            transform: scale(1);
+            transition: none;
+        }
+
         .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
         .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
         .divider-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 1.5s ease-in-out; }
@@ -49,50 +64,42 @@
             background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
             pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); display: none; mix-blend-mode: screen;
         }
-        #lightbox-image { opacity: 0; transform: scale(0.95); transition: opacity 0.3s ease-out, transform 0.3s ease-out; }
-        #lightbox-image.is-visible { opacity: 1; transform: scale(1); }
-
-        /* --- Carousel Styles --- */
+        /* --- Scrollable Carousel Styles --- */
         .carousel-viewport {
             width: 100%;
-            overflow-x: hidden;
-            /* Optional: Add fade effect at edges */
-            -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 10%, rgba(0,0,0,1) 90%, rgba(0,0,0,0) 100%);
-            mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 10%, rgba(0,0,0,1) 90%, rgba(0,0,0,0) 100%);
+            overflow-x: auto; /* Enable horizontal scrolling */
+            white-space: nowrap; /* Keep items in one line */
+            padding-bottom: 1rem; /* Space for scrollbar */
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
         }
-        .carousel-track {
-            display: flex;
-            width: calc(200% * var(--item-count) / 3); /* Adjust width based on item count and desired visible items */
-             /* Estimate: Assuming roughly 3 items visible on average, 13 unique items */
-             /* Width = 2 * 13 * (avg item width) */
-             /* Let's set fixed item width for easier calculation */
+         /* Hide scrollbar visually (optional, but common) */
+        .carousel-viewport::-webkit-scrollbar { display: none; } /* Chrome, Safari, Opera */
+        .carousel-viewport { -ms-overflow-style: none; scrollbar-width: none; } /* IE, Edge, Firefox */
 
-            /* Animation */
-            animation: scroll-left 60s linear infinite; /* Adjust duration for speed */
-        }
-        .carousel-viewport:hover .carousel-track {
-             animation-play-state: paused;
-        }
         .carousel-item {
+            display: inline-block; /* Layout items inline */
             flex-shrink: 0;
-            width: auto; /* Adjust width as needed or keep auto */
-            height: 10rem; /* h-40 */
+            width: auto;
+            height: 6rem; /* h-24 - Smaller height */
             margin-right: 1rem; /* gap-4 */
-            display: block; /* Ensure images behave correctly */
             border: 1px solid #e5e7eb; /* border-gray-200 */
             border-radius: 0.5rem; /* rounded-lg */
-            overflow: hidden; /* Ensure rounded corners apply */
+            overflow: hidden;
+            vertical-align: top; /* Align items nicely */
         }
          .carousel-item img {
              width: auto;
              height: 100%;
              object-fit: cover;
          }
-
-        @keyframes scroll-left {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); } /* Scroll by half the track width */
-        }
+         /* --- Static Grid Styles --- */
+         .gallery-grid-item {
+             aspect-ratio: 297 / 210; /* A4 Landscape */
+             background-color: #f3f4f6; /* bg-gray-100 */
+             border-radius: 0.5rem; /* rounded-lg */
+             overflow: hidden;
+             border: 1px solid #e5e7eb; /* border-gray-200 */
+         }
 
     </style>
 </head>
@@ -192,41 +199,70 @@
              </p>
         </section>
 
-        {/* Gallery Section - Replaced Grid with Carousel */}
+        {/* Gallery Section - Now with Carousel and Grid */}
         <section id="gallery" class="fade-in-section mb-20 pt-16 -mt-16">
             <h3 data-key="gallery-title" class="translatable text-3xl font-bold mb-8 text-center text-black" data-en="Gallery" data-de="Galerie">Gallery</h3>
-            {/* Carousel Viewport */}
-            <div class="carousel-viewport">
-                {/* Carousel Track - Contains 2 sets of images */}
-                <div class="carousel-track">
-                    {/* Image Set 1 */}
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/5_ulpq6j.png" alt="Pedestrians walk past brightly lit modern shopfronts on a street at night." class="gallery-img gallery-item-clickable"></div>
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/8_vtftql.png" alt="Illuminated building with a tower and adjacent structures on a street at night." class="gallery-img gallery-item-clickable"></div>
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209002/6_typwgx.png" alt="Street intersection at night with glowing streetlights and dark buildings." class="gallery-img gallery-item-clickable"></div>
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/4_null04.png" alt="Modern building with large, lit glass front at night." class="gallery-img gallery-item-clickable"></div>
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/3_cyiqpk.png" alt="Colourful buildings reflected in harbour water with small boats at night." class="gallery-img gallery-item-clickable"></div>
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/1_sbzyhy.png" alt="Street corner with illuminated traditional buildings at night." class="gallery-img gallery-item-clickable"></div>
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209000/13_at5ibg.png" alt="Wooden pier with railings extending into calm water under a pale sky." class="gallery-img gallery-item-clickable"></div>
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209009/14_lnxo5n.png" alt="Long white pier with a building at the end (Sellin Pier) stretching onto a sandy beach." class="gallery-img gallery-item-clickable"></div>
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209008/11_wcbenb.png" alt="Houses on a small hill among bare trees, lit up at dusk." class="gallery-img gallery-item-clickable"></div>
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209007/10_to7taw.png" alt="[Describe image 10_to7taw.png]" class="gallery-img gallery-item-clickable"></div>
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/2_t9vs7f.png" alt="Long, low building illuminated at night, seen across a road." class="gallery-img gallery-item-clickable"></div>
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/7_eiddxy.png" alt="Café Corner, Potsdam Night" class="gallery-img gallery-item-clickable"></div>
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/9_gkmvef.png" alt="Woodhouse, Baabe" class="gallery-img gallery-item-clickable"></div>
-                     {/* Image Set 2 (Duplicates for seamless loop) */}
+
+             {/* Scrollable Carousel */}
+             <div class="carousel-viewport mb-8">
+                 {/* Track contains only one set now */}
+                 <div class="carousel-track-to-be-removed"> {/* Remove this div later if carousel is removed */}
                      <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/5_ulpq6j.png" alt="Pedestrians walk past brightly lit modern shopfronts on a street at night." class="gallery-img gallery-item-clickable"></div>
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/8_vtftql.png" alt="Illuminated building with a tower and adjacent structures on a street at night." class="gallery-img gallery-item-clickable"></div>
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209002/6_typwgx.png" alt="Street intersection at night with glowing streetlights and dark buildings." class="gallery-img gallery-item-clickable"></div>
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/4_null04.png" alt="Modern building with large, lit glass front at night." class="gallery-img gallery-item-clickable"></div>
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/3_cyiqpk.png" alt="Colourful buildings reflected in harbour water with small boats at night." class="gallery-img gallery-item-clickable"></div>
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/1_sbzyhy.png" alt="Street corner with illuminated traditional buildings at night." class="gallery-img gallery-item-clickable"></div>
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209000/13_at5ibg.png" alt="Wooden pier with railings extending into calm water under a pale sky." class="gallery-img gallery-item-clickable"></div>
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209009/14_lnxo5n.png" alt="Long white pier with a building at the end (Sellin Pier) stretching onto a sandy beach." class="gallery-img gallery-item-clickable"></div>
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209008/11_wcbenb.png" alt="Houses on a small hill among bare trees, lit up at dusk." class="gallery-img gallery-item-clickable"></div>
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209007/10_to7taw.png" alt="[Describe image 10_to7taw.png]" class="gallery-img gallery-item-clickable"></div>
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/2_t9vs7f.png" alt="Long, low building illuminated at night, seen across a road." class="gallery-img gallery-item-clickable"></div>
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/7_eiddxy.png" alt="Café Corner, Potsdam Night" class="gallery-img gallery-item-clickable"></div>
-                    <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/9_gkmvef.png" alt="Woodhouse, Baabe" class="gallery-img gallery-item-clickable"></div>
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/8_vtftql.png" alt="Illuminated building with a tower and adjacent structures on a street at night." class="gallery-img gallery-item-clickable"></div>
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209002/6_typwgx.png" alt="Street intersection at night with glowing streetlights and dark buildings." class="gallery-img gallery-item-clickable"></div>
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/4_null04.png" alt="Modern building with large, lit glass front at night." class="gallery-img gallery-item-clickable"></div>
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/3_cyiqpk.png" alt="Colourful buildings reflected in harbour water with small boats at night." class="gallery-img gallery-item-clickable"></div>
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/1_sbzyhy.png" alt="Street corner with illuminated traditional buildings at night." class="gallery-img gallery-item-clickable"></div>
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209000/13_at5ibg.png" alt="Wooden pier with railings extending into calm water under a pale sky." class="gallery-img gallery-item-clickable"></div>
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209009/14_lnxo5n.png" alt="Long white pier with a building at the end (Sellin Pier) stretching onto a sandy beach." class="gallery-img gallery-item-clickable"></div>
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209008/11_wcbenb.png" alt="Houses on a small hill among bare trees, lit up at dusk." class="gallery-img gallery-item-clickable"></div>
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209007/10_to7taw.png" alt="[Describe image 10_to7taw.png]" class="gallery-img gallery-item-clickable"></div>
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/2_t9vs7f.png" alt="Long, low building illuminated at night, seen across a road." class="gallery-img gallery-item-clickable"></div>
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/7_eiddxy.png" alt="Café Corner, Potsdam Night" class="gallery-img gallery-item-clickable"></div>
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/9_gkmvef.png" alt="Woodhouse, Baabe" class="gallery-img gallery-item-clickable"></div>
+                 </div>
+             </div>
+
+            {/* Static Grid */}
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                 <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/5_ulpq6j.png" alt="Pedestrians walk past brightly lit modern shopfronts on a street at night." class="gallery-img gallery-item-clickable">
+                </div>
+                <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/8_vtftql.png" alt="Illuminated building with a tower and adjacent structures on a street at night." class="gallery-img gallery-item-clickable">
+                </div>
+                <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209002/6_typwgx.png" alt="Street intersection at night with glowing streetlights and dark buildings." class="gallery-img gallery-item-clickable">
+                </div>
+                 <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/4_null04.png" alt="Modern building with large, lit glass front at night." class="gallery-img gallery-item-clickable">
+                </div>
+                 <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/3_cyiqpk.png" alt="Colourful buildings reflected in harbour water with small boats at night." class="gallery-img gallery-item-clickable">
+                </div>
+                 <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/1_sbzyhy.png" alt="Street corner with illuminated traditional buildings at night." class="gallery-img gallery-item-clickable">
+                </div>
+                 <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209000/13_at5ibg.png" alt="Wooden pier with railings extending into calm water under a pale sky." class="gallery-img gallery-item-clickable">
+                </div>
+                 <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209009/14_lnxo5n.png" alt="Long white pier with a building at the end (Sellin Pier) stretching onto a sandy beach." class="gallery-img gallery-item-clickable">
+                </div>
+                 <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209008/11_wcbenb.png" alt="Houses on a small hill among bare trees, lit up at dusk." class="gallery-img gallery-item-clickable">
+                </div>
+                 <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209007/10_to7taw.png" alt="[Describe image 10_to7taw.png]" class="gallery-img gallery-item-clickable">
+                </div>
+                 <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/2_t9vs7f.png" alt="Long, low building illuminated at night, seen across a road." class="gallery-img gallery-item-clickable">
+                </div>
+                 <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/7_eiddxy.png" alt="Café Corner, Potsdam Night" class="gallery-img gallery-item-clickable">
+                </div>
+                 <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/9_gkmvef.png" alt="Woodhouse, Baabe" class="gallery-img gallery-item-clickable">
                 </div>
             </div>
         </section>
@@ -254,9 +290,9 @@
         </div>
     </footer>
 
-    <div id="lightbox-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center opacity-0 pointer-events-none z-[60] p-4 cursor-default">
+    <div id="lightbox-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center opacity-0 pointer-events-none z-[100] p-4 cursor-default">
         <button id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold p-2 bg-black bg-opacity-30 rounded-full hover:bg-opacity-50 focus:outline-none hidden sm:block">&lt;</button>
-        <img id="lightbox-image" src="" alt="Enlarged View" class="max-w-full max-h-full object-contain block">
+        <img id="lightbox-image" src="" alt="Enlarged View" class="max-w-full max-h-full object-contain block opacity-100 scale-100">
         <button id="lightbox-next" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold p-2 bg-black bg-opacity-30 rounded-full hover:bg-opacity-50 focus:outline-none hidden sm:block">&gt;</button>
         <button id="lightbox-close" class="absolute top-5 right-6 text-white text-4xl leading-none font-bold hover:text-gray-300 focus:outline-none">&times;</button>
     </div>
@@ -285,62 +321,69 @@
         const lightboxClose = document.getElementById('lightbox-close');
         const lightboxPrev = document.getElementById('lightbox-prev');
         const lightboxNext = document.getElementById('lightbox-next');
-        // Select images within the carousel track now
-        const galleryItems = document.querySelectorAll('.carousel-track .gallery-item-clickable');
-        let galleryImageSources = [];
+        // Select ALL clickable items (carousel + grid)
+        const galleryItems = document.querySelectorAll('.gallery-item-clickable');
+        let galleryImageSources = []; // Will store unique sources from the grid
         let currentImageIndex = -1;
         let touchStartX = 0;
         let touchEndX = 0;
 
-        // Populate sources with unique URLs only (first half of track)
-        const numUniqueImages = galleryItems.length / 2;
-        galleryItems.forEach((item, index) => {
-            if (index < numUniqueImages) {
-                 galleryImageSources.push(item.src);
-            }
-            // Set data-index to loop back for duplicates
-            item.setAttribute('data-index', index % numUniqueImages);
-            item.addEventListener('click', openLightbox);
+        // Populate sources from the GRID only, and set data-index on ALL items
+        const gridItems = document.querySelectorAll('#gallery .grid .gallery-item-clickable');
+        gridItems.forEach((item, index) => {
+            galleryImageSources.push(item.src); // Store unique source
+            item.setAttribute('data-index', index); // Set index for grid item
         });
+        // Now set correct index for carousel items (pointing to the same source in the unique list)
+        const carouselItems = document.querySelectorAll('.carousel-viewport .gallery-item-clickable');
+        carouselItems.forEach(item => {
+            const itemSrc = item.src;
+            const uniqueIndex = galleryImageSources.findIndex(src => src === itemSrc);
+            if (uniqueIndex !== -1) {
+                item.setAttribute('data-index', uniqueIndex);
+            }
+            item.addEventListener('click', openLightbox); // Add listener to carousel items
+        });
+         // Add listener to grid items too
+         gridItems.forEach(item => {
+             item.addEventListener('click', openLightbox);
+         });
 
 
         function showImageAtIndex(index) {
-             // Use numUniqueImages for bounds checking
-            if (index < 0 || index >= numUniqueImages) return;
-            // Use the unique sources array
-            lightboxImage.src = galleryImageSources[index];
+            if (index < 0 || index >= galleryImageSources.length) return; // Use unique sources length
+            lightboxImage.src = galleryImageSources[index]; // Use unique sources array
             currentImageIndex = index;
             const isSmallScreen = window.innerWidth < 640;
-             // Use numUniqueImages for button visibility logic
             lightboxPrev.classList.toggle('hidden', index === 0 || isSmallScreen);
-            lightboxNext.classList.toggle('hidden', index === numUniqueImages - 1 || isSmallScreen);
+            lightboxNext.classList.toggle('hidden', index === galleryImageSources.length - 1 || isSmallScreen); // Use unique sources length
         }
 
         function openLightbox(event) {
             const clickedIndex = parseInt(event.target.getAttribute('data-index'), 10);
             if (!isNaN(clickedIndex)) {
-                lightboxImage.classList.remove('is-visible');
                 showImageAtIndex(clickedIndex);
-                lightboxOverlay.classList.add('is-active');
-                requestAnimationFrame(() => {
-                   lightboxImage.classList.add('is-visible');
-                });
+                lightboxOverlay.classList.add('is-active'); // Show overlay (opacity/pointer-events)
                 document.body.style.overflow = 'hidden';
+                console.log('Opening lightbox with index:', clickedIndex);
+            } else {
+                 console.error("Could not get index for clicked item:", event.target);
             }
         }
 
         function closeLightbox() {
-            lightboxImage.classList.remove('is-visible');
-            lightboxOverlay.classList.remove('is-active');
+            console.log('Closing lightbox');
+            lightboxOverlay.classList.remove('is-active'); // Hide overlay
+            // Clear src after transition (optional, but good practice)
             setTimeout(() => {
                 lightboxImage.src = "";
                 currentImageIndex = -1;
-                document.body.style.overflow = '';
-            }, 300);
+            }, 300); // Match overlay transition
+            document.body.style.overflow = ''; // Restore scroll immediately
         }
 
         function showPreviousImage() { if (currentImageIndex > 0) showImageAtIndex(currentImageIndex - 1); }
-        function showNextImage() { if (currentImageIndex < numUniqueImages - 1) showImageAtIndex(currentImageIndex + 1); } // Use numUniqueImages
+        function showNextImage() { if (currentImageIndex < galleryImageSources.length - 1) showImageAtIndex(currentImageIndex + 1); } // Use unique sources length
 
         lightboxClose.addEventListener('click', closeLightbox);
         lightboxPrev.addEventListener('click', showPreviousImage);
