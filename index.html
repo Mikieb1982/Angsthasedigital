@@ -8,8 +8,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&family=Raleway:wght@400;700&display=swap" rel="stylesheet">
-    {/* Favicon Link Updated */}
-    <link rel="icon" type="image/png" href="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png">
     <style>
         html { scroll-behavior: smooth; }
         body { font-family: 'Lato', sans-serif; position: relative; min-height: 100vh; }
@@ -22,8 +20,30 @@
             background-repeat: no-repeat; background-position: center center; background-size: contain;
             background-attachment: fixed; opacity: 0.25;
         }
-        #lightbox-overlay { transition: opacity 0.3s ease-in-out; }
+        /* Lightbox Overlay: Use opacity and pointer-events, high z-index */
+        #lightbox-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+            z-index: 100; /* Increased z-index */
+        }
+        #lightbox-overlay.is-active {
+            opacity: 1;
+            pointer-events: auto;
+        }
         #lightbox-overlay button { cursor: pointer; }
+
+        /* Lightbox Image Animation Styles Re-added */
+        #lightbox-image {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        }
+        #lightbox-image.is-visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
         .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
         .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
         .divider-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 1.5s ease-in-out; }
@@ -295,7 +315,7 @@
         const lightboxClose = document.getElementById('lightbox-close');
         const lightboxPrev = document.getElementById('lightbox-prev');
         const lightboxNext = document.getElementById('lightbox-next');
-        const galleryItems = document.querySelectorAll('.gallery-item-clickable');
+        const gallerySection = document.getElementById('gallery'); // Use delegation target
         let galleryImageSources = [];
         let currentImageIndex = -1;
         let touchStartX = 0;
@@ -314,10 +334,6 @@
                 item.setAttribute('data-index', uniqueIndex);
             }
         });
-         galleryItems.forEach(item => {
-             item.addEventListener('click', openLightbox);
-         });
-
 
         function showImageAtIndex(index) {
             if (index < 0 || index >= galleryImageSources.length) return;
@@ -328,26 +344,39 @@
             lightboxNext.classList.toggle('hidden', index === galleryImageSources.length - 1 || isSmallScreen);
         }
 
-        function openLightbox(event) {
-            const clickedIndex = parseInt(event.target.getAttribute('data-index'), 10);
+        function openLightbox(clickedImageElement) { // Accept the clicked element
+            const clickedIndex = parseInt(clickedImageElement.getAttribute('data-index'), 10);
             if (!isNaN(clickedIndex)) {
+                // Removed image animation class toggling - simplified approach
                 showImageAtIndex(clickedIndex);
                 lightboxOverlay.classList.add('is-active');
                 document.body.style.overflow = 'hidden';
+                console.log('Opening lightbox with index:', clickedIndex);
+            } else {
+                 console.error("Could not get index for clicked item:", clickedImageElement);
             }
         }
 
         function closeLightbox() {
+            console.log('Closing lightbox');
             lightboxOverlay.classList.remove('is-active');
-             setTimeout(() => {
-                lightboxImage.src = "";
-                currentImageIndex = -1;
-            }, 300);
+            // Removed image animation class toggling
+            lightboxImage.src = ""; // Clear src immediately
+            currentImageIndex = -1;
             document.body.style.overflow = '';
         }
 
         function showPreviousImage() { if (currentImageIndex > 0) showImageAtIndex(currentImageIndex - 1); }
         function showNextImage() { if (currentImageIndex < galleryImageSources.length - 1) showImageAtIndex(currentImageIndex + 1); }
+
+        // Event Delegation for gallery clicks
+        if (gallerySection) {
+            gallerySection.addEventListener('click', (event) => {
+                if (event.target.classList.contains('gallery-item-clickable')) {
+                    openLightbox(event.target); // Pass the clicked image element
+                }
+            });
+        }
 
         lightboxClose.addEventListener('click', closeLightbox);
         lightboxPrev.addEventListener('click', showPreviousImage);
