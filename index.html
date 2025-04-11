@@ -4,85 +4,137 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Angsthase Digital Art</title>
-    {/* Tailwind CSS via CDN */}
     <script src="https://cdn.tailwindcss.com"></script>
-    {/* Google Fonts */}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&family=Raleway:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Basic Setup & Custom Styles */
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Lato', sans-serif; position: relative; min-height: 100vh; padding-bottom: 4rem; /* Ensure space for footer */ }
-        h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', sans-serif; }
-        img { background-color: #f3f4f6; /* Placeholder background */ }
-        .gallery-img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; display: block; }
-
-        /* Fixed background with opacity */
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Lato', sans-serif;
+            position: relative;
+            min-height: 100vh;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Raleway', sans-serif;
+        }
+        img {
+            background-color: #f3f4f6;
+        }
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            cursor: pointer;
+        }
         body::before {
-            content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1;
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
             background-image: url('https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png');
-            background-repeat: no-repeat; background-position: center center; background-size: contain;
-            background-attachment: fixed; opacity: 0.25;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: contain;
+            background-attachment: fixed;
+            opacity: 0.25;
         }
-
-        /* Custom Lightbox Styles */
         #lightbox-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(0, 0, 0, 0.85);
-            display: flex; align-items: center; justify-content: center;
-            z-index: 50; /* High z-index */
-            opacity: 0; visibility: hidden;
-            transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
-            pointer-events: none; /* Disable pointer events on overlay itself */
+            transition: opacity 0.3s ease-in-out;
         }
-        #lightbox-overlay.is-visible {
-            opacity: 1; visibility: visible;
-            transition: opacity 0.3s ease-in-out, visibility 0s linear 0s;
+        #lightbox-overlay button {
+             cursor: pointer;
         }
-        #lightbox-content {
-            position: relative; max-width: 90vw; max-height: 85vh;
-            pointer-events: auto; /* Re-enable pointer events for content */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
-        #lightbox-img {
-            display: block; max-width: 100%; max-height: 100%; object-fit: contain;
-            -webkit-user-drag: none; user-select: none; /* Prevent dragging image */
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
         }
-        #lightbox-close {
-            position: absolute; top: 5px; right: 10px; /* Adjusted position */
-            background: rgba(0,0,0,0.3); border: none; color: white; font-size: 2rem;
-            cursor: pointer; line-height: 1; padding: 0px 8px; border-radius: 4px;
-            z-index: 51; /* Above image */
+        .divider-line {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            transition: stroke-dashoffset 1.5s ease-in-out;
         }
-        #lightbox-close:hover { background: rgba(0,0,0,0.6); }
-
-        /* Prev/Next Buttons */
-        .lightbox-nav {
-            position: absolute; top: 50%; transform: translateY(-50%);
-            background: rgba(0,0,0,0.3); border: none; color: white; font-size: 2rem;
-            cursor: pointer; padding: 10px 5px; border-radius: 4px;
-            z-index: 51; /* Above image */
+        .fade-in-section.is-visible .divider-line {
+            stroke-dashoffset: 0;
+        }
+        #hero-image-container {
+             perspective: 1000px;
+        }
+        #hero-image {
+            transition: transform 0.1s ease-out;
+            will-change: transform;
+        }
+         .hotspot {
+            position: absolute;
+            width: 1.25rem;
+            height: 1.25rem;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .hotspot:hover {
+            transform: scale(1.2);
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        .hotspot::after {
+            content: '+';
+            font-size: 0.875rem;
+            color: rgba(0, 0, 0, 0.6);
             line-height: 1;
         }
-        .lightbox-nav:hover { background: rgba(0,0,0,0.6); }
-        #lightbox-prev { left: 10px; }
-        #lightbox-next { right: 10px; }
-
-
-        /* Fade-in Animation Styles */
-        .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
-        .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
-
-        /* Divider Line Animation */
-        .divider-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 1.5s ease-in-out; }
-        .fade-in-section.is-visible .divider-line { stroke-dashoffset: 0; }
-
+        .hotspot-tooltip {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            line-height: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+            white-space: nowrap;
+            z-index: 10;
+             pointer-events: none;
+             transform: translate(-50%, -120%);
+        }
+        .hotspot-tooltip.is-visible {
+            opacity: 1;
+            visibility: visible;
+        }
+         #cursor-spotlight {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            display: none;
+            mix-blend-mode: screen;
+        }
     </style>
 </head>
 <body class="bg-white text-gray-800 antialiased">
 
     <header class="py-6 px-4 md:px-8 border-b border-gray-200 sticky top-0 z-30 bg-white/80 backdrop-blur-sm">
-         <div class="container mx-auto flex justify-between items-center">
+        <div class="container mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png"
                      alt="Angsthase Logo"
@@ -102,7 +154,7 @@
     <section class="mb-20 text-center pt-16">
          <div id="hero-image-container" class="w-full h-48 md:h-72 bg-gray-100 flex items-center justify-center mb-8 overflow-hidden">
              <img id="hero-image" src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744274602/hero_yjoq8w.png"
-                  alt="Hero Artwork: Abstract representation of Angsthase Digital Art"
+                  alt="Hero Artwork"
                   class="w-full h-full object-contain"
                   onerror="this.onerror=null; this.src='https://placehold.co/1200x400/F3F4F6/1F2937?text=Image+Error'; this.alt='Image failed to load';">
          </div>
@@ -119,6 +171,7 @@
     </div>
 
     <main class="container mx-auto px-4 md:px-8 py-16 relative z-10 -mt-16">
+
         <section class="fade-in-section mb-20 flex flex-col md:flex-row items-center gap-8 md:gap-12">
             <div class="md:w-7/12 text-gray-700">
                 <h3 class="text-2xl font-bold mb-4 text-black">Project Spotlight</h3>
@@ -133,12 +186,16 @@
                  <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/7_eiddxy.png"
                      alt="Artwork Example 1: Café Corner, Potsdam Night" class="w-full h-auto rounded-lg border border-gray-200 block"
                      onerror="this.onerror=null; this.src='https://placehold.co/600x400/E5E7EB/1F2937?text=Image+Error'; this.alt='Image failed to load';">
+                 <button class="hotspot" style="top: 30%; left: 40%;" data-tooltip-target="tooltip-1"></button>
+                 <div id="tooltip-1" class="hotspot-tooltip" style="left: 40%;">Focus on window light</div>
+                 <button class="hotspot" style="top: 75%; left: 60%;" data-tooltip-target="tooltip-2"></button>
+                 <div id="tooltip-2" class="hotspot-tooltip" style="left: 60%;">Painterly reflections</div>
             </div>
         </section>
 
         <section class="fade-in-section mb-20 flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12">
-            <div class="md:w-7/12 text-gray-700">
-                <h3 class="text-2xl font-bold mb-4 text-black">Atmospheric Textures</h3>
+             <div class="md:w-7/12 text-gray-700">
+                <h3 class="text-2xl font-bold mb-4 text-black">Another Piece / About</h3>
                  <p class="mb-4">
                     Titled 'Woodhouse, Baabe', this artwork captures a structure within the unique landscape of the Rügen coast. Developed from a photograph, the image has been digitally transformed to emphasize mood and atmosphere over strict realism.
                  </p>
@@ -154,7 +211,7 @@
         </section>
 
         <section id="about-style" class="fade-in-section mb-20 max-w-4xl mx-auto text-gray-700 pt-16 -mt-16">
-            <h3 class="text-3xl font-bold mb-6 text-center text-black">About The Art Style</h3>
+             <h3 class="text-3xl font-bold mb-6 text-center text-black">About The Art Style</h3>
              <p class="mb-4">
                 The digital art originates from photographs, often capturing scenes from familiar places in Germany – from the streets of Potsdam and the Bad Belzig area to the unique landscapes of the Rügen coast. Each image undergoes extensive digital processing and synthesis, transforming these photographic moments. The aim is less about strict realism and more focused on evoking a specific mood and atmosphere inherent in the scene.
              </p>
@@ -168,290 +225,221 @@
 
         <section id="gallery" class="fade-in-section mb-20 pt-16 -mt-16">
             <h3 class="text-3xl font-bold mb-8 text-center text-black">Gallery</h3>
-            {/* Ensure all images below have the data-full-src attribute pointing to the large version */}
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                  <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/c_thumb,w_300/v1744209004/5_ulpq6j.png"
-                         data-full-src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/5_ulpq6j.png"
-                         alt="Artwork: Moody landscape 1" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/5_ulpq6j.png" alt="Artwork 4" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
                 </div>
                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/c_thumb,w_300/v1744209003/8_vtftql.png"
-                         data-full-src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/8_vtftql.png"
-                         alt="Artwork: Architectural detail 1" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/8_vtftql.png" alt="Artwork 5" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
                 </div>
                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/c_thumb,w_300/v1744209002/6_typwgx.png"
-                         data-full-src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209002/6_typwgx.png"
-                         alt="Artwork: Night scene 1" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
-                </div>
-                <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/c_thumb,w_300/v1744209001/4_null04.png"
-                         data-full-src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/4_null04.png"
-                         alt="Artwork: Landscape 2" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
-                </div>
-                <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/c_thumb,w_300/v1744209001/3_cyiqpk.png"
-                         data-full-src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/3_cyiqpk.png"
-                         alt="Artwork: Street scene 1" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
-                </div>
-                <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/c_thumb,w_300/v1744209001/1_sbzyhy.png"
-                         data-full-src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/1_sbzyhy.png"
-                         alt="Artwork: Abstract texture 1" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
-                </div>
-                <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/c_thumb,w_300/v1744209000/13_at5ibg.png"
-                         data-full-src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209000/13_at5ibg.png"
-                         alt="Artwork: Coastal scene 1" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
-                </div>
-                <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/c_thumb,w_300/v1744209009/14_lnxo5n.png"
-                         data-full-src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209009/14_lnxo5n.png"
-                         alt="Artwork: Forest scene 1" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
-                </div>
-                <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/c_thumb,w_300/v1744209008/11_wcbenb.png"
-                         data-full-src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209008/11_wcbenb.png"
-                         alt="Artwork: Building detail 1" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
-                </div>
-                <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/c_thumb,w_300/v1744209007/10_to7taw.png"
-                         data-full-src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209007/10_to7taw.png"
-                         alt="Artwork: Reflection study 1" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
-                </div>
-                <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/c_thumb,w_300/v1744209001/2_t9vs7f.png"
-                         data-full-src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/2_t9vs7f.png"
-                         alt="Artwork: Light study 1" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209002/6_typwgx.png" alt="Artwork 6" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
                 </div>
                  <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/c_thumb,w_300/v1744209003/7_eiddxy.png"
-                         data-full-src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/7_eiddxy.png"
-                         alt="Artwork: Café Corner, Potsdam Night" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/4_null04.png" alt="Artwork 7" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
                 </div>
                  <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/c_thumb,w_300/v1744209004/9_gkmvef.png"
-                         data-full-src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/9_gkmvef.png"
-                         alt="Artwork: Woodhouse, Baabe" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
-                 </div>
-                 {/* Ensure all gallery items above have the data-full-src attribute */}
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/3_cyiqpk.png" alt="Artwork 8" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/1_sbzyhy.png" alt="Artwork 9" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209000/13_at5ibg.png" alt="Artwork 10" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209009/14_lnxo5n.png" alt="Artwork 11" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209008/11_wcbenb.png" alt="Artwork 12" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209007/10_to7taw.png" alt="Artwork 13" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/2_t9vs7f.png" alt="Artwork 14" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/7_eiddxy.png" alt="Café Corner, Potsdam Night" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/9_gkmvef.png" alt="Woodhouse, Baabe" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
             </div>
         </section>
 
-        <section id="contact" class="fade-in-section mb-20 pt-16 -mt-16 max-w-xl mx-auto text-center">
-             <h3 class="text-3xl font-bold mb-6 text-black">Contact</h3>
-            <p class="text-gray-700 mb-4">
-                For inquiries about the artwork or potential commissions, please reach out.
-            </p>
-            <p class="text-lg font-semibold text-slate-600">
-                 contact [at] example [dot] com
-            </p>
+        <section id="contact" class="fade-in-section mb-20 pt-16 -mt-16">
+             <h3 class="text-3xl font-bold mb-8 text-center text-black">Contact</h3>
+             <p class="text-center text-gray-700">
+                Email: <a href="mailto:angsthasedigitalstudio@gmail.com" class="text-gray-800 hover:text-slate-600 underline">angsthasedigitalstudio@gmail.com</a>
+             </p>
         </section>
 
     </main>
 
-    <footer class="absolute bottom-0 left-0 right-0 py-4 px-4 md:px-8 border-t border-gray-200 bg-gray-50 text-center z-20">
-        <p class="text-sm text-gray-500">&copy; <span id="current-year"></span> Angsthase Digital Art. All rights reserved.</p>
+    <footer class="bg-gray-100 py-8 px-4 md:px-8 mt-16">
+        <div class="container mx-auto text-center text-gray-600">
+            <div class="mb-4">
+                <a href="#" class="hover:text-slate-600 px-2">Privacy Policy</a> |
+                <a href="#" class="hover:text-slate-600 px-2">Terms of Service</a> |
+                <a href="#" class="hover:text-slate-600 px-2">Impressum</a>
+            </div>
+            <p>&copy; 2025 Angsthase Digital Art. All rights reserved.</p>
+        </div>
     </footer>
 
-    <div id="lightbox-overlay" style="pointer-events: none;">
-        <div id="lightbox-content">
-            <img id="lightbox-img" src="" alt="Enlarged gallery image">
-            <button id="lightbox-close" aria-label="Close lightbox">&times;</button>
-            <button id="lightbox-prev" class="lightbox-nav" aria-label="Previous image">&lt;</button>
-            <button id="lightbox-next" class="lightbox-nav" aria-label="Next image">&gt;</button>
-        </div>
+    <div id="lightbox-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden z-50 p-4 cursor-default">
+        <button id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold p-2 bg-black bg-opacity-30 rounded-full hover:bg-opacity-50 focus:outline-none hidden sm:block">&lt;</button>
+        <img id="lightbox-image" src="" alt="Enlarged View" class="max-w-full max-h-full object-contain block">
+        <button id="lightbox-next" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold p-2 bg-black bg-opacity-30 rounded-full hover:bg-opacity-50 focus:outline-none hidden sm:block">&gt;</button>
+        <button id="lightbox-close" class="absolute top-5 right-6 text-white text-4xl leading-none font-bold hover:text-gray-300 focus:outline-none">&times;</button>
     </div>
 
+    <div id="cursor-spotlight"></div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-
-            // --- Set Current Year in Footer ---
-            const yearSpan = document.getElementById('current-year');
-            if (yearSpan) {
-                yearSpan.textContent = new Date().getFullYear();
-            }
-
-            // --- Fade-in Sections on Scroll ---
-            const fadeElements = document.querySelectorAll('.fade-in-section');
-            if ("IntersectionObserver" in window) {
-                const observer = new IntersectionObserver((entries, observer) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('is-visible');
-                            // observer.unobserve(entry.target); // Optional: stop observing
-                        }
-                    });
-                }, { threshold: 0.1 });
-                fadeElements.forEach(el => observer.observe(el));
-            } else {
-                fadeElements.forEach(el => el.classList.add('is-visible')); // Fallback
-            }
-
-            // --- Enhanced Custom Gallery Lightbox ---
-            const lightboxOverlay = document.getElementById('lightbox-overlay');
-            const lightboxContent = document.getElementById('lightbox-content');
-            const lightboxImg = document.getElementById('lightbox-img');
-            const lightboxClose = document.getElementById('lightbox-close');
-            const lightboxPrev = document.getElementById('lightbox-prev');
-            const lightboxNext = document.getElementById('lightbox-next');
-            const galleryItems = document.querySelectorAll('.gallery-item-clickable'); // Target the img elements
-
-            let galleryData = []; // To store {src, alt} for all gallery items
-            let currentIndex = 0;
-            let isLightboxOpen = false; // Track lightbox state
-            let touchStartX = 0;
-            let touchMoveX = 0;
-            const swipeThreshold = 50; // Min pixels needed for a swipe action
-
-            // Function to update the lightbox image
-            const showImage = (index) => {
-                if (!galleryData || galleryData.length === 0) return; // Exit if no data
-
-                // Ensure index is within bounds
-                index = Math.max(0, Math.min(galleryData.length - 1, index));
-                currentIndex = index;
-
-                // Preload image slightly for smoother transition (optional)
-                const imgPreload = new Image();
-                imgPreload.onload = () => {
-                    lightboxImg.src = galleryData[currentIndex].src;
-                    lightboxImg.alt = galleryData[currentIndex].alt;
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+        const observerCallback = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    const line = entry.target.querySelector('.divider-line');
+                    if (line) { }
+                     if (!entry.target.querySelector('.divider-line')) { observer.unobserve(entry.target); }
+                     if (entry.target.querySelector('.divider-line')) { observer.unobserve(entry.target); }
                 }
-                imgPreload.src = galleryData[currentIndex].src;
+            });
+        };
+        const scrollObserver = new IntersectionObserver(observerCallback, observerOptions);
+        const elementsToAnimate = document.querySelectorAll('.fade-in-section');
+        elementsToAnimate.forEach(el => { scrollObserver.observe(el); });
 
+        const lightboxOverlay = document.getElementById('lightbox-overlay');
+        const lightboxImage = document.getElementById('lightbox-image');
+        const lightboxClose = document.getElementById('lightbox-close');
+        const lightboxPrev = document.getElementById('lightbox-prev');
+        const lightboxNext = document.getElementById('lightbox-next');
+        const galleryItems = document.querySelectorAll('.gallery-item-clickable');
+        let galleryImageSources = [];
+        let currentImageIndex = -1;
+        let touchStartX = 0;
+        let touchEndX = 0;
 
-                 // Hide/show arrows at bounds
-                lightboxPrev.style.display = (currentIndex === 0) ? 'none' : 'block';
-                lightboxNext.style.display = (currentIndex === galleryData.length - 1) ? 'none' : 'block';
-            };
+        galleryItems.forEach((item, index) => {
+            galleryImageSources.push(item.src);
+            item.setAttribute('data-index', index);
+            item.addEventListener('click', openLightbox);
+        });
 
-            // Navigation functions
-            const showNext = () => {
-                if (currentIndex < galleryData.length - 1) {
-                   showImage(currentIndex + 1);
-                }
-            };
-            const showPrev = () => {
-                 if (currentIndex > 0) {
-                   showImage(currentIndex - 1);
-                 }
-            };
+        function showImageAtIndex(index) {
+            if (index < 0 || index >= galleryImageSources.length) return;
+            lightboxImage.src = galleryImageSources[index];
+            currentImageIndex = index;
+            const isSmallScreen = window.innerWidth < 640;
+            lightboxPrev.classList.toggle('hidden', index === 0 || isSmallScreen);
+            lightboxNext.classList.toggle('hidden', index === galleryImageSources.length - 1 || isSmallScreen);
+        }
 
-            // Open lightbox and prepare gallery data
-            const openLightbox = (elementIndex) => {
-                 // Build gallery data array from DOM elements each time it opens
-                 galleryData = Array.from(galleryItems).map(imgElement => ({
-                     src: imgElement.dataset.fullSrc || imgElement.src, // Use data-full-src preferentially
-                     alt: imgElement.alt
-                 }));
+        function openLightbox(event) {
+            const clickedIndex = parseInt(event.target.getAttribute('data-index'), 10);
+            if (!isNaN(clickedIndex)) {
+                showImageAtIndex(clickedIndex);
+                lightboxOverlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
 
-                 if (galleryData.length > 0) {
-                     isLightboxOpen = true;
-                     showImage(elementIndex); // Show the clicked image first
-                     lightboxOverlay.classList.add('is-visible');
-                     document.body.style.overflow = 'hidden'; // Prevent background scroll
-                 }
-            };
+        function closeLightbox() {
+            lightboxOverlay.classList.add('hidden');
+            lightboxImage.src = "";
+            currentImageIndex = -1;
+            document.body.style.overflow = '';
+        }
 
-             // Add click listener to gallery items
-             galleryItems.forEach((item, index) => {
-                item.addEventListener('click', (e) => {
-                   openLightbox(index);
+        function showPreviousImage() { if (currentImageIndex > 0) showImageAtIndex(currentImageIndex - 1); }
+        function showNextImage() { if (currentImageIndex < galleryImageSources.length - 1) showImageAtIndex(currentImageIndex + 1); }
+
+        lightboxClose.addEventListener('click', closeLightbox);
+        lightboxPrev.addEventListener('click', showPreviousImage);
+        lightboxNext.addEventListener('click', showNextImage);
+        lightboxOverlay.addEventListener('click', (event) => { if (event.target === lightboxOverlay) closeLightbox(); });
+        document.addEventListener('keydown', (event) => {
+            if (lightboxOverlay.classList.contains('hidden')) return;
+            switch (event.key) {
+                case 'Escape': closeLightbox(); break;
+                case 'ArrowLeft': showPreviousImage(); break;
+                case 'ArrowRight': showNextImage(); break;
+            }
+        });
+
+        lightboxImage.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+        lightboxImage.addEventListener('touchend', (e) => { touchEndX = e.changedTouches[0].screenX; handleSwipeGesture(); }, { passive: true });
+        function handleSwipeGesture() {
+            const swipeThreshold = 50;
+            const distance = touchEndX - touchStartX;
+            if (distance > swipeThreshold) showPreviousImage();
+            else if (distance < -swipeThreshold) showNextImage();
+            touchStartX = 0; touchEndX = 0;
+        }
+
+        window.addEventListener('resize', () => { if (!lightboxOverlay.classList.contains('hidden')) showImageAtIndex(currentImageIndex); });
+
+        const heroImage = document.getElementById('hero-image');
+        const heroContainer = document.getElementById('hero-image-container');
+
+        if (heroImage && heroContainer) {
+            heroContainer.addEventListener('mousemove', (e) => {
+                const rect = heroContainer.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                const maxRot = 3;
+                const rotY = (x / (rect.width / 2)) * maxRot;
+                const rotX = (-y / (rect.height / 2)) * maxRot;
+                heroImage.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.03)`;
+            });
+            heroContainer.addEventListener('mouseleave', () => {
+                heroImage.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+            });
+        } else {
+             console.error("Hero image or container not found for interactive effect.");
+             const potentialHeroContainer = document.querySelector('section > div > img#hero-image')?.parentElement;
+             if (potentialHeroContainer && !potentialHeroContainer.id) {
+                 potentialHeroContainer.id = 'hero-image-container';
+             }
+        }
+
+        const hotspots = document.querySelectorAll('.hotspot');
+        hotspots.forEach(hotspot => {
+            const tooltipId = hotspot.getAttribute('data-tooltip-target');
+            const tooltip = document.getElementById(tooltipId);
+
+            if (tooltip) {
+                hotspot.addEventListener('mouseenter', () => {
+                    tooltip.style.left = hotspot.style.left;
+                    tooltip.classList.add('is-visible');
                 });
-             });
+                hotspot.addEventListener('mouseleave', () => {
+                    tooltip.classList.remove('is-visible');
+                });
+            }
+        });
 
-
-            // Close lightbox function
-            const closeLightbox = () => {
-                isLightboxOpen = false;
-                lightboxOverlay.classList.remove('is-visible');
-                document.body.style.overflow = ''; // Restore background scroll
-            };
-
-            // Event listeners for closing
-            lightboxClose.addEventListener('click', closeLightbox);
-            lightboxOverlay.addEventListener('click', (e) => {
-                 if (e.target === lightboxOverlay) {
-                    closeLightbox();
-                 }
+        const spotlight = document.getElementById('cursor-spotlight');
+        if (spotlight) {
+            document.body.addEventListener('mousemove', (e) => {
+                spotlight.style.left = `${e.pageX}px`;
+                spotlight.style.top = `${e.pageY}px`;
             });
-
-            // Event listeners for Nav buttons
-            lightboxPrev.addEventListener('click', showPrev);
-            lightboxNext.addEventListener('click', showNext);
-
-            // Keyboard Navigation
-            document.addEventListener('keydown', (e) => {
-                if (isLightboxOpen) { // Only react if lightbox is open
-                    if (e.key === 'Escape') {
-                        closeLightbox();
-                    } else if (e.key === 'ArrowLeft') {
-                        showPrev();
-                    } else if (e.key === 'ArrowRight') {
-                        showNext();
-                    }
-                }
+            document.body.addEventListener('mouseenter', () => {
+                 spotlight.style.display = 'block';
             });
-
-            // --- Swipe Navigation Logic ---
-            let isTouching = false; // Flag to track touch state
-
-            lightboxContent.addEventListener('touchstart', (e) => {
-                 // Only start swipe if touching the image itself
-                 if (e.target === lightboxImg) {
-                     isTouching = true;
-                     touchStartX = e.touches[0].clientX;
-                     touchMoveX = touchStartX; // Initialize moveX
-                     // Optional: Temporarily disable image transition for smoother swipe feedback
-                     // lightboxImg.style.transition = 'none';
-                 }
-            }, { passive: true });
-
-            lightboxContent.addEventListener('touchmove', (e) => {
-                 if (isTouching && e.target === lightboxImg) {
-                     touchMoveX = e.touches[0].clientX;
-                     // Optional: Add visual feedback like moving the image slightly:
-                     // const deltaX = touchMoveX - touchStartX;
-                     // lightboxImg.style.transform = `translateX(${deltaX}px)`;
-                 }
-            }, { passive: true });
-
-            lightboxContent.addEventListener('touchend', (e) => {
-                if (isTouching) { // Process touchend only if touchstart occurred on the image
-                    isTouching = false; // Reset flag
-                    const deltaX = touchMoveX - touchStartX;
-                    // Optional: Reset any visual feedback transform
-                    // lightboxImg.style.transform = '';
-                    // Optional: Re-enable image transition
-                    // lightboxImg.style.transition = '';
-
-
-                    if (Math.abs(deltaX) > swipeThreshold) { // Check threshold
-                        if (deltaX < 0) { // Swiped Left (Next image)
-                            showNext();
-                        } else { // Swiped Right (Previous image)
-                            showPrev();
-                        }
-                    }
-                    // Reset touch coordinates
-                    touchStartX = 0;
-                    touchMoveX = 0;
-                }
+             document.body.addEventListener('mouseleave', () => {
+                 spotlight.style.display = 'none';
             });
+        }
 
-             // Prevent touchend on buttons triggering swipe end unexpectedly
-             lightboxPrev.addEventListener('touchstart', (e) => e.stopPropagation());
-             lightboxNext.addEventListener('touchstart', (e) => e.stopPropagation());
-             lightboxClose.addEventListener('touchstart', (e) => e.stopPropagation());
-             lightboxPrev.addEventListener('touchend', (e) => e.stopPropagation());
-             lightboxNext.addEventListener('touchend', (e) => e.stopPropagation());
-             lightboxClose.addEventListener('touchend', (e) => e.stopPropagation());
-
-
-        }); // End DOMContentLoaded
     </script>
 
 </body>
 </html>
+
