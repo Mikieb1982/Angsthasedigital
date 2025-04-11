@@ -25,6 +25,8 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease-in-out;
+            /* Increased z-index */
+            z-index: 60;
         }
         #lightbox-overlay.is-active {
             opacity: 1;
@@ -234,7 +236,7 @@
         </div>
     </footer>
 
-    <div id="lightbox-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden z-50 p-4 cursor-default">
+    <div id="lightbox-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center opacity-0 pointer-events-none z-[60] p-4 cursor-default">
         <button id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold p-2 bg-black bg-opacity-30 rounded-full hover:bg-opacity-50 focus:outline-none hidden sm:block">&lt;</button>
         <img id="lightbox-image" src="" alt="Enlarged View" class="max-w-full max-h-full object-contain block">
         <button id="lightbox-next" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold p-2 bg-black bg-opacity-30 rounded-full hover:bg-opacity-50 focus:outline-none hidden sm:block">&gt;</button>
@@ -289,28 +291,31 @@
         function openLightbox(event) {
             const clickedIndex = parseInt(event.target.getAttribute('data-index'), 10);
             if (!isNaN(clickedIndex)) {
-                lightboxImage.classList.remove('is-visible'); // Reset animation state
+                lightboxImage.classList.remove('is-visible'); // Ensure animation resets
                 showImageAtIndex(clickedIndex);
-                lightboxOverlay.classList.add('is-active'); // Use class for overlay visibility
+                lightboxOverlay.classList.add('is-active');
+                // Use rAF to ensure display is set before transition starts
                 requestAnimationFrame(() => {
-                    requestAnimationFrame(() => { // Double rAF for robustness
-                       lightboxImage.classList.add('is-visible'); // Trigger image animation
-                    });
+                   lightboxImage.classList.add('is-visible');
                 });
                 document.body.style.overflow = 'hidden';
+                console.log('Opening lightbox with src:', lightboxImage.src); // Debug log
+            } else {
+                 console.error("Could not get index for clicked item:", event.target);
             }
         }
 
         function closeLightbox() {
-            lightboxImage.classList.remove('is-visible'); // Start fade out animation
-            lightboxOverlay.classList.remove('is-active'); // Start overlay fade out
-            setTimeout(() => { // Wait for transition before clearing
+            console.log('Closing lightbox'); // Debug log
+            lightboxImage.classList.remove('is-visible');
+            lightboxOverlay.classList.remove('is-active');
+            // Wait for transitions before clearing src and resetting scroll
+             setTimeout(() => {
                 lightboxImage.src = "";
                 currentImageIndex = -1;
                 document.body.style.overflow = '';
             }, 300); // Match CSS transition duration
         }
-
 
         function showPreviousImage() { if (currentImageIndex > 0) showImageAtIndex(currentImageIndex - 1); }
         function showNextImage() { if (currentImageIndex < galleryImageSources.length - 1) showImageAtIndex(currentImageIndex + 1); }
