@@ -3,399 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-key="page-title" class="translatable" data-en="Angsthase Digital Art" data-de="Angsthase Digital Art">Angsthase Digital Art</title>
+    <title>Rounded Corners Example</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Lato', sans-serif; position: relative; min-height: 100vh; }
-        h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', sans-serif; }
-        img { background-color: #f3f4f6; }
-        .gallery-img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
-        body::before {
-            content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1;
-            background-image: url('https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png');
-            background-repeat: no-repeat; background-position: center center; background-size: contain;
-            background-attachment: fixed; opacity: 0.25;
-        }
-        #lightbox-overlay { transition: opacity 0.3s ease-in-out; }
-        #lightbox-overlay button { cursor: pointer; }
-        .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
-        .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
-        .divider-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 1.5s ease-in-out; }
-        .fade-in-section.is-visible .divider-line { stroke-dashoffset: 0; }
-        #hero-image-container { perspective: 1000px; }
-        #hero-image { transition: transform 0.1s ease-out; will-change: transform; }
-         .hotspot {
-            position: absolute; width: 1.25rem; height: 1.25rem; background-color: rgba(255, 255, 255, 0.5);
-            border-radius: 9999px; cursor: pointer; transition: all 0.2s ease-in-out; display: flex;
-            align-items: center; justify-content: center; border: 1px solid rgba(0, 0, 0, 0.1);
-        }
-        .hotspot:hover { transform: scale(1.2); background-color: rgba(255, 255, 255, 0.8); }
-        .hotspot::after { content: '+'; font-size: 0.875rem; color: rgba(0, 0, 0, 0.6); line-height: 1; }
-        .hotspot-tooltip {
-            position: absolute; background-color: rgba(0, 0, 0, 0.8); color: white; padding: 0.5rem 0.75rem;
-            border-radius: 0.375rem; font-size: 0.75rem; line-height: 1rem; opacity: 0; visibility: hidden;
-            transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out; white-space: nowrap;
-            z-index: 10; pointer-events: none; transform: translate(-50%, -120%);
-        }
-        .hotspot-tooltip.is-visible { opacity: 1; visibility: visible; }
-         #cursor-spotlight {
-            position: fixed; width: 300px; height: 300px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
-            pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); display: none; mix-blend-mode: screen;
+        /* Apply Inter font globally */
+        body {
+            font-family: 'Inter', sans-serif;
         }
     </style>
 </head>
-<body class="bg-white text-gray-800 antialiased">
+<body class="bg-gray-100 p-10">
 
-    <header class="py-6 px-4 md:px-8 border-b border-gray-200 sticky top-0 z-30 bg-white/80 backdrop-blur-sm">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png"
-                     alt="Angsthase Logo"
-                     class="w-10 h-10 rounded-full object-cover border border-gray-200">
-                <h1 class="text-2xl md:text-3xl font-bold text-black translatable" data-key="site-title" data-en="Angsthase Digital Art" data-de="Angsthase Digital Art">Angsthase Digital Art</h1>
-            </div>
-            <nav>
-                <ul class="flex space-x-4 md:space-x-6 text-gray-600 items-center">
-                    <li><a href="#gallery" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 translatable" data-key="nav-gallery" data-en="Gallery" data-de="Galerie">Gallery</a></li>
-                    <li><a href="#about-style" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 translatable" data-key="nav-about" data-en="About" data-de="Über">About</a></li>
-                    <li><a href="#contact" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 translatable" data-key="nav-contact" data-en="Contact" data-de="Kontakt">Contact</a></li>
-                    <li>
-                        <button id="lang-toggle" class="ml-2 px-3 py-1 border border-gray-400 rounded-md text-xs hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            DE / EN
-                        </button>
-                    </li>
-                </ul>
-            </nav>
+    <h1 class="text-2xl font-semibold mb-6 text-gray-800">Rounded Corners Examples</h1>
+
+    <div class="mb-8">
+        <h2 class="text-lg font-medium mb-2 text-gray-700">Rounded Image:</h2>
+        <img src="https://placehold.co/600x400/cccccc/ffffff?text=Example+Image"
+             alt="Placeholder image"
+             class="w-1/2 rounded-lg shadow-md">
+             </div>
+
+    <div class="mb-8">
+        <h2 class="text-lg font-medium mb-2 text-gray-700">Rounded Container:</h2>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+             <p class="text-gray-600">This container div has rounded corners using 'rounded-lg'.</p>
         </div>
-    </header>
-
-    <section class="mb-20 text-center pt-16">
-         <div id="hero-image-container" class="w-full h-48 md:h-72 bg-gray-100 flex items-center justify-center mb-8 overflow-hidden">
-             <img id="hero-image" src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744274602/hero_yjoq8w.png"
-                  alt="Atmospheric landscape with trees and distant lights"
-                  class="w-full h-full object-contain">
-         </div>
-         <div class="container mx-auto px-4 md:px-8">
-             <h2 data-key="welcome-title" class="translatable text-3xl md:text-4xl font-bold mb-4 text-black mt-8" data-en="Welcome to Angsthase Digital Art" data-de="Willkommen bei Angsthase Digital Art">Welcome to Angsthase Digital Art</h2>
-             <p data-key="welcome-text" class="translatable text-gray-700 max-w-2xl mx-auto" data-en="Exploring themes through digital mediums. Browse the gallery to see the latest creations." data-de="Digitale Medien zur Erkundung von Themen. Durchsuchen Sie die Galerie nach den neuesten Kreationen.">Exploring themes through digital mediums. Browse the gallery to see the latest creations.</p>
-        </div>
-    </section>
-
-    <div class="fade-in-section container mx-auto px-4 md:px-8 my-16">
-         <svg width="100%" height="5" viewBox="0 0 1000 5" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-slate-500 block">
-            <line class="divider-line" x1="0" y1="2.5" x2="1000" y2="2.5" stroke="currentColor" stroke-width="1"/>
-        </svg>
     </div>
 
-    <main class="container mx-auto px-4 md:px-8 py-16 relative z-10 -mt-16">
-
-        <section class="fade-in-section mb-20 flex flex-col md:flex-row items-center gap-8 md:gap-12">
-            <div class="md:w-7/12 text-gray-700">
-                <h3 data-key="spotlight-title" class="translatable text-2xl font-bold mb-4 text-black" data-en="Project Spotlight" data-de="Projekt-Spotlight">Project Spotlight</h3>
-                <p data-key="spotlight-p1" class="translatable mb-4" data-en="Titled 'Café Corner, Potsdam Night', this piece highlights the contrast between the warm, inviting light spilling from the windows and the cool darkness of the surrounding night. Developed from photographic source material, the scene undergoes digital processing to enhance the atmospheric quality and painterly textures, particularly noticeable in the rendering of the reflections and the sky." data-de="Mit dem Titel ‚Café-Ecke, Potsdam Nacht‘ hebt dieses Werk den Kontrast zwischen dem warmen, einladenden Licht, das aus den Fenstern strömt, und der kühlen Dunkelheit der umgebenden Nacht hervor. Entwickelt aus fotografischem Ausgangsmaterial, durchläuft die Szene eine digitale Bearbeitung, um die atmosphärische Qualität und die malerischen Texturen zu verstärken, was besonders bei der Darstellung der Reflexionen und des Himmels auffällt.">
-                    Titled 'Café Corner, Potsdam Night', this piece highlights the contrast between the warm, inviting light spilling from the windows and the cool darkness of the surrounding night. Developed from photographic source material, the scene undergoes digital processing to enhance the atmospheric quality and painterly textures, particularly noticeable in the rendering of the reflections and the sky.
-                </p>
-                <p data-key="spotlight-p2" class="translatable" data-en="The focus is on capturing a specific feeling of quiet solitude often found in illuminated structures after dark. Digital brushwork aims to evoke mood rather than precise detail, blending observed reality with a more expressive interpretation of light and shadow." data-de="Der Fokus liegt darauf, ein spezifisches Gefühl der ruhigen Einsamkeit einzufangen, das oft in beleuchteten Strukturen nach Einbruch der Dunkelheit zu finden ist. Digitale Pinselstriche zielen darauf ab, Stimmung statt präziser Details hervorzurufen, indem beobachtete Realität mit einer ausdrucksstärkeren Interpretation von Licht und Schatten verschmolzen wird.">
-                    The focus is on capturing a specific feeling of quiet solitude often found in illuminated structures after dark. Digital brushwork aims to evoke mood rather than precise detail, blending observed reality with a more expressive interpretation of light and shadow.
-                </p>
-            </div>
-            <div class="md:w-5/12 md:-mr-6 lg:-mr-10 relative">
-                 <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/7_eiddxy.png"
-                     alt="Artwork Example 1: Café Corner, Potsdam Night" class="w-full h-auto rounded-lg border border-gray-200 block"
-                     onerror="this.onerror=null; this.src='https://placehold.co/600x400/E5E7EB/1F2937?text=Image+Error'; this.alt='Image failed to load';">
-                 <button class="hotspot" style="top: 30%; left: 40%;" data-tooltip-target="tooltip-1"></button>
-                 <div id="tooltip-1" class="hotspot-tooltip translatable" style="left: 40%;" data-key="tooltip-1" data-en="Focus on window light" data-de="Fokus auf Fensterlicht">Focus on window light</div>
-                 <button class="hotspot" style="top: 75%; left: 60%;" data-tooltip-target="tooltip-2"></button>
-                 <div id="tooltip-2" class="hotspot-tooltip translatable" style="left: 60%;" data-key="tooltip-2" data-en="Painterly reflections" data-de="Malerische Reflexionen">Painterly reflections</div>
-            </div>
-        </section>
-
-        <section class="fade-in-section mb-20 flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12">
-             <div class="md:w-7/12 text-gray-700">
-                <h3 data-key="another-title" class="translatable text-2xl font-bold mb-4 text-black" data-en="Another Piece / About" data-de="Weiteres Werk / Über">Another Piece / About</h3>
-                 <p data-key="another-p1" class="translatable mb-4" data-en="Titled 'Woodhouse, Baabe', this artwork captures a structure within the unique landscape of the Rügen coast. Developed from a photograph, the image has been digitally transformed to emphasize mood and atmosphere over strict realism." data-de="Mit dem Titel ‚Holzhaus, Baabe‘ fängt dieses Kunstwerk eine Struktur innerhalb der einzigartigen Landschaft der Küste Rügens ein. Entwickelt aus einer Fotografie, wurde das Bild digital transformiert, um Stimmung und Atmosphäre über strengen Realismus zu betonen.">
-                    Titled 'Woodhouse, Baabe', this artwork captures a structure within the unique landscape of the Rügen coast. Developed from a photograph, the image has been digitally transformed to emphasize mood and atmosphere over strict realism.
-                 </p>
-                 <p data-key="another-p2" class="translatable" data-en="The focus is on the interplay of light on the wooden surfaces and the surrounding environment, rendered with distinct painterly textures characteristic of the digital synthesis process. It aims to convey the quiet feeling of this specific place, blending observed reality with an expressive, atmospheric interpretation." data-de="Der Fokus liegt auf dem Zusammenspiel von Licht auf den Holzoberflächen und der umgebenden Umgebung, wiedergegeben mit den ausgeprägten malerischen Texturen, die für den digitalen Syntheseprozess charakteristisch sind. Es zielt darauf ab, das ruhige Gefühl dieses spezifischen Ortes zu vermitteln, indem die beobachtete Realität mit einer ausdrucksstärkeren, atmosphärischen Interpretation verschmolzen wird.">
-                    The focus is on the interplay of light on the wooden surfaces and the surrounding environment, rendered with distinct painterly textures characteristic of the digital synthesis process. It aims to convey the quiet feeling of this specific place, blending observed reality with an expressive, atmospheric interpretation.
-                 </p>
-            </div>
-           <div class="md:w-5/12 md:-ml-6 lg:-ml-10">
-                <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/9_gkmvef.png"
-                     alt="Artwork Example 2: Woodhouse, Baabe" class="w-full h-auto rounded-lg border border-gray-200"
-                     onerror="this.onerror=null; this.src='https://placehold.co/600x400/E5E7EB/1F2937?text=Image+Error'; this.alt='Image failed to load';">
-           </div>
-        </section>
-
-        <section id="about-style" class="fade-in-section mb-20 max-w-4xl mx-auto text-gray-700 pt-16 -mt-16">
-             <h3 data-key="about-title" class="translatable text-3xl font-bold mb-6 text-center text-black" data-en="About The Art Style" data-de="Über den Kunststil">About The Art Style</h3>
-             <p data-key="about-p1" class="translatable mb-4" data-en="The digital art originates from photographs, often capturing scenes from familiar places in Germany – from the streets of Potsdam and the Bad Belzig area to the unique landscapes of the Rügen coast. Each image undergoes extensive digital processing and synthesis, transforming these photographic moments. The aim is less about strict realism and more focused on evoking a specific mood and atmosphere inherent in the scene." data-de="Die digitale Kunst basiert auf Fotografien, die oft Szenen von vertrauten Orten in Deutschland festhalten – von den Straßen Potsdams und der Gegend um Bad Belzig bis zu den einzigartigen Landschaften der Küste Rügens. Jedes Bild durchläuft eine umfangreiche digitale Bearbeitung und Synthese, wodurch diese fotografischen Momente transformiert werden. Das Ziel ist weniger strenger Realismus, sondern vielmehr das Hervorrufen einer spezifischen Stimmung und Atmosphäre, die der Szene innewohnt.">
-                The digital art originates from photographs, often capturing scenes from familiar places in Germany – from the streets of Potsdam and the Bad Belzig area to the unique landscapes of the Rügen coast. Each image undergoes extensive digital processing and synthesis, transforming these photographic moments. The aim is less about strict realism and more focused on evoking a specific mood and atmosphere inherent in the scene.
-             </p>
-             <p data-key="about-p2" class="translatable mb-4" data-en="The resulting style is distinctly painterly, characterized by visible digital textures and brushwork that are particularly noticeable in skies, water, and shadow areas. There is a strong focus on the interplay of light – whether it's the warm glow of a window against the cool night, the transitional colours of dusk and dawn, or the quality of daylight on different surfaces. This digital synthesis process allows blending the observed reality captured in the source photograph with a more expressive, atmospheric interpretation." data-de="Der resultierende Stil ist deutlich malerisch, gekennzeichnet durch sichtbare digitale Texturen und Pinselstriche, die besonders in Himmeln, Wasser und Schattenbereichen auffallen. Ein starker Fokus liegt auf dem Zusammenspiel von Licht – sei es das warme Leuchten eines Fensters gegen die kühle Nacht, die Übergangsfarben der Dämmerung und des Morgengrauens oder die Qualität des Tageslichts auf verschiedenen Oberflächen. Dieser digitale Syntheseprozess ermöglicht es, die in der Ausgangsfotografie festgehaltene beobachtete Realität mit einer ausdrucksstärkeren, atmosphärischen Interpretation zu verschmelzen.">
-                The resulting style is distinctly painterly, characterized by visible digital textures and brushwork that are particularly noticeable in skies, water, and shadow areas. There is a strong focus on the interplay of light – whether it's the warm glow of a window against the cool night, the transitional colours of dusk and dawn, or the quality of daylight on different surfaces. This digital synthesis process allows blending the observed reality captured in the source photograph with a more expressive, atmospheric interpretation.
-             </p>
-             <p data-key="about-p3" class="translatable" data-en="Through subjects often featuring architecture, streetscapes, and landscapes, themes of quiet, solitude, and the unique feeling of a place at a particular moment are explored. The goal is to create atmospheric digital paintings that invite contemplation and offer a distinctive view of these locations, filtered through this artistic process." data-de="Durch Motive, die oft Architektur, Straßenszenen und Landschaften zeigen, werden Themen wie Ruhe, Einsamkeit und das einzigartige Gefühl eines Ortes zu einem bestimmten Zeitpunkt erforscht. Das Ziel ist es, atmosphärische digitale Gemälde zu schaffen, die zur Kontemplation einladen und einen unverwechselbaren Blick auf diese Orte bieten, gefiltert durch diesen künstlerischen Prozess.">
-                Through subjects often featuring architecture, streetscapes, and landscapes, themes of quiet, solitude, and the unique feeling of a place at a particular moment are explored. The goal is to create atmospheric digital paintings that invite contemplation and offer a distinctive view of these locations, filtered through this artistic process.
-             </p>
-        </section>
-
-        <section id="gallery" class="fade-in-section mb-20 pt-16 -mt-16">
-            <h3 data-key="gallery-title" class="translatable text-3xl font-bold mb-8 text-center text-black" data-en="Gallery" data-de="Galerie">Gallery</h3>
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/5_ulpq6j.png" alt="Pedestrians walk past brightly lit modern shopfronts on a street at night." class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
-                </div>
-                <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/8_vtftql.png" alt="Illuminated building with a tower and adjacent structures on a street at night." class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
-                </div>
-                <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209002/6_typwgx.png" alt="Street intersection at night with glowing streetlights and dark buildings." class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
-                </div>
-                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/4_null04.png" alt="Modern building with large, lit glass front at night." class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
-                </div>
-                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/3_cyiqpk.png" alt="Colourful buildings reflected in harbour water with small boats at night." class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
-                </div>
-                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/1_sbzyhy.png" alt="Street corner with illuminated traditional buildings at night." class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
-                </div>
-                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209000/13_at5ibg.png" alt="Wooden pier with railings extending into calm water under a pale sky." class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
-                </div>
-                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209009/14_lnxo5n.png" alt="Long white pier with a building at the end (Sellin Pier) stretching onto a sandy beach." class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
-                </div>
-                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209008/11_wcbenb.png" alt="Houses on a small hill among bare trees, lit up at dusk." class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
-                </div>
-                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209007/10_to7taw.png" alt="[Describe image 10_to7taw.png]" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
-                </div>
-                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/2_t9vs7f.png" alt="Long, low building illuminated at night, seen across a road." class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
-                </div>
-                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/7_eiddxy.png" alt="Café Corner, Potsdam Night" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
-                </div>
-                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/9_gkmvef.png" alt="Woodhouse, Baabe" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
-                </div>
-            </div>
-        </section>
-
-        <section id="contact" class="fade-in-section mb-20 pt-16 -mt-16">
-             <h3 data-key="contact-title" class="translatable text-3xl font-bold mb-8 text-center text-black" data-en="Contact" data-de="Kontakt">Contact</h3>
-             <p data-key="contact-prompt" class="translatable text-center text-gray-700 mb-2" data-en="If you have any questions about these artworks, would like to buy any, or wish to commission a piece, please contact me at:" data-de="Wenn Sie Fragen zu diesen Kunstwerken haben, eines kaufen möchten oder ein Werk in Auftrag geben wollen, kontaktieren Sie mich bitte unter:">
-                 If you have any questions about these artworks, would like to buy any, or wish to commission a piece, please contact me at:
-             </p>
-             <p class="text-center text-gray-700">
-                Email: <a href="mailto:angsthasedigitalstudio@gmail.com" class="text-gray-800 hover:text-slate-600 underline">angsthasedigitalstudio@gmail.com</a>
-             </p>
-        </section>
-
-    </main>
-
-    <footer class="bg-gray-100 py-8 px-4 md:px-8 mt-16">
-        <div class="container mx-auto text-center text-gray-600">
-            <div class="mb-4">
-                <a href="#" class="hover:text-slate-600 px-2 translatable" data-key="footer-privacy" data-en="Privacy Policy" data-de="Datenschutzrichtlinie">Privacy Policy</a> |
-                <a href="#" class="hover:text-slate-600 px-2 translatable" data-key="footer-terms" data-en="Terms of Service" data-de="Nutzungsbedingungen">Terms of Service</a> |
-                <a href="#" class="hover:text-slate-600 px-2 translatable" data-key="footer-imprint" data-en="Impressum" data-de="Impressum">Impressum</a>
-            </div>
-            <p data-key="footer-copy" class="translatable" data-en="&copy; 2025 Angsthase Digital Art. All rights reserved." data-de="© 2025 Angsthase Digital Art. Alle Rechte vorbehalten.">&copy; 2025 Angsthase Digital Art. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <div id="lightbox-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden z-50 p-4 cursor-default">
-        <button id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold p-2 bg-black bg-opacity-30 rounded-full hover:bg-opacity-50 focus:outline-none hidden sm:block">&lt;</button>
-        <img id="lightbox-image" src="" alt="Enlarged View" class="max-w-full max-h-full object-contain block">
-        <button id="lightbox-next" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold p-2 bg-black bg-opacity-30 rounded-full hover:bg-opacity-50 focus:outline-none hidden sm:block">&gt;</button>
-        <button id="lightbox-close" class="absolute top-5 right-6 text-white text-4xl leading-none font-bold hover:text-gray-300 focus:outline-none">&times;</button>
+    <div>
+        <h2 class="text-lg font-medium mb-2 text-gray-700">Rounded Button:</h2>
+        <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow">
+             Rounded Button
+        </button>
     </div>
 
-    <div id="cursor-spotlight"></div>
-
-    <script>
-        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
-        const observerCallback = (entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                    const line = entry.target.querySelector('.divider-line');
-                    if (line) { }
-                     if (!entry.target.querySelector('.divider-line')) { observer.unobserve(entry.target); }
-                     if (entry.target.querySelector('.divider-line')) { observer.unobserve(entry.target); }
-                }
-            });
-        };
-        const scrollObserver = new IntersectionObserver(observerCallback, observerOptions);
-        const elementsToAnimate = document.querySelectorAll('.fade-in-section');
-        elementsToAnimate.forEach(el => { scrollObserver.observe(el); });
-
-        const lightboxOverlay = document.getElementById('lightbox-overlay');
-        const lightboxImage = document.getElementById('lightbox-image');
-        const lightboxClose = document.getElementById('lightbox-close');
-        const lightboxPrev = document.getElementById('lightbox-prev');
-        const lightboxNext = document.getElementById('lightbox-next');
-        const galleryItems = document.querySelectorAll('.gallery-item-clickable');
-        let galleryImageSources = [];
-        let currentImageIndex = -1;
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        galleryItems.forEach((item, index) => {
-            galleryImageSources.push(item.src);
-            item.setAttribute('data-index', index);
-            item.addEventListener('click', openLightbox);
-        });
-
-        function showImageAtIndex(index) {
-            if (index < 0 || index >= galleryImageSources.length) return;
-            lightboxImage.src = galleryImageSources[index];
-            currentImageIndex = index;
-            const isSmallScreen = window.innerWidth < 640;
-            lightboxPrev.classList.toggle('hidden', index === 0 || isSmallScreen);
-            lightboxNext.classList.toggle('hidden', index === galleryImageSources.length - 1 || isSmallScreen);
-        }
-
-        function openLightbox(event) {
-            const clickedIndex = parseInt(event.target.getAttribute('data-index'), 10);
-            if (!isNaN(clickedIndex)) {
-                showImageAtIndex(clickedIndex);
-                lightboxOverlay.classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-            }
-        }
-
-        function closeLightbox() {
-            lightboxOverlay.classList.add('hidden');
-            lightboxImage.src = "";
-            currentImageIndex = -1;
-            document.body.style.overflow = '';
-        }
-
-        function showPreviousImage() { if (currentImageIndex > 0) showImageAtIndex(currentImageIndex - 1); }
-        function showNextImage() { if (currentImageIndex < galleryImageSources.length - 1) showImageAtIndex(currentImageIndex + 1); }
-
-        lightboxClose.addEventListener('click', closeLightbox);
-        lightboxPrev.addEventListener('click', showPreviousImage);
-        lightboxNext.addEventListener('click', showNextImage);
-        lightboxOverlay.addEventListener('click', (event) => { if (event.target === lightboxOverlay) closeLightbox(); });
-        document.addEventListener('keydown', (event) => {
-            if (lightboxOverlay.classList.contains('hidden')) return;
-            switch (event.key) {
-                case 'Escape': closeLightbox(); break;
-                case 'ArrowLeft': showPreviousImage(); break;
-                case 'ArrowRight': showNextImage(); break;
-            }
-        });
-
-        lightboxImage.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
-        lightboxImage.addEventListener('touchend', (e) => { touchEndX = e.changedTouches[0].screenX; handleSwipeGesture(); }, { passive: true });
-        function handleSwipeGesture() {
-            const swipeThreshold = 50;
-            const distance = touchEndX - touchStartX;
-            if (distance > swipeThreshold) showPreviousImage();
-            else if (distance < -swipeThreshold) showNextImage();
-            touchStartX = 0; touchEndX = 0;
-        }
-
-        window.addEventListener('resize', () => { if (!lightboxOverlay.classList.contains('hidden')) showImageAtIndex(currentImageIndex); });
-
-        const heroImage = document.getElementById('hero-image');
-        const heroContainer = document.getElementById('hero-image-container');
-
-        if (heroImage && heroContainer) {
-            heroContainer.addEventListener('mousemove', (e) => {
-                const rect = heroContainer.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
-                const maxRot = 3;
-                const rotY = (x / (rect.width / 2)) * maxRot;
-                const rotX = (-y / (rect.height / 2)) * maxRot;
-                heroImage.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.03)`;
-            });
-            heroContainer.addEventListener('mouseleave', () => {
-                heroImage.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
-            });
-        } else {
-             const potentialHeroContainer = document.querySelector('section > div > img#hero-image')?.parentElement;
-             if (potentialHeroContainer && !potentialHeroContainer.id) {
-                 potentialHeroContainer.id = 'hero-image-container';
-             }
-        }
-
-        const hotspots = document.querySelectorAll('.hotspot');
-        hotspots.forEach(hotspot => {
-            const tooltipId = hotspot.getAttribute('data-tooltip-target');
-            const tooltip = document.getElementById(tooltipId);
-
-            if (tooltip) {
-                hotspot.addEventListener('mouseenter', () => {
-                    tooltip.style.left = hotspot.style.left;
-                    tooltip.classList.add('is-visible');
-                });
-                hotspot.addEventListener('mouseleave', () => {
-                    tooltip.classList.remove('is-visible');
-                });
-            }
-        });
-
-        const spotlight = document.getElementById('cursor-spotlight');
-        if (spotlight) {
-            document.body.addEventListener('mousemove', (e) => {
-                spotlight.style.left = `${e.pageX}px`;
-                spotlight.style.top = `${e.pageY}px`;
-            });
-            document.body.addEventListener('mouseenter', () => {
-                 spotlight.style.display = 'block';
-            });
-             document.body.addEventListener('mouseleave', () => {
-                 spotlight.style.display = 'none';
-            });
-        }
-
-        const langToggleButton = document.getElementById('lang-toggle');
-        const translatableElements = document.querySelectorAll('.translatable');
-        let currentLang = localStorage.getItem('preferredLang') || 'en';
-
-        function setLanguage(lang) {
-            translatableElements.forEach(el => {
-                const textEn = el.dataset.en;
-                const textDe = el.dataset.de;
-                if (lang === 'de' && textDe && !textDe.startsWith('[')) {
-                    el.innerHTML = textDe;
-                } else {
-                    el.innerHTML = textEn;
-                }
-                document.documentElement.lang = lang;
-                langToggleButton.textContent = lang === 'en' ? 'DE' : 'EN';
-            });
-            localStorage.setItem('preferredLang', lang);
-            currentLang = lang;
-        }
-
-        translatableElements.forEach(el => {
-            if (!el.dataset.en) {
-                el.dataset.en = el.innerHTML.trim();
-            }
-        });
-        setLanguage(currentLang);
-
-        langToggleButton.addEventListener('click', () => {
-            const newLang = currentLang === 'en' ? 'de' : 'en';
-            setLanguage(newLang);
-        });
-
-    </script>
-
-</body>
+    </body>
 </html>
 
