@@ -9,43 +9,125 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&family=Raleway:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Lato', sans-serif; position: relative; min-height: 100vh; }
-        h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', sans-serif; }
-        img { background-color: #f3f4f6; }
-        .gallery-img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Lato', sans-serif;
+            position: relative;
+            min-height: 100vh;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Raleway', sans-serif;
+        }
+        img {
+            background-color: #f3f4f6;
+        }
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            cursor: pointer;
+        }
         body::before {
-            content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1;
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
             background-image: url('https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png');
-            background-repeat: no-repeat; background-position: center center; background-size: contain;
-            background-attachment: fixed; opacity: 0.25;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: contain;
+            background-attachment: fixed;
+            opacity: 0.25;
         }
-        #lightbox-overlay { transition: opacity 0.3s ease-in-out; }
-        #lightbox-overlay button { cursor: pointer; }
-        .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
-        .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
-        .divider-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 1.5s ease-in-out; }
-        .fade-in-section.is-visible .divider-line { stroke-dashoffset: 0; }
-        #hero-image-container { perspective: 1000px; }
-        #hero-image { transition: transform 0.1s ease-out; will-change: transform; }
+        #lightbox-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
+        #lightbox-overlay button {
+             cursor: pointer;
+        }
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .divider-line {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            transition: stroke-dashoffset 1.5s ease-in-out;
+        }
+        .fade-in-section.is-visible .divider-line {
+            stroke-dashoffset: 0;
+        }
+        #hero-image-container {
+             perspective: 1000px;
+        }
+        #hero-image {
+            transition: transform 0.1s ease-out;
+            will-change: transform;
+        }
          .hotspot {
-            position: absolute; width: 1.25rem; height: 1.25rem; background-color: rgba(255, 255, 255, 0.5);
-            border-radius: 9999px; cursor: pointer; transition: all 0.2s ease-in-out; display: flex;
-            align-items: center; justify-content: center; border: 1px solid rgba(0, 0, 0, 0.1);
+            position: absolute;
+            width: 1.25rem;
+            height: 1.25rem;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(0, 0, 0, 0.1);
         }
-        .hotspot:hover { transform: scale(1.2); background-color: rgba(255, 255, 255, 0.8); }
-        .hotspot::after { content: '+'; font-size: 0.875rem; color: rgba(0, 0, 0, 0.6); line-height: 1; }
+        .hotspot:hover {
+            transform: scale(1.2);
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        .hotspot::after {
+            content: '+';
+            font-size: 0.875rem;
+            color: rgba(0, 0, 0, 0.6);
+            line-height: 1;
+        }
         .hotspot-tooltip {
-            position: absolute; background-color: rgba(0, 0, 0, 0.8); color: white; padding: 0.5rem 0.75rem;
-            border-radius: 0.375rem; font-size: 0.75rem; line-height: 1rem; opacity: 0; visibility: hidden;
-            transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out; white-space: nowrap;
-            z-index: 10; pointer-events: none; transform: translate(-50%, -120%);
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            line-height: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+            white-space: nowrap;
+            z-index: 10;
+            pointer-events: none;
+            transform: translate(-50%, -120%);
         }
-        .hotspot-tooltip.is-visible { opacity: 1; visibility: visible; }
+        .hotspot-tooltip.is-visible {
+            opacity: 1;
+            visibility: visible;
+        }
          #cursor-spotlight {
-            position: fixed; width: 300px; height: 300px; border-radius: 50%;
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
             background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
-            pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); display: none; mix-blend-mode: screen;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            display: none;
+            mix-blend-mode: screen;
         }
     </style>
 </head>
@@ -57,16 +139,12 @@
                 <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png"
                      alt="Angsthase Logo"
                      class="w-10 h-10 rounded-full object-cover border border-gray-200">
-                {/* EDIT data-de: Replace placeholder */}
                 <h1 class="text-2xl md:text-3xl font-bold text-black translatable" data-key="site-title" data-de="[German Site Title]">Angsthase Digital Art</h1>
             </div>
             <nav>
                 <ul class="flex space-x-4 md:space-x-6 text-gray-600 items-center">
-                    {/* EDIT data-de: Replace placeholder */}
                     <li><a href="#gallery" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 translatable" data-key="nav-gallery" data-de="[Galerie]">Gallery</a></li>
-                     {/* EDIT data-de: Replace placeholder */}
                     <li><a href="#about-style" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 translatable" data-key="nav-about" data-de="[Über]">About</a></li>
-                     {/* EDIT data-de: Replace placeholder */}
                     <li><a href="#contact" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 translatable" data-key="nav-contact" data-de="[Kontakt]">Contact</a></li>
                     <li>
                         <button id="lang-toggle" class="ml-2 px-3 py-1 border border-gray-400 rounded-md text-xs hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -85,9 +163,7 @@
                   class="w-full h-full object-contain">
          </div>
          <div class="container mx-auto px-4 md:px-8">
-              {/* EDIT data-de: Replace placeholder */}
              <h2 data-key="welcome-title" class="translatable text-3xl md:text-4xl font-bold mb-4 text-black mt-8" data-de="[German Welcome Title]">Welcome to Angsthase Digital Art</h2>
-              {/* EDIT data-de: Replace placeholder */}
              <p data-key="welcome-text" class="translatable text-gray-700 max-w-2xl mx-auto" data-de="[German Welcome Text]">Exploring themes through digital mediums. Browse the gallery to see the latest creations.</p>
         </div>
     </section>
@@ -102,13 +178,10 @@
 
         <section class="fade-in-section mb-20 flex flex-col md:flex-row items-center gap-8 md:gap-12">
             <div class="md:w-7/12 text-gray-700">
-                 {/* EDIT data-de: Replace placeholder */}
                 <h3 data-key="spotlight-title" class="translatable text-2xl font-bold mb-4 text-black" data-de="[German Spotlight Title]">Project Spotlight</h3>
-                 {/* EDIT data-de: Replace placeholder */}
                 <p data-key="spotlight-p1" class="translatable mb-4" data-de="[German Spotlight P1]">
                     Titled 'Café Corner, Potsdam Night', this piece highlights the contrast between the warm, inviting light spilling from the windows and the cool darkness of the surrounding night. Developed from photographic source material, the scene undergoes digital processing to enhance the atmospheric quality and painterly textures, particularly noticeable in the rendering of the reflections and the sky.
                 </p>
-                 {/* EDIT data-de: Replace placeholder */}
                 <p data-key="spotlight-p2" class="translatable" data-de="[German Spotlight P2]">
                     The focus is on capturing a specific feeling of quiet solitude often found in illuminated structures after dark. Digital brushwork aims to evoke mood rather than precise detail, blending observed reality with a more expressive interpretation of light and shadow.
                 </p>
@@ -118,23 +191,18 @@
                      alt="Artwork Example 1: Café Corner, Potsdam Night" class="w-full h-auto rounded-lg border border-gray-200 block"
                      onerror="this.onerror=null; this.src='https://placehold.co/600x400/E5E7EB/1F2937?text=Image+Error'; this.alt='Image failed to load';">
                  <button class="hotspot" style="top: 30%; left: 40%;" data-tooltip-target="tooltip-1"></button>
-                  {/* EDIT data-de: Replace placeholder */}
                  <div id="tooltip-1" class="hotspot-tooltip translatable" style="left: 40%;" data-key="tooltip-1" data-de="[German Tooltip 1]">Focus on window light</div>
                  <button class="hotspot" style="top: 75%; left: 60%;" data-tooltip-target="tooltip-2"></button>
-                  {/* EDIT data-de: Replace placeholder */}
                  <div id="tooltip-2" class="hotspot-tooltip translatable" style="left: 60%;" data-key="tooltip-2" data-de="[German Tooltip 2]">Painterly reflections</div>
             </div>
         </section>
 
         <section class="fade-in-section mb-20 flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12">
              <div class="md:w-7/12 text-gray-700">
-                 {/* EDIT data-de: Replace placeholder */}
                 <h3 data-key="another-title" class="translatable text-2xl font-bold mb-4 text-black" data-de="[German Another Piece Title]">Another Piece / About</h3>
-                 {/* EDIT data-de: Replace placeholder */}
                  <p data-key="another-p1" class="translatable mb-4" data-de="[German Another P1]">
                     Titled 'Woodhouse, Baabe', this artwork captures a structure within the unique landscape of the Rügen coast. Developed from a photograph, the image has been digitally transformed to emphasize mood and atmosphere over strict realism.
                  </p>
-                  {/* EDIT data-de: Replace placeholder */}
                  <p data-key="another-p2" class="translatable" data-de="[German Another P2]">
                     The focus is on the interplay of light on the wooden surfaces and the surrounding environment, rendered with distinct painterly textures characteristic of the digital synthesis process. It aims to convey the quiet feeling of this specific place, blending observed reality with an expressive, atmospheric interpretation.
                  </p>
@@ -147,24 +215,19 @@
         </section>
 
         <section id="about-style" class="fade-in-section mb-20 max-w-4xl mx-auto text-gray-700 pt-16 -mt-16">
-             {/* EDIT data-de: Replace placeholder */}
              <h3 data-key="about-title" class="translatable text-3xl font-bold mb-6 text-center text-black" data-de="[German About Style Title]">About The Art Style</h3>
-              {/* EDIT data-de: Replace placeholder */}
              <p data-key="about-p1" class="translatable mb-4" data-de="[German About P1]">
                 The digital art originates from photographs, often capturing scenes from familiar places in Germany – from the streets of Potsdam and the Bad Belzig area to the unique landscapes of the Rügen coast. Each image undergoes extensive digital processing and synthesis, transforming these photographic moments. The aim is less about strict realism and more focused on evoking a specific mood and atmosphere inherent in the scene.
              </p>
-              {/* EDIT data-de: Replace placeholder */}
              <p data-key="about-p2" class="translatable mb-4" data-de="[German About P2]">
                 The resulting style is distinctly painterly, characterized by visible digital textures and brushwork that are particularly noticeable in skies, water, and shadow areas. There is a strong focus on the interplay of light – whether it's the warm glow of a window against the cool night, the transitional colours of dusk and dawn, or the quality of daylight on different surfaces. This digital synthesis process allows blending the observed reality captured in the source photograph with a more expressive, atmospheric interpretation.
              </p>
-              {/* EDIT data-de: Replace placeholder */}
              <p data-key="about-p3" class="translatable" data-de="[German About P3]">
                 Through subjects often featuring architecture, streetscapes, and landscapes, themes of quiet, solitude, and the unique feeling of a place at a particular moment are explored. The goal is to create atmospheric digital paintings that invite contemplation and offer a distinctive view of these locations, filtered through this artistic process.
              </p>
         </section>
 
         <section id="gallery" class="fade-in-section mb-20 pt-16 -mt-16">
-             {/* EDIT data-de: Replace placeholder */}
             <h3 data-key="gallery-title" class="translatable text-3xl font-bold mb-8 text-center text-black" data-de="[Galerie]">Gallery</h3>
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                  <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
@@ -211,7 +274,6 @@
 
         <section id="contact" class="fade-in-section mb-20 pt-16 -mt-16">
              <h3 data-key="contact-title" class="translatable text-3xl font-bold mb-8 text-center text-black" data-de="[Kontakt]">Contact</h3>
-              {/* EDIT data-de: Replace placeholder */}
              <p data-key="contact-prompt" class="translatable text-center text-gray-700 mb-2" data-de="[German Contact Prompt]">
                  If you have any questions about these artworks, would like to buy any, or wish to commission a piece, please contact me at:
              </p>
@@ -225,14 +287,10 @@
     <footer class="bg-gray-100 py-8 px-4 md:px-8 mt-16">
         <div class="container mx-auto text-center text-gray-600">
             <div class="mb-4">
-                {/* EDIT data-de: Replace placeholder */}
                 <a href="#" class="hover:text-slate-600 px-2 translatable" data-key="footer-privacy" data-de="[Datenschutz]">Privacy Policy</a> |
-                {/* EDIT data-de: Replace placeholder */}
                 <a href="#" class="hover:text-slate-600 px-2 translatable" data-key="footer-terms" data-de="[AGB]">Terms of Service</a> |
-                 {/* EDIT data-de: Replace placeholder */}
                 <a href="#" class="hover:text-slate-600 px-2 translatable" data-key="footer-imprint" data-de="[Impressum]">Impressum</a>
             </div>
-             {/* EDIT data-de: Replace placeholder */}
             <p data-key="footer-copy" class="translatable" data-de="[German Copyright]">&copy; 2025 Angsthase Digital Art. All rights reserved.</p>
         </div>
     </footer>
@@ -350,7 +408,7 @@
                 heroImage.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
             });
         } else {
-             console.error("Hero image or container not found for interactive effect.");
+             // console.error("Hero image or container not found for interactive effect.");
              const potentialHeroContainer = document.querySelector('section > div > img#hero-image')?.parentElement;
              if (potentialHeroContainer && !potentialHeroContainer.id) {
                  potentialHeroContainer.id = 'hero-image-container';
@@ -395,7 +453,7 @@
             translatableElements.forEach(el => {
                 const textEn = el.dataset.en;
                 const textDe = el.dataset.de;
-                if (lang === 'de' && textDe && !textDe.startsWith('[')) { // Only switch if translation exists
+                if (lang === 'de' && textDe && !textDe.startsWith('[')) {
                     el.innerHTML = textDe;
                 } else {
                     el.innerHTML = textEn;
