@@ -10,30 +10,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&family=Raleway:wght@400;700&display=swap" rel="stylesheet">
     <style>
         html { scroll-behavior: smooth; }
-        body { font-family: 'Lato', sans-serif; position: relative; min-height: 100vh; padding-bottom: 5rem; /* Footer height */ }
+        body { font-family: 'Lato', sans-serif; position: relative; min-height: 100vh; }
         h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', sans-serif; }
-        img { background-color: #f3f4f6; } /* Placeholder background for loading images */
+        img { background-color: #f3f4f6; }
         .gallery-img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
-        /* Faint background image */
         body::before {
             content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1;
             background-image: url('https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png');
             background-repeat: no-repeat; background-position: center center; background-size: contain;
-            background-attachment: fixed; opacity: 0.15; /* Slightly reduced opacity */
+            background-attachment: fixed; opacity: 0.25;
         }
-        /* Lightbox Styles */
         #lightbox-overlay { transition: opacity 0.3s ease-in-out; }
         #lightbox-overlay button { cursor: pointer; }
-        /* Fade-in Animation Styles */
         .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
         .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
-        /* Divider Line Animation Styles */
         .divider-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 1.5s ease-in-out; }
         .fade-in-section.is-visible .divider-line { stroke-dashoffset: 0; }
-        /* Hero Image Tilt Effect Styles */
         #hero-image-container { perspective: 1000px; }
         #hero-image { transition: transform 0.1s ease-out; will-change: transform; }
-        /* Hotspot Styles */
          .hotspot {
             position: absolute; width: 1.25rem; height: 1.25rem; background-color: rgba(255, 255, 255, 0.5);
             border-radius: 9999px; cursor: pointer; transition: all 0.2s ease-in-out; display: flex;
@@ -41,29 +35,17 @@
         }
         .hotspot:hover { transform: scale(1.2); background-color: rgba(255, 255, 255, 0.8); }
         .hotspot::after { content: '+'; font-size: 0.875rem; color: rgba(0, 0, 0, 0.6); line-height: 1; }
-        /* Hotspot Tooltip Styles */
         .hotspot-tooltip {
             position: absolute; background-color: rgba(0, 0, 0, 0.8); color: white; padding: 0.5rem 0.75rem;
             border-radius: 0.375rem; font-size: 0.75rem; line-height: 1rem; opacity: 0; visibility: hidden;
             transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out; white-space: nowrap;
-            z-index: 10; pointer-events: none; transform: translate(-50%, -120%); /* Position above hotspot */
+            z-index: 10; pointer-events: none; transform: translate(-50%, -120%);
         }
         .hotspot-tooltip.is-visible { opacity: 1; visibility: visible; }
-        /* Cursor Spotlight Effect Styles */
          #cursor-spotlight {
             position: fixed; width: 300px; height: 300px; border-radius: 50%;
             background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
             pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); display: none; mix-blend-mode: screen;
-        }
-        /* Basic Form Styling */
-        .form-input, .form-textarea {
-            @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent text-gray-800 bg-white/80; /* Added slight transparency */
-        }
-        .form-label {
-            @apply block text-sm font-medium text-gray-700 mb-1 text-left;
-        }
-        .form-button {
-             @apply inline-flex items-center px-6 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-slate-600 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 transition;
         }
     </style>
 </head>
@@ -79,11 +61,11 @@
             </div>
             <nav>
                 <ul class="flex space-x-4 md:space-x-6 text-gray-600 items-center">
-                    <li><a href="#gallery" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-slate-500 translatable" data-key="nav-gallery" data-en="Gallery" data-de="Galerie">Gallery</a></li>
-                    <li><a href="#about-style" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-slate-500 translatable" data-key="nav-about" data-en="About" data-de="Über">About</a></li>
-                    <li><a href="#contact" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-slate-500 translatable" data-key="nav-contact" data-en="Contact" data-de="Kontakt">Contact</a></li>
+                    <li><a href="#gallery" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 translatable" data-key="nav-gallery" data-en="Gallery" data-de="Galerie">Gallery</a></li>
+                    <li><a href="#about-style" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 translatable" data-key="nav-about" data-en="About" data-de="Über">About</a></li>
+                    <li><a href="#contact" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 translatable" data-key="nav-contact" data-en="Contact" data-de="Kontakt">Contact</a></li>
                     <li>
-                        <button id="lang-toggle" class="ml-2 px-3 py-1 border border-gray-400 rounded-md text-xs hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-slate-500">
+                        <button id="lang-toggle" class="ml-2 px-3 py-1 border border-gray-400 rounded-md text-xs hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
                             DE / EN
                         </button>
                     </li>
@@ -143,7 +125,7 @@
                     The focus is on the interplay of light on the wooden surfaces and the surrounding environment, rendered with distinct painterly textures characteristic of the digital synthesis process. It aims to convey the quiet feeling of this specific place, blending observed reality with an expressive, atmospheric interpretation.
                  </p>
             </div>
-            <div class="md:w-5/12 md:-ml-6 lg:-ml-10">
+           <div class="md:w-5/12 md:-ml-6 lg:-ml-10">
                 <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/9_gkmvef.png"
                      alt="Artwork Example 2: Woodhouse, Baabe" class="w-full h-auto rounded-lg border border-gray-200"
                      onerror="this.onerror=null; this.src='https://placehold.co/600x400/E5E7EB/1F2937?text=Image+Error'; this.alt='Image failed to load';">
@@ -152,315 +134,266 @@
 
         <section id="about-style" class="fade-in-section mb-20 max-w-4xl mx-auto text-gray-700 pt-16 -mt-16">
              <h3 data-key="about-title" class="translatable text-3xl font-bold mb-6 text-center text-black" data-en="About The Art Style" data-de="Über den Kunststil">About The Art Style</h3>
-             <p data-key="about-p1" class="translatable mb-4" data-en="The digital art originates from photographs, often capturing scenes from familiar places in Germany – from the streets of Potsdam and the Bad Belzig area to the unique landscapes of the Rügen coast. Each image undergoes extensive digital processing and synthesis, transforming these photographic moments. The aim is less about strict realism and more focused on evoking a specific mood and atmosphere inherent in the scene." data-de="Die digitale Kunst basiert auf Fotografien, die oft Szenen von vertrauten Orten in Deutschland festhalten – von den Straßen Potsdams und der Gegend um Bad Belzig bis zu den einzigartigen Landschaften der Küste Rügens. Jedes Bild durchläuft eine umfangreiche digitale Bearbeitung und Synthese, die diese fotografischen Momente transformiert. Das Ziel ist weniger strenger Realismus als vielmehr das Hervorrufen einer spezifischen Stimmung und Atmosphäre, die der Szene innewohnt.">
-                 The digital art originates from photographs, often capturing scenes from familiar places in Germany – from the streets of Potsdam and the Bad Belzig area to the unique landscapes of the Rügen coast. Each image undergoes extensive digital processing and synthesis, transforming these photographic moments. The aim is less about strict realism and more focused on evoking a specific mood and atmosphere inherent in the scene.
+             <p data-key="about-p1" class="translatable mb-4" data-en="The digital art originates from photographs, often capturing scenes from familiar places in Germany – from the streets of Potsdam and the Bad Belzig area to the unique landscapes of the Rügen coast. Each image undergoes extensive digital processing and synthesis, transforming these photographic moments. The aim is less about strict realism and more focused on evoking a specific mood and atmosphere inherent in the scene." data-de="Die digitale Kunst basiert auf Fotografien, die oft Szenen von vertrauten Orten in Deutschland festhalten – von den Straßen Potsdams und der Gegend um Bad Belzig bis zu den einzigartigen Landschaften der Küste Rügens. Jedes Bild durchläuft eine umfangreiche digitale Bearbeitung und Synthese, wodurch diese fotografischen Momente transformiert werden. Das Ziel ist weniger strenger Realismus, sondern vielmehr das Hervorrufen einer spezifischen Stimmung und Atmosphäre, die der Szene innewohnt.">
+                The digital art originates from photographs, often capturing scenes from familiar places in Germany – from the streets of Potsdam and the Bad Belzig area to the unique landscapes of the Rügen coast. Each image undergoes extensive digital processing and synthesis, transforming these photographic moments. The aim is less about strict realism and more focused on evoking a specific mood and atmosphere inherent in the scene.
              </p>
-             <p data-key="about-p2" class="translatable mb-4" data-en="Using techniques that blend photo manipulation with digital painting, the process seeks to create a painterly aesthetic. Textures are emphasized, light is often dramatized, and colors are adjusted to enhance the emotional quality. The resulting images sit somewhere between photography and painting, aiming for an atmospheric interpretation rather than a direct representation." data-de="Durch Techniken, die Fotomanipulation mit digitaler Malerei verbinden, versucht der Prozess, eine malerische Ästhetik zu schaffen. Texturen werden betont, Licht wird oft dramatisiert und Farben werden angepasst, um die emotionale Qualität zu verbessern. Die resultierenden Bilder liegen irgendwo zwischen Fotografie und Malerei und zielen auf eine atmosphärische Interpretation statt einer direkten Darstellung ab.">
-                 Using techniques that blend photo manipulation with digital painting, the process seeks to create a painterly aesthetic. Textures are emphasized, light is often dramatized, and colors are adjusted to enhance the emotional quality. The resulting images sit somewhere between photography and painting, aiming for an atmospheric interpretation rather than a direct representation.
+             <p data-key="about-p2" class="translatable mb-4" data-en="The resulting style is distinctly painterly, characterized by visible digital textures and brushwork that are particularly noticeable in skies, water, and shadow areas. There is a strong focus on the interplay of light – whether it's the warm glow of a window against the cool night, the transitional colours of dusk and dawn, or the quality of daylight on different surfaces. This digital synthesis process allows blending the observed reality captured in the source photograph with a more expressive, atmospheric interpretation." data-de="Der resultierende Stil ist deutlich malerisch, gekennzeichnet durch sichtbare digitale Texturen und Pinselstriche, die besonders in Himmeln, Wasser und Schattenbereichen auffallen. Ein starker Fokus liegt auf dem Zusammenspiel von Licht – sei es das warme Leuchten eines Fensters gegen die kühle Nacht, die Übergangsfarben der Dämmerung und des Morgengrauens oder die Qualität des Tageslichts auf verschiedenen Oberflächen. Dieser digitale Syntheseprozess ermöglicht es, die in der Ausgangsfotografie festgehaltene beobachtete Realität mit einer ausdrucksstärkeren, atmosphärischen Interpretation zu verschmelzen.">
+                The resulting style is distinctly painterly, characterized by visible digital textures and brushwork that are particularly noticeable in skies, water, and shadow areas. There is a strong focus on the interplay of light – whether it's the warm glow of a window against the cool night, the transitional colours of dusk and dawn, or the quality of daylight on different surfaces. This digital synthesis process allows blending the observed reality captured in the source photograph with a more expressive, atmospheric interpretation.
              </p>
-             <p data-key="about-p3" class="translatable" data-en="The name 'Angsthase' (German for 'scaredy-cat' or 'coward') reflects a personal theme of confronting anxieties through creative expression, finding a way to process feelings and observations through the act of digital creation." data-de="Der Name ‚Angsthase‘ spiegelt ein persönliches Thema wider, Ängste durch kreativen Ausdruck zu konfrontieren und einen Weg zu finden, Gefühle und Beobachtungen durch den Akt der digitalen Schöpfung zu verarbeiten.">
-                 The name 'Angsthase' (German for 'scaredy-cat' or 'coward') reflects a personal theme of confronting anxieties through creative expression, finding a way to process feelings and observations through the act of digital creation.
+             <p data-key="about-p3" class="translatable" data-en="Through subjects often featuring architecture, streetscapes, and landscapes, themes of quiet, solitude, and the unique feeling of a place at a particular moment are explored. The goal is to create atmospheric digital paintings that invite contemplation and offer a distinctive view of these locations, filtered through this artistic process." data-de="Durch Motive, die oft Architektur, Straßenszenen und Landschaften zeigen, werden Themen wie Ruhe, Einsamkeit und das einzigartige Gefühl eines Ortes zu einem bestimmten Zeitpunkt erforscht. Das Ziel ist es, atmosphärische digitale Gemälde zu schaffen, die zur Kontemplation einladen und einen unverwechselbaren Blick auf diese Orte bieten, gefiltert durch diesen künstlerischen Prozess.">
+                Through subjects often featuring architecture, streetscapes, and landscapes, themes of quiet, solitude, and the unique feeling of a place at a particular moment are explored. The goal is to create atmospheric digital paintings that invite contemplation and offer a distinctive view of these locations, filtered through this artistic process.
              </p>
         </section>
-
-        <div class="fade-in-section container mx-auto px-4 md:px-8 my-16">
-            <svg width="100%" height="5" viewBox="0 0 1000 5" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-slate-500 block">
-                <line class="divider-line" x1="0" y1="2.5" x2="1000" y2="2.5" stroke="currentColor" stroke-width="1"/>
-            </svg>
-        </div>
 
         <section id="gallery" class="fade-in-section mb-20 pt-16 -mt-16">
             <h3 data-key="gallery-title" class="translatable text-3xl font-bold mb-8 text-center text-black" data-en="Gallery" data-de="Galerie">Gallery</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/1_w77z0a.png" alt="Gallery Image 1" class="gallery-img"
-                         onerror="this.onerror=null; this.src='https://placehold.co/400x400/E5E7EB/1F2937?text=Image+1'; this.alt='Placeholder Image 1';">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/5_ulpq6j.png" alt="Pedestrians walk past brightly lit modern shopfronts on a street at night." class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
                 </div>
-                <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/2_u0s63l.png" alt="Gallery Image 2" class="gallery-img"
-                         onerror="this.onerror=null; this.src='https://placehold.co/400x400/E5E7EB/1F2937?text=Image+2'; this.alt='Placeholder Image 2';">
+                <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/8_vtftql.png" alt="Illuminated building with a tower and adjacent structures on a street at night." class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
                 </div>
-                <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/3_b3qgvn.png" alt="Gallery Image 3" class="gallery-img"
-                         onerror="this.onerror=null; this.src='https://placehold.co/400x400/E5E7EB/1F2937?text=Image+3'; this.alt='Placeholder Image 3';">
+                <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209002/6_typwgx.png" alt="Street intersection at night with glowing streetlights and dark buildings." class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
                 </div>
-                <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/4_z7j9zb.png" alt="Gallery Image 4" class="gallery-img"
-                         onerror="this.onerror=null; this.src='https://placehold.co/400x400/E5E7EB/1F2937?text=Image+4'; this.alt='Placeholder Image 4';">
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/4_null04.png" alt="Modern building with large, lit glass front at night." class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
                 </div>
-                <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/5_f0zylt.png" alt="Gallery Image 5" class="gallery-img"
-                         onerror="this.onerror=null; this.src='https://placehold.co/400x400/E5E7EB/1F2937?text=Image+5'; this.alt='Placeholder Image 5';">
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/3_cyiqpk.png" alt="Colourful buildings reflected in harbour water with small boats at night." class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
                 </div>
-                <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/6_p2i5qn.png" alt="Gallery Image 6" class="gallery-img"
-                         onerror="this.onerror=null; this.src='https://placehold.co/400x400/E5E7EB/1F2937?text=Image+6'; this.alt='Placeholder Image 6';">
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/1_sbzyhy.png" alt="Street corner with illuminated traditional buildings at night." class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
                 </div>
-                 <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/7_eiddxy.png" alt="Gallery Image 7" class="gallery-img"
-                         onerror="this.onerror=null; this.src='https://placehold.co/400x400/E5E7EB/1F2937?text=Image+7'; this.alt='Placeholder Image 7';">
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209000/13_at5ibg.png" alt="Wooden pier with railings extending into calm water under a pale sky." class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
                 </div>
-                 <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/8_n7j3mk.png" alt="Gallery Image 8" class="gallery-img"
-                         onerror="this.onerror=null; this.src='https://placehold.co/400x400/E5E7EB/1F2937?text=Image+8'; this.alt='Placeholder Image 8';">
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209009/14_lnxo5n.png" alt="Long white pier with a building at the end (Sellin Pier) stretching onto a sandy beach." class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
                 </div>
-                 <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/9_gkmvef.png" alt="Gallery Image 9" class="gallery-img"
-                         onerror="this.onerror=null; this.src='https://placehold.co/400x400/E5E7EB/1F2937?text=Image+9'; this.alt='Placeholder Image 9';">
-                 </div>
-                 <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/10_c2s9wz.png" alt="Gallery Image 10" class="gallery-img"
-                         onerror="this.onerror=null; this.src='https://placehold.co/400x400/E5E7EB/1F2937?text=Image+10'; this.alt='Placeholder Image 10';">
-                 </div>
-                 </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209008/11_wcbenb.png" alt="Houses on a small hill among bare trees, lit up at dusk." class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209007/10_to7taw.png" alt="[Describe image 10_to7taw.png]" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/2_t9vs7f.png" alt="Long, low building illuminated at night, seen across a road." class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/7_eiddxy.png" alt="Café Corner, Potsdam Night" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+                 <div class="aspect-[297/210] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/9_gkmvef.png" alt="Woodhouse, Baabe" class="gallery-img gallery-item-clickable" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-xs text-gray-500\'>Image Error</div>';">
+                </div>
+            </div>
         </section>
 
-        <section id="contact" class="fade-in-section max-w-xl mx-auto pt-16 -mt-16">
-            <h3 data-key="contact-title" class="translatable text-3xl font-bold mb-6 text-center text-black" data-en="Contact" data-de="Kontakt">Contact</h3>
-            <p data-key="contact-text" class="translatable text-center text-gray-700 mb-8" data-en="Get in touch for inquiries or collaborations." data-de="Kontaktieren Sie mich für Anfragen oder Kooperationen.">Get in touch for inquiries or collaborations.</p>
-            <form id="contact-form" class="space-y-4">
-                <div>
-                    <label for="name" class="form-label translatable" data-key="form-name" data-en="Name" data-de="Name">Name</label>
-                    <input type="text" id="name" name="name" required class="form-input">
-                </div>
-                <div>
-                    <label for="email" class="form-label translatable" data-key="form-email" data-en="Email" data-de="E-Mail">Email</label>
-                    <input type="email" id="email" name="email" required class="form-input">
-                </div>
-                <div>
-                    <label for="message" class="form-label translatable" data-key="form-message" data-en="Message" data-de="Nachricht">Message</label>
-                    <textarea id="message" name="message" rows="4" required class="form-textarea"></textarea>
-                </div>
-                <div class="text-center">
-                    <button type="submit" class="form-button translatable" data-key="form-submit" data-en="Send Message" data-de="Nachricht senden">Send Message</button>
-                </div>
-            </form>
-             <div id="form-status" class="mt-4 text-center"></div>
+        <section id="contact" class="fade-in-section mb-20 pt-16 -mt-16">
+             <h3 data-key="contact-title" class="translatable text-3xl font-bold mb-8 text-center text-black" data-en="Contact" data-de="Kontakt">Contact</h3>
+             <p data-key="contact-prompt" class="translatable text-center text-gray-700 mb-2" data-en="If you have any questions about these artworks, would like to buy any, or wish to commission a piece, please contact me at:" data-de="Wenn Sie Fragen zu diesen Kunstwerken haben, eines kaufen möchten oder ein Werk in Auftrag geben wollen, kontaktieren Sie mich bitte unter:">
+                 If you have any questions about these artworks, would like to buy any, or wish to commission a piece, please contact me at:
+             </p>
+             <p class="text-center text-gray-700">
+                Email: <a href="mailto:angsthasedigitalstudio@gmail.com" class="text-gray-800 hover:text-slate-600 underline">angsthasedigitalstudio@gmail.com</a>
+             </p>
         </section>
 
     </main>
 
-    <footer class="absolute bottom-0 left-0 right-0 py-4 px-4 md:px-8 border-t border-gray-200 bg-white/80 backdrop-blur-sm text-center text-gray-500 text-sm">
-        <p>&copy; <span id="current-year"></span> Angsthase Digital Art. All rights reserved.</p>
+    <footer class="bg-gray-100 py-8 px-4 md:px-8 mt-16">
+        <div class="container mx-auto text-center text-gray-600">
+            <div class="mb-4">
+                <a href="#" class="hover:text-slate-600 px-2 translatable" data-key="footer-privacy" data-en="Privacy Policy" data-de="Datenschutzrichtlinie">Privacy Policy</a> |
+                <a href="#" class="hover:text-slate-600 px-2 translatable" data-key="footer-terms" data-en="Terms of Service" data-de="Nutzungsbedingungen">Terms of Service</a> |
+                <a href="#" class="hover:text-slate-600 px-2 translatable" data-key="footer-imprint" data-en="Impressum" data-de="Impressum">Impressum</a>
+            </div>
+            <p data-key="footer-copy" class="translatable" data-en="&copy; 2025 Angsthase Digital Art. All rights reserved." data-de="© 2025 Angsthase Digital Art. Alle Rechte vorbehalten.">&copy; 2025 Angsthase Digital Art. All rights reserved.</p>
+        </div>
     </footer>
 
-    <div id="lightbox-overlay" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden opacity-0">
-        <img id="lightbox-image" src="" alt="Lightbox Image" class="max-w-full max-h-full object-contain rounded-lg">
-        <button id="lightbox-close" class="absolute top-4 right-4 text-white text-3xl font-bold leading-none hover:text-gray-300 focus:outline-none">&times;</button>
+    <div id="lightbox-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden z-50 p-4 cursor-default">
+        <button id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold p-2 bg-black bg-opacity-30 rounded-full hover:bg-opacity-50 focus:outline-none hidden sm:block">&lt;</button>
+        <img id="lightbox-image" src="" alt="Enlarged View" class="max-w-full max-h-full object-contain block">
+        <button id="lightbox-next" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold p-2 bg-black bg-opacity-30 rounded-full hover:bg-opacity-50 focus:outline-none hidden sm:block">&gt;</button>
+        <button id="lightbox-close" class="absolute top-5 right-6 text-white text-4xl leading-none font-bold hover:text-gray-300 focus:outline-none">&times;</button>
     </div>
 
     <div id="cursor-spotlight"></div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+        const observerCallback = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    const line = entry.target.querySelector('.divider-line');
+                    if (line) { }
+                     if (!entry.target.querySelector('.divider-line')) { observer.unobserve(entry.target); }
+                     if (entry.target.querySelector('.divider-line')) { observer.unobserve(entry.target); }
+                }
+            });
+        };
+        const scrollObserver = new IntersectionObserver(observerCallback, observerOptions);
+        const elementsToAnimate = document.querySelectorAll('.fade-in-section');
+        elementsToAnimate.forEach(el => { scrollObserver.observe(el); });
 
-            // --- Language Translation ---
-            const langToggleButton = document.getElementById('lang-toggle');
-            const translatableElements = document.querySelectorAll('.translatable');
-            let currentLang = 'en'; // Default language
+        const lightboxOverlay = document.getElementById('lightbox-overlay');
+        const lightboxImage = document.getElementById('lightbox-image');
+        const lightboxClose = document.getElementById('lightbox-close');
+        const lightboxPrev = document.getElementById('lightbox-prev');
+        const lightboxNext = document.getElementById('lightbox-next');
+        const galleryItems = document.querySelectorAll('.gallery-item-clickable');
+        let galleryImageSources = [];
+        let currentImageIndex = -1;
+        let touchStartX = 0;
+        let touchEndX = 0;
 
-            function translatePage(lang) {
-                translatableElements.forEach(el => {
-                    const key = el.getAttribute('data-key');
-                    const translation = el.getAttribute(`data-${lang}`);
-                    if (translation) {
-                        // Handle different element types
-                        if (el.tagName === 'TITLE' || el.tagName === 'H1' || el.tagName === 'H2' || el.tagName === 'H3' || el.tagName === 'P' || el.tagName === 'A' || el.tagName === 'BUTTON' || el.tagName === 'LABEL' || el.classList.contains('hotspot-tooltip')) {
-                            el.textContent = translation;
-                        } else if (el.tagName === 'INPUT' && el.type === 'submit') {
-                            el.value = translation;
-                        }
-                        // Add more conditions if other elements need translation (e.g., placeholders)
-                    }
+        galleryItems.forEach((item, index) => {
+            galleryImageSources.push(item.src);
+            item.setAttribute('data-index', index);
+            item.addEventListener('click', openLightbox);
+        });
+
+        function showImageAtIndex(index) {
+            if (index < 0 || index >= galleryImageSources.length) return;
+            lightboxImage.src = galleryImageSources[index];
+            currentImageIndex = index;
+            const isSmallScreen = window.innerWidth < 640;
+            lightboxPrev.classList.toggle('hidden', index === 0 || isSmallScreen);
+            lightboxNext.classList.toggle('hidden', index === galleryImageSources.length - 1 || isSmallScreen);
+        }
+
+        function openLightbox(event) {
+            const clickedIndex = parseInt(event.target.getAttribute('data-index'), 10);
+            if (!isNaN(clickedIndex)) {
+                showImageAtIndex(clickedIndex);
+                lightboxOverlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeLightbox() {
+            lightboxOverlay.classList.add('hidden');
+            lightboxImage.src = "";
+            currentImageIndex = -1;
+            document.body.style.overflow = '';
+        }
+
+        function showPreviousImage() { if (currentImageIndex > 0) showImageAtIndex(currentImageIndex - 1); }
+        function showNextImage() { if (currentImageIndex < galleryImageSources.length - 1) showImageAtIndex(currentImageIndex + 1); }
+
+        lightboxClose.addEventListener('click', closeLightbox);
+        lightboxPrev.addEventListener('click', showPreviousImage);
+        lightboxNext.addEventListener('click', showNextImage);
+        lightboxOverlay.addEventListener('click', (event) => { if (event.target === lightboxOverlay) closeLightbox(); });
+        document.addEventListener('keydown', (event) => {
+            if (lightboxOverlay.classList.contains('hidden')) return;
+            switch (event.key) {
+                case 'Escape': closeLightbox(); break;
+                case 'ArrowLeft': showPreviousImage(); break;
+                case 'ArrowRight': showNextImage(); break;
+            }
+        });
+
+        lightboxImage.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+        lightboxImage.addEventListener('touchend', (e) => { touchEndX = e.changedTouches[0].screenX; handleSwipeGesture(); }, { passive: true });
+        function handleSwipeGesture() {
+            const swipeThreshold = 50;
+            const distance = touchEndX - touchStartX;
+            if (distance > swipeThreshold) showPreviousImage();
+            else if (distance < -swipeThreshold) showNextImage();
+            touchStartX = 0; touchEndX = 0;
+        }
+
+        window.addEventListener('resize', () => { if (!lightboxOverlay.classList.contains('hidden')) showImageAtIndex(currentImageIndex); });
+
+        const heroImage = document.getElementById('hero-image');
+        const heroContainer = document.getElementById('hero-image-container');
+
+        if (heroImage && heroContainer) {
+            heroContainer.addEventListener('mousemove', (e) => {
+                const rect = heroContainer.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                const maxRot = 3;
+                const rotY = (x / (rect.width / 2)) * maxRot;
+                const rotX = (-y / (rect.height / 2)) * maxRot;
+                heroImage.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.03)`;
+            });
+            heroContainer.addEventListener('mouseleave', () => {
+                heroImage.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+            });
+        } else {
+             const potentialHeroContainer = document.querySelector('section > div > img#hero-image')?.parentElement;
+             if (potentialHeroContainer && !potentialHeroContainer.id) {
+                 potentialHeroContainer.id = 'hero-image-container';
+             }
+        }
+
+        const hotspots = document.querySelectorAll('.hotspot');
+        hotspots.forEach(hotspot => {
+            const tooltipId = hotspot.getAttribute('data-tooltip-target');
+            const tooltip = document.getElementById(tooltipId);
+
+            if (tooltip) {
+                hotspot.addEventListener('mouseenter', () => {
+                    tooltip.style.left = hotspot.style.left;
+                    tooltip.classList.add('is-visible');
                 });
-                // Update html lang attribute
+                hotspot.addEventListener('mouseleave', () => {
+                    tooltip.classList.remove('is-visible');
+                });
+            }
+        });
+
+        const spotlight = document.getElementById('cursor-spotlight');
+        if (spotlight) {
+            document.body.addEventListener('mousemove', (e) => {
+                spotlight.style.left = `${e.pageX}px`;
+                spotlight.style.top = `${e.pageY}px`;
+            });
+            document.body.addEventListener('mouseenter', () => {
+                 spotlight.style.display = 'block';
+            });
+             document.body.addEventListener('mouseleave', () => {
+                 spotlight.style.display = 'none';
+            });
+        }
+
+        const langToggleButton = document.getElementById('lang-toggle');
+        const translatableElements = document.querySelectorAll('.translatable');
+        let currentLang = localStorage.getItem('preferredLang') || 'en';
+
+        function setLanguage(lang) {
+            translatableElements.forEach(el => {
+                const textEn = el.dataset.en;
+                const textDe = el.dataset.de;
+                if (lang === 'de' && textDe && !textDe.startsWith('[')) {
+                    el.innerHTML = textDe;
+                } else {
+                    el.innerHTML = textEn;
+                }
                 document.documentElement.lang = lang;
-                currentLang = lang;
-                // Store preference (optional)
-                // localStorage.setItem('preferredLang', lang);
-            }
-
-            langToggleButton.addEventListener('click', () => {
-                const newLang = currentLang === 'en' ? 'de' : 'en';
-                translatePage(newLang);
+                langToggleButton.textContent = lang === 'en' ? 'DE' : 'EN';
             });
+            localStorage.setItem('preferredLang', lang);
+            currentLang = lang;
+        }
 
-            // --- Fade-in Animation on Scroll ---
-            const fadeInSections = document.querySelectorAll('.fade-in-section');
-            const observerOptions = {
-                root: null, // relative to document viewport
-                rootMargin: '0px',
-                threshold: 0.1 // trigger when 10% of the element is visible
-            };
-
-            const observerCallback = (entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        observer.unobserve(entry.target); // Optional: stop observing once visible
-                    }
-                });
-            };
-
-            const intersectionObserver = new IntersectionObserver(observerCallback, observerOptions);
-            fadeInSections.forEach(section => {
-                intersectionObserver.observe(section);
-            });
-
-            // --- Hero Image Tilt Effect ---
-            const heroImageContainer = document.getElementById('hero-image-container');
-            const heroImage = document.getElementById('hero-image');
-
-            if (heroImageContainer && heroImage) {
-                heroImageContainer.addEventListener('mousemove', (e) => {
-                    const { left, top, width, height } = heroImageContainer.getBoundingClientRect();
-                    const x = (e.clientX - left) / width - 0.5; // -0.5 to 0.5
-                    const y = (e.clientY - top) / height - 0.5; // -0.5 to 0.5
-
-                    const rotateY = x * 10; // Adjust multiplier for tilt intensity
-                    const rotateX = -y * 10; // Adjust multiplier for tilt intensity
-
-                    heroImage.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`; // Added slight scale for effect
-                });
-
-                heroImageContainer.addEventListener('mouseleave', () => {
-                    heroImage.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
-                });
+        translatableElements.forEach(el => {
+            if (!el.dataset.en) {
+                el.dataset.en = el.innerHTML.trim();
             }
+        });
+        setLanguage(currentLang);
 
-            // --- Hotspot Tooltips ---
-            const hotspots = document.querySelectorAll('.hotspot');
-            hotspots.forEach(hotspot => {
-                const tooltipId = hotspot.getAttribute('data-tooltip-target');
-                const tooltip = document.getElementById(tooltipId);
+        langToggleButton.addEventListener('click', () => {
+            const newLang = currentLang === 'en' ? 'de' : 'en';
+            setLanguage(newLang);
+        });
 
-                if (tooltip) {
-                    hotspot.addEventListener('mouseenter', () => {
-                        tooltip.classList.add('is-visible');
-                    });
-                    hotspot.addEventListener('mouseleave', () => {
-                        tooltip.classList.remove('is-visible');
-                    });
-                     // Touch support (optional, basic implementation)
-                    hotspot.addEventListener('touchstart', (e) => {
-                        e.preventDefault(); // Prevent potential double actions
-                        tooltip.classList.toggle('is-visible');
-                    });
-                }
-            });
-             // Hide tooltips if clicking elsewhere (for touch)
-            document.addEventListener('click', (e) => {
-                if (!e.target.classList.contains('hotspot')) {
-                    document.querySelectorAll('.hotspot-tooltip.is-visible').forEach(tooltip => {
-                        tooltip.classList.remove('is-visible');
-                    });
-                }
-            });
-
-
-            // --- Cursor Spotlight Effect ---
-            const spotlight = document.getElementById('cursor-spotlight');
-            if (spotlight) {
-                document.addEventListener('mousemove', (e) => {
-                    spotlight.style.left = `${e.clientX}px`;
-                    spotlight.style.top = `${e.clientY}px`;
-                });
-                document.addEventListener('mouseenter', () => {
-                    spotlight.style.display = 'block';
-                });
-                document.addEventListener('mouseleave', () => {
-                    spotlight.style.display = 'none';
-                });
-            }
-
-            // --- Gallery Lightbox ---
-            const galleryImages = document.querySelectorAll('.gallery-img');
-            const lightboxOverlay = document.getElementById('lightbox-overlay');
-            const lightboxImage = document.getElementById('lightbox-image');
-            const lightboxClose = document.getElementById('lightbox-close');
-
-            if (lightboxOverlay && lightboxImage && lightboxClose) {
-                galleryImages.forEach(img => {
-                    img.addEventListener('click', () => {
-                        const highResSrc = img.src; // In a real scenario, you might have a data-highres attribute
-                        lightboxImage.src = highResSrc;
-                        lightboxImage.alt = img.alt; // Copy alt text
-                        lightboxOverlay.classList.remove('hidden');
-                        setTimeout(() => lightboxOverlay.classList.remove('opacity-0'), 10); // Start fade-in
-                        document.body.style.overflow = 'hidden'; // Prevent scrolling background
-                    });
-                });
-
-                const closeLightbox = () => {
-                    lightboxOverlay.classList.add('opacity-0');
-                    setTimeout(() => {
-                        lightboxOverlay.classList.add('hidden');
-                        lightboxImage.src = ""; // Clear src
-                        lightboxImage.alt = "";
-                        document.body.style.overflow = ''; // Restore scrolling
-                    }, 300); // Match transition duration
-                };
-
-                lightboxClose.addEventListener('click', closeLightbox);
-                lightboxOverlay.addEventListener('click', (e) => {
-                    // Close if clicking on the overlay itself, not the image
-                    if (e.target === lightboxOverlay) {
-                        closeLightbox();
-                    }
-                });
-                // Close lightbox with Escape key
-                 document.addEventListener('keydown', (e) => {
-                    if (e.key === 'Escape' && !lightboxOverlay.classList.contains('hidden')) {
-                        closeLightbox();
-                    }
-                });
-            }
-
-            // --- Contact Form Submission (Basic Example) ---
-            const contactForm = document.getElementById('contact-form');
-            const formStatus = document.getElementById('form-status');
-
-            if (contactForm && formStatus) {
-                contactForm.addEventListener('submit', (e) => {
-                    e.preventDefault(); // Prevent default form submission
-                    formStatus.textContent = currentLang === 'de' ? 'Sende Nachricht...' : 'Sending message...';
-                    formStatus.className = 'mt-4 text-center text-blue-600'; // Reset classes
-
-                    // Simulate form submission (replace with actual AJAX call)
-                    setTimeout(() => {
-                        // Example: Assume success
-                        formStatus.textContent = currentLang === 'de' ? 'Nachricht erfolgreich gesendet!' : 'Message sent successfully!';
-                        formStatus.className = 'mt-4 text-center text-green-600';
-                        contactForm.reset(); // Clear the form
-
-                        // Example: Assume error
-                        // formStatus.textContent = currentLang === 'de' ? 'Senden fehlgeschlagen. Bitte versuchen Sie es erneut.' : 'Failed to send. Please try again.';
-                        // formStatus.className = 'mt-4 text-center text-red-600';
-
-                    }, 1500); // Simulate network delay
-                });
-            }
-
-            // --- Footer Year ---
-            const currentYearSpan = document.getElementById('current-year');
-            if (currentYearSpan) {
-                currentYearSpan.textContent = new Date().getFullYear();
-            }
-
-             // --- Initial Setup ---
-             // Check for stored language preference (optional)
-             // const preferredLang = localStorage.getItem('preferredLang');
-             // if (preferredLang) {
-             //     translatePage(preferredLang);
-             // } else {
-             //     // Default to 'en' or browser language detection
-             //     translatePage('en');
-             // }
-             // Default to English on load
-             translatePage('en');
-
-
-        }); // End DOMContentLoaded
     </script>
 
 </body>
