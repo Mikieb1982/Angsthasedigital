@@ -3,43 +3,428 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rounded Corners Example</title>
+    <title data-key="page-title" class="translatable" data-en="Angsthase Digital Art" data-de="Angsthase Digital Art">Angsthase Digital Art</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&family=Raleway:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Apply Inter font globally */
-        body {
-            font-family: 'Inter', sans-serif;
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Lato', sans-serif; position: relative; min-height: 100vh; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', sans-serif; }
+        /* Added background color as fallback for images */
+        img { background-color: #f3f4f6; }
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            cursor: pointer;
+            /* Rounded corners will be applied via Tailwind class directly on the img tag now */
+        }
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1;
+            background-image: url('https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png');
+            background-repeat: no-repeat; background-position: center center; background-size: contain;
+            background-attachment: fixed; opacity: 0.25;
+        }
+        #lightbox-overlay { transition: opacity 0.3s ease-in-out; }
+        #lightbox-overlay button { cursor: pointer; }
+        .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
+        .divider-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 1.5s ease-in-out; }
+        .fade-in-section.is-visible .divider-line { stroke-dashoffset: 0; }
+        #hero-image-container { perspective: 1000px; }
+        #hero-image { transition: transform 0.1s ease-out; will-change: transform; }
+         .hotspot {
+            position: absolute; width: 1.25rem; height: 1.25rem; background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 9999px; cursor: pointer; transition: all 0.2s ease-in-out; display: flex;
+            align-items: center; justify-content: center; border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .hotspot:hover { transform: scale(1.2); background-color: rgba(255, 255, 255, 0.8); }
+        .hotspot::after { content: '+'; font-size: 0.875rem; color: rgba(0, 0, 0, 0.6); line-height: 1; }
+        .hotspot-tooltip {
+            position: absolute; background-color: rgba(0, 0, 0, 0.8); color: white; padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem; font-size: 0.75rem; line-height: 1rem; opacity: 0; visibility: hidden;
+            transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out; white-space: nowrap;
+            z-index: 10; pointer-events: none; transform: translate(-50%, -120%);
+        }
+        .hotspot-tooltip.is-visible { opacity: 1; visibility: visible; }
+         #cursor-spotlight {
+            position: fixed; width: 300px; height: 300px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+            pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); display: none; mix-blend-mode: screen;
+        }
+        /* Basic Form Styling */
+        .form-input, .form-textarea {
+            @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent text-gray-800;
+        }
+        .form-label {
+            @apply block text-sm font-medium text-gray-700 mb-1 text-left;
         }
     </style>
 </head>
-<body class="bg-gray-100 p-10">
+<body class="bg-white text-gray-800 antialiased">
 
-    <h1 class="text-2xl font-semibold mb-6 text-gray-800">Rounded Corners Examples</h1>
-
-    <div class="mb-8">
-        <h2 class="text-lg font-medium mb-2 text-gray-700">Rounded Image:</h2>
-        <img src="https://placehold.co/600x400/cccccc/ffffff?text=Example+Image"
-             alt="Placeholder image"
-             class="w-1/2 rounded-lg shadow-md">
-             </div>
-
-    <div class="mb-8">
-        <h2 class="text-lg font-medium mb-2 text-gray-700">Rounded Container:</h2>
-        <div class="bg-white p-6 rounded-lg shadow-md">
-             <p class="text-gray-600">This container div has rounded corners using 'rounded-lg'.</p>
+    <header class="py-6 px-4 md:px-8 border-b border-gray-200 sticky top-0 z-30 bg-white/80 backdrop-blur-sm">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png"
+                     alt="Angsthase Logo"
+                     class="w-10 h-10 rounded-full object-cover border border-gray-200">
+                <h1 class="text-2xl md:text-3xl font-bold text-black translatable" data-key="site-title" data-en="Angsthase Digital Art" data-de="Angsthase Digital Art">Angsthase Digital Art</h1>
+            </div>
+            <nav>
+                <ul class="flex space-x-4 md:space-x-6 text-gray-600 items-center">
+                    <li><a href="#gallery" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 translatable" data-key="nav-gallery" data-en="Gallery" data-de="Galerie">Gallery</a></li>
+                    <li><a href="#about-style" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 translatable" data-key="nav-about" data-en="About" data-de="Über">About</a></li>
+                    <li><a href="#contact" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500 translatable" data-key="nav-contact" data-en="Contact" data-de="Kontakt">Contact</a></li>
+                    <li>
+                        <button id="lang-toggle" class="ml-2 px-3 py-1 border border-gray-400 rounded-md text-xs hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            DE / EN
+                        </button>
+                    </li>
+                </ul>
+            </nav>
         </div>
+    </header>
+
+    <section class="mb-20 text-center pt-16">
+         <div id="hero-image-container" class="w-full h-48 md:h-72 bg-gray-100 flex items-center justify-center mb-8 overflow-hidden rounded-lg"> <img id="hero-image" src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744274602/hero_yjoq8w.png"
+                  alt="Atmospheric landscape with trees and distant lights"
+                  class="w-full h-full object-contain rounded-lg"> </div>
+         <div class="container mx-auto px-4 md:px-8">
+             <h2 data-key="welcome-title" class="translatable text-3xl md:text-4xl font-bold mb-4 text-black mt-8" data-en="Welcome to Angsthase Digital Art" data-de="Willkommen bei Angsthase Digital Art">Welcome to Angsthase Digital Art</h2>
+             <p data-key="welcome-text" class="translatable text-gray-700 max-w-2xl mx-auto" data-en="Exploring themes through digital mediums. Browse the gallery to see the latest creations." data-de="Digitale Medien zur Erkundung von Themen. Durchsuchen Sie die Galerie nach den neuesten Kreationen.">Exploring themes through digital mediums. Browse the gallery to see the latest creations.</p>
+        </div>
+    </section>
+
+    <div class="fade-in-section container mx-auto px-4 md:px-8 my-16">
+         <svg width="100%" height="5" viewBox="0 0 1000 5" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-slate-500 block">
+            <line class="divider-line" x1="0" y1="2.5" x2="1000" y2="2.5" stroke="currentColor" stroke-width="1"/>
+        </svg>
     </div>
 
-    <div>
-        <h2 class="text-lg font-medium mb-2 text-gray-700">Rounded Button:</h2>
-        <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow">
-             Rounded Button
-        </button>
+    <main class="container mx-auto px-4 md:px-8 py-16 relative z-10 -mt-16">
+
+        <section class="fade-in-section mb-20 flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            <div class="md:w-7/12 text-gray-700">
+                <h3 data-key="spotlight-title" class="translatable text-2xl font-bold mb-4 text-black" data-en="Project Spotlight" data-de="Projekt-Spotlight">Project Spotlight</h3>
+                <p data-key="spotlight-p1" class="translatable mb-4" data-en="Titled 'Café Corner, Potsdam Night', this piece highlights the contrast between the warm, inviting light spilling from the windows and the cool darkness of the surrounding night. Developed from photographic source material, the scene undergoes digital processing to enhance the atmospheric quality and painterly textures, particularly noticeable in the rendering of the reflections and the sky." data-de="Mit dem Titel ‚Café-Ecke, Potsdam Nacht‘ hebt dieses Werk den Kontrast zwischen dem warmen, einladenden Licht, das aus den Fenstern strömt, und der kühlen Dunkelheit der umgebenden Nacht hervor. Entwickelt aus fotografischem Ausgangsmaterial, durchläuft die Szene eine digitale Bearbeitung, um die atmosphärische Qualität und die malerischen Texturen zu verstärken, was besonders bei der Darstellung der Reflexionen und des Himmels auffällt.">
+                    Titled 'Café Corner, Potsdam Night', this piece highlights the contrast between the warm, inviting light spilling from the windows and the cool darkness of the surrounding night. Developed from photographic source material, the scene undergoes digital processing to enhance the atmospheric quality and painterly textures, particularly noticeable in the rendering of the reflections and the sky.
+                </p>
+                <p data-key="spotlight-p2" class="translatable" data-en="The focus is on capturing a specific feeling of quiet solitude often found in illuminated structures after dark. Digital brushwork aims to evoke mood rather than precise detail, blending observed reality with a more expressive interpretation of light and shadow." data-de="Der Fokus liegt darauf, ein spezifisches Gefühl der ruhigen Einsamkeit einzufangen, das oft in beleuchteten Strukturen nach Einbruch der Dunkelheit zu finden ist. Digitale Pinselstriche zielen darauf ab, Stimmung statt präziser Details hervorzurufen, indem beobachtete Realität mit einer ausdrucksstärkeren Interpretation von Licht und Schatten verschmolzen wird.">
+                    The focus is on capturing a specific feeling of quiet solitude often found in illuminated structures after dark. Digital brushwork aims to evoke mood rather than precise detail, blending observed reality with a more expressive interpretation of light and shadow.
+                </p>
+            </div>
+            <div class="md:w-5/12 md:-mr-6 lg:-mr-10 relative">
+                 <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/7_eiddxy.png"
+                     alt="Artwork Example 1: Café Corner, Potsdam Night" class="w-full h-auto rounded-lg border border-gray-200 block"
+                     onerror="this.onerror=null; this.src='https://placehold.co/600x400/E5E7EB/1F2937?text=Image+Error'; this.alt='Image failed to load';">
+                 <button class="hotspot" style="top: 30%; left: 40%;" data-tooltip-target="tooltip-1"></button>
+                 <div id="tooltip-1" class="hotspot-tooltip translatable" style="left: 40%;" data-key="tooltip-1" data-en="Focus on window light" data-de="Fokus auf Fensterlicht">Focus on window light</div>
+                 <button class="hotspot" style="top: 75%; left: 60%;" data-tooltip-target="tooltip-2"></button>
+                 <div id="tooltip-2" class="hotspot-tooltip translatable" style="left: 60%;" data-key="tooltip-2" data-en="Painterly reflections" data-de="Malerische Reflexionen">Painterly reflections</div>
+            </div>
+        </section>
+
+        <section class="fade-in-section mb-20 flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12">
+             <div class="md:w-7/12 text-gray-700">
+                <h3 data-key="another-title" class="translatable text-2xl font-bold mb-4 text-black" data-en="Another Piece / About" data-de="Weiteres Werk / Über">Another Piece / About</h3>
+                 <p data-key="another-p1" class="translatable mb-4" data-en="Titled 'Woodhouse, Baabe', this artwork captures a structure within the unique landscape of the Rügen coast. Developed from a photograph, the image has been digitally transformed to emphasize mood and atmosphere over strict realism." data-de="Mit dem Titel ‚Holzhaus, Baabe‘ fängt dieses Kunstwerk eine Struktur innerhalb der einzigartigen Landschaft der Küste Rügens ein. Entwickelt aus einer Fotografie, wurde das Bild digital transformiert, um Stimmung und Atmosphäre über strengen Realismus zu betonen.">
+                    Titled 'Woodhouse, Baabe', this artwork captures a structure within the unique landscape of the Rügen coast. Developed from a photograph, the image has been digitally transformed to emphasize mood and atmosphere over strict realism.
+                 </p>
+                 <p data-key="another-p2" class="translatable" data-en="The focus is on the interplay of light on the wooden surfaces and the surrounding environment, rendered with distinct painterly textures characteristic of the digital synthesis process. It aims to convey the quiet feeling of this specific place, blending observed reality with an expressive, atmospheric interpretation." data-de="Der Fokus liegt auf dem Zusammenspiel von Licht auf den Holzoberflächen und der umgebenden Umgebung, wiedergegeben mit den ausgeprägten malerischen Texturen, die für den digitalen Syntheseprozess charakteristisch sind. Es zielt darauf ab, das ruhige Gefühl dieses spezifischen Ortes zu vermitteln, indem die beobachtete Realität mit einer ausdrucksstärkeren, atmosphärischen Interpretation verschmolzen wird.">
+                    The focus is on the interplay of light on the wooden surfaces and the surrounding environment, rendered with distinct painterly textures characteristic of the digital synthesis process. It aims to convey the quiet feeling of this specific place, blending observed reality with an expressive, atmospheric interpretation.
+                 </p>
+            </div>
+           <div class="md:w-5/12 md:-ml-6 lg:-ml-10">
+                <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/9_gkmvef.png"
+                     alt="Artwork Example 2: Woodhouse, Baabe" class="w-full h-auto rounded-lg border border-gray-200"
+                     onerror="this.onerror=null; this.src='https://placehold.co/600x400/E5E7EB/1F2937?text=Image+Error'; this.alt='Image failed to load';">
+           </div>
+        </section>
+
+        <section id="gallery" class="fade-in-section mb-20 pt-16 -mt-16">
+            <h3 class="text-3xl font-bold mb-8 text-center text-black translatable" data-key="gallery-title" data-en="Gallery" data-de="Galerie">Gallery</h3>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div><img src="https://placehold.co/300x300/cccccc/ffffff?text=Gallery+1" alt="Gallery Image 1" class="gallery-img rounded-lg"></div> <div><img src="https://placehold.co/300x300/cccccc/ffffff?text=Gallery+2" alt="Gallery Image 2" class="gallery-img rounded-lg"></div> <div><img src="https://placehold.co/300x300/cccccc/ffffff?text=Gallery+3" alt="Gallery Image 3" class="gallery-img rounded-lg"></div> <div><img src="https://placehold.co/300x300/cccccc/ffffff?text=Gallery+4" alt="Gallery Image 4" class="gallery-img rounded-lg"></div> </div>
+        </section>
+
+        <section id="about-style" class="fade-in-section mb-20 max-w-4xl mx-auto text-gray-700 pt-16 -mt-16">
+             <h3 data-key="about-title" class="translatable text-3xl font-bold mb-6 text-center text-black" data-en="About The Art Style" data-de="Über den Kunststil">About The Art Style</h3>
+             <p data-key="about-p1" class="translatable mb-4" data-en="The digital art originates from photographs, often capturing scenes from familiar places in Germany – from the streets of Potsdam and the Bad Belzig area to the unique landscapes of the Rügen coast. Each image undergoes extensive digital processing and synthesis, transforming these photographic moments. The aim is less about strict realism and more focused on evoking a specific mood and atmosphere inherent in the scene." data-de="Die digitale Kunst basiert auf Fotografien, die oft Szenen von vertrauten Orten in Deutschland festhalten – von den Straßen Potsdams und der Gegend um Bad Belzig bis zu den einzigartigen Landschaften der Küste Rügens. Jedes Bild durchläuft eine">
+                The digital art originates from photographs, often capturing scenes from familiar places in Germany – from the streets of Potsdam and the Bad Belzig area to the unique landscapes of the Rügen coast. Each image undergoes extensive digital processing and synthesis, transforming these photographic moments. The aim is less about strict realism and more focused on evoking a specific mood and atmosphere inherent in the scene.
+             </p>
+             </section>
+        <section id="contact" class="fade-in-section pt-16 -mt-16">
+             </section>
+
+    </main>
+
+    <footer class="mt-20 py-6 px-4 md:px-8 border-t border-gray-200 text-center text-gray-500 text-sm">
+        &copy; <span id="year"></span> Angsthase Digital Art. All rights reserved.
+    </footer>
+
+    <div id="lightbox-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-50 hidden opacity-0">
+        <img id="lightbox-image" src="" alt="Enlarged gallery image" class="max-w-full max-h-full object-contain rounded-lg"> <button id="lightbox-close" class="absolute top-4 right-4 text-white text-3xl font-bold focus:outline-none">&times;</button>
+        <button id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold focus:outline-none p-2 bg-black/30 rounded-full">&#10094;</button>
+        <button id="lightbox-next" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold focus:outline-none p-2 bg-black/30 rounded-full">&#10095;</button>
     </div>
 
-    </body>
+    <div id="cursor-spotlight"></div>
+
+    <script>
+        // Basic Year Update
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Language Toggle
+        const translations = {
+            // ... (Your existing translation data) ...
+             "page-title": { "en": "Angsthase Digital Art", "de": "Angsthase Digital Art" },
+            "site-title": { "en": "Angsthase Digital Art", "de": "Angsthase Digital Art" },
+            "nav-gallery": { "en": "Gallery", "de": "Galerie" },
+            "nav-about": { "en": "About", "de": "Über" },
+            "nav-contact": { "en": "Contact", "de": "Kontakt" },
+            "welcome-title": { "en": "Welcome to Angsthase Digital Art", "de": "Willkommen bei Angsthase Digital Art" },
+            "welcome-text": { "en": "Exploring themes through digital mediums. Browse the gallery to see the latest creations.", "de": "Digitale Medien zur Erkundung von Themen. Durchsuchen Sie die Galerie nach den neuesten Kreationen." },
+            "spotlight-title": { "en": "Project Spotlight", "de": "Projekt-Spotlight" },
+            "spotlight-p1": { "en": "Titled 'Café Corner, Potsdam Night', this piece highlights the contrast between the warm, inviting light spilling from the windows and the cool darkness of the surrounding night. Developed from photographic source material, the scene undergoes digital processing to enhance the atmospheric quality and painterly textures, particularly noticeable in the rendering of the reflections and the sky.", "de": "Mit dem Titel ‚Café-Ecke, Potsdam Nacht‘ hebt dieses Werk den Kontrast zwischen dem warmen, einladenden Licht, das aus den Fenstern strömt, und der kühlen Dunkelheit der umgebenden Nacht hervor. Entwickelt aus fotografischem Ausgangsmaterial, durchläuft die Szene eine digitale Bearbeitung, um die atmosphärische Qualität und die malerischen Texturen zu verstärken, was besonders bei der Darstellung der Reflexionen und des Himmels auffällt." },
+            "spotlight-p2": { "en": "The focus is on capturing a specific feeling of quiet solitude often found in illuminated structures after dark. Digital brushwork aims to evoke mood rather than precise detail, blending observed reality with a more expressive interpretation of light and shadow.", "de": "Der Fokus liegt darauf, ein spezifisches Gefühl der ruhigen Einsamkeit einzufangen, das oft in beleuchteten Strukturen nach Einbruch der Dunkelheit zu finden ist. Digitale Pinselstriche zielen darauf ab, Stimmung statt präziser Details hervorzurufen, indem beobachtete Realität mit einer ausdrucksstärkeren Interpretation von Licht und Schatten verschmolzen wird." },
+            "tooltip-1": { "en": "Focus on window light", "de": "Fokus auf Fensterlicht" },
+            "tooltip-2": { "en": "Painterly reflections", "de": "Malerische Reflexionen" },
+            "another-title": { "en": "Another Piece / About", "de": "Weiteres Werk / Über" },
+            "another-p1": { "en": "Titled 'Woodhouse, Baabe', this artwork captures a structure within the unique landscape of the Rügen coast. Developed from a photograph, the image has been digitally transformed to emphasize mood and atmosphere over strict realism.", "de": "Mit dem Titel ‚Holzhaus, Baabe‘ fängt dieses Kunstwerk eine Struktur innerhalb der einzigartigen Landschaft der Küste Rügens ein. Entwickelt aus einer Fotografie, wurde das Bild digital transformiert, um Stimmung und Atmosphäre über strengen Realismus zu betonen." },
+            "another-p2": { "en": "The focus is on the interplay of light on the wooden surfaces and the surrounding environment, rendered with distinct painterly textures characteristic of the digital synthesis process. It aims to convey the quiet feeling of this specific place, blending observed reality with an expressive, atmospheric interpretation.", "de": "Der Fokus liegt auf dem Zusammenspiel von Licht auf den Holzoberflächen und der umgebenden Umgebung, wiedergegeben mit den ausgeprägten malerischen Texturen, die für den digitalen Syntheseprozess charakteristisch sind. Es zielt darauf ab, das ruhige Gefühl dieses spezifischen Ortes zu vermitteln, indem die beobachtete Realität mit einer ausdrucksstärkeren, atmosphärischen Interpretation verschmolzen wird." },
+            "about-title": { "en": "About The Art Style", "de": "Über den Kunststil" },
+            "about-p1": { "en": "The digital art originates from photographs, often capturing scenes from familiar places in Germany – from the streets of Potsdam and the Bad Belzig area to the unique landscapes of the Rügen coast. Each image undergoes extensive digital processing and synthesis, transforming these photographic moments. The aim is less about strict realism and more focused on evoking a specific mood and atmosphere inherent in the scene.", "de": "Die digitale Kunst basiert auf Fotografien, die oft Szenen von vertrauten Orten in Deutschland festhalten – von den Straßen Potsdams und der Gegend um Bad Belzig bis zu den einzigartigen Landschaften der Küste Rügens. Jedes Bild durchläuft eine" },
+            "gallery-title": { "en": "Gallery", "de": "Galerie" }
+            // Add other keys as needed
+        };
+
+        let currentLang = localStorage.getItem('preferredLang') || 'en';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('preferredLang', lang);
+            document.documentElement.lang = lang;
+            document.querySelectorAll('.translatable').forEach(el => {
+                const key = el.dataset.key;
+                if (key && translations[key] && translations[key][lang]) {
+                    // Preserve child nodes if only text content needs changing
+                    if (el.childNodes.length === 1 && el.childNodes[0].nodeType === Node.TEXT_NODE) {
+                         el.textContent = translations[key][lang];
+                    } else {
+                        // More complex elements might need specific handling
+                        // For now, just setting textContent as a fallback
+                         el.textContent = translations[key][lang];
+                         // If title, update document title
+                         if (el.tagName === 'TITLE') {
+                             document.title = translations[key][lang];
+                         }
+                    }
+                } else if (key && el.dataset[lang]) {
+                     // Fallback to data attributes if key not in main object
+                     el.textContent = el.dataset[lang];
+                     if (el.tagName === 'TITLE') {
+                         document.title = el.dataset[lang];
+                     }
+                }
+            });
+        }
+
+        document.getElementById('lang-toggle').addEventListener('click', () => {
+            setLanguage(currentLang === 'en' ? 'de' : 'en');
+        });
+
+        // Set initial language on load
+        setLanguage(currentLang);
+
+
+        // Fade In Sections on Scroll
+        const sections = document.querySelectorAll('.fade-in-section');
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // Optional: unobserve after animation
+                    // observer.unobserve(entry.target);
+                }
+                // Optional: remove class if scrolling back up
+                // else {
+                //     entry.target.classList.remove('is-visible');
+                // }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+
+        // Hotspot Tooltips
+        const hotspots = document.querySelectorAll('.hotspot');
+        hotspots.forEach(hotspot => {
+            const targetId = hotspot.dataset.tooltipTarget;
+            const tooltip = document.getElementById(targetId);
+            if (!tooltip) return;
+
+            // Position tooltip initially
+            const hotspotRect = hotspot.getBoundingClientRect();
+            const parentRect = hotspot.offsetParent.getBoundingClientRect();
+            tooltip.style.top = `${hotspot.offsetTop - tooltip.offsetHeight - 10}px`; // Adjust vertical offset
+            tooltip.style.left = `${hotspot.offsetLeft + hotspot.offsetWidth / 2}px`; // Center horizontally
+
+
+            hotspot.addEventListener('mouseenter', () => {
+                 // Recalculate position just before showing
+                 tooltip.style.top = `${hotspot.offsetTop - tooltip.offsetHeight - 10}px`;
+                 tooltip.style.left = `${hotspot.offsetLeft + hotspot.offsetWidth / 2}px`;
+                 tooltip.classList.add('is-visible');
+            });
+            hotspot.addEventListener('mouseleave', () => {
+                 tooltip.classList.remove('is-visible');
+            });
+             // Touch support for tooltips
+             hotspot.addEventListener('touchstart', (e) => {
+                 e.preventDefault(); // Prevent potential double actions
+                 tooltip.style.top = `${hotspot.offsetTop - tooltip.offsetHeight - 10}px`;
+                 tooltip.style.left = `${hotspot.offsetLeft + hotspot.offsetWidth / 2}px`;
+                 tooltip.classList.toggle('is-visible'); // Toggle on touch
+             }, { passive: false });
+        });
+         // Hide tooltips if clicking elsewhere
+         document.addEventListener('click', (e) => {
+             if (!e.target.classList.contains('hotspot')) {
+                 document.querySelectorAll('.hotspot-tooltip.is-visible').forEach(tooltip => {
+                     tooltip.classList.remove('is-visible');
+                 });
+             }
+         });
+
+
+        // Hero Image Tilt Effect
+        const heroImage = document.getElementById('hero-image');
+        const heroContainer = document.getElementById('hero-image-container');
+
+        if (heroImage && heroContainer) {
+            heroContainer.addEventListener('mousemove', (e) => {
+                const rect = heroContainer.getBoundingClientRect();
+                const x = e.clientX - rect.left; // x position within the element.
+                const y = e.clientY - rect.top;  // y position within the element.
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const deltaX = x - centerX;
+                const deltaY = y - centerY;
+
+                // Adjust sensitivity factor as needed
+                const rotateX = (deltaY / centerY) * -3; // Max rotation 3 degrees
+                const rotateY = (deltaX / centerX) * 3;  // Max rotation 3 degrees
+
+                heroImage.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`; // Added slight scale
+            });
+
+            heroContainer.addEventListener('mouseleave', () => {
+                heroImage.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)'; // Reset transform
+            });
+        }
+
+        // Lightbox Functionality
+        const galleryImages = document.querySelectorAll('.gallery-img');
+        const lightboxOverlay = document.getElementById('lightbox-overlay');
+        const lightboxImage = document.getElementById('lightbox-image');
+        const lightboxClose = document.getElementById('lightbox-close');
+        const lightboxPrev = document.getElementById('lightbox-prev');
+        const lightboxNext = document.getElementById('lightbox-next');
+        let currentImageIndex = 0;
+        const images = Array.from(galleryImages).map(img => img.src); // Get image sources
+
+        function showLightbox(index) {
+            if (index < 0 || index >= images.length) return;
+            currentImageIndex = index;
+            lightboxImage.src = images[currentImageIndex];
+            lightboxOverlay.classList.remove('hidden');
+            setTimeout(() => lightboxOverlay.classList.remove('opacity-0'), 10); // Fade in
+            updateLightboxNav();
+        }
+
+        function hideLightbox() {
+            lightboxOverlay.classList.add('opacity-0');
+            setTimeout(() => lightboxOverlay.classList.add('hidden'), 300); // Wait for fade out
+        }
+
+        function showNextImage() {
+            showLightbox((currentImageIndex + 1) % images.length);
+        }
+
+        function showPrevImage() {
+            showLightbox((currentImageIndex - 1 + images.length) % images.length);
+        }
+
+        function updateLightboxNav() {
+            // Optional: disable prev/next if only one image or at ends (if not looping)
+            // For looping, buttons are always active if there's more than one image
+            const hasMultipleImages = images.length > 1;
+            lightboxPrev.style.display = hasMultipleImages ? 'block' : 'none';
+            lightboxNext.style.display = hasMultipleImages ? 'block' : 'none';
+        }
+
+
+        galleryImages.forEach((img, index) => {
+            img.addEventListener('click', () => {
+                showLightbox(index);
+            });
+        });
+
+        lightboxClose.addEventListener('click', hideLightbox);
+        lightboxOverlay.addEventListener('click', (e) => {
+            // Close if clicking on the background overlay itself
+            if (e.target === lightboxOverlay) {
+                hideLightbox();
+            }
+        });
+        lightboxPrev.addEventListener('click', showPrevImage);
+        lightboxNext.addEventListener('click', showNextImage);
+
+        // Keyboard navigation for lightbox
+        document.addEventListener('keydown', (e) => {
+            if (!lightboxOverlay.classList.contains('hidden')) {
+                if (e.key === 'Escape') hideLightbox();
+                if (e.key === 'ArrowRight') showNextImage();
+                if (e.key === 'ArrowLeft') showPrevImage();
+            }
+        });
+
+        // Cursor Spotlight Effect (Optional)
+        const spotlight = document.getElementById('cursor-spotlight');
+        if (spotlight) {
+            document.addEventListener('mousemove', (e) => {
+                // Only show if not over interactive elements like buttons or links
+                if (e.target.closest('a, button, .hotspot')) {
+                     spotlight.style.display = 'none';
+                } else {
+                     spotlight.style.display = 'block';
+                     spotlight.style.left = `${e.clientX}px`;
+                     spotlight.style.top = `${e.clientY}px`;
+                }
+            });
+            document.addEventListener('mouseleave', () => {
+                 spotlight.style.display = 'none';
+            });
+             document.addEventListener('mouseenter', () => {
+                 // Check initial target on mouse enter
+                 if (!document.elementFromPoint(event.clientX, event.clientY)?.closest('a, button, .hotspot')) {
+                    spotlight.style.display = 'block';
+                 }
+            });
+        }
+
+
+    </script>
+
+</body>
 </html>
 
