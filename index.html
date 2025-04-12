@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png">
     <style>
         html { scroll-behavior: smooth; }
         body { font-family: 'Lato', sans-serif; position: relative; min-height: 100vh; }
@@ -20,14 +21,14 @@
             background-repeat: no-repeat; background-position: center center; background-size: contain;
             background-attachment: fixed; opacity: 0.25;
         }
-        /* Lightbox Overlay: Basic styles, visibility handled by 'hidden' class */
+        /* Lightbox Overlay: Basic styles */
         #lightbox-overlay {
-             z-index: 100; /* Ensure high z-index */
+            z-index: 100; /* Ensure high z-index */
         }
         #lightbox-overlay button { cursor: pointer; }
         /* Lightbox Image: Basic styles */
         #lightbox-image {
-             /* No transition/opacity/transform needed for basic show/hide */
+            /* No special styles needed for basic show/hide */
         }
 
         .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
@@ -301,7 +302,7 @@
         const lightboxClose = document.getElementById('lightbox-close');
         const lightboxPrev = document.getElementById('lightbox-prev');
         const lightboxNext = document.getElementById('lightbox-next');
-        const gallerySection = document.getElementById('gallery'); // Event delegation target
+        const gallerySection = document.getElementById('gallery');
         let galleryImageSources = [];
         let currentImageIndex = -1;
         let touchStartX = 0;
@@ -333,21 +334,21 @@
         function openLightbox(clickedImageElement) {
             const clickedIndex = parseInt(clickedImageElement.dataset.index, 10);
             if (!isNaN(clickedIndex)) {
+                console.log('Opening lightbox with index:', clickedIndex);
                 showImageAtIndex(clickedIndex);
-                lightboxOverlay.classList.add('is-active'); // Show overlay
+                lightboxOverlay.classList.add('is-active');
                 document.body.style.overflow = 'hidden';
-                console.log('Opening lightbox with index:', clickedIndex, 'src:', lightboxImage.src); // Debug log
             } else {
                  console.error("Could not get index for clicked item:", clickedImageElement);
             }
         }
 
         function closeLightbox() {
-            console.log('Closing lightbox'); // Debug log
-            lightboxOverlay.classList.remove('is-active'); // Hide overlay
-            lightboxImage.src = ""; // Clear src immediately
+            console.log('Closing lightbox');
+            lightboxOverlay.classList.remove('is-active');
+            lightboxImage.src = "";
             currentImageIndex = -1;
-            document.body.style.overflow = ''; // Restore scroll
+            document.body.style.overflow = '';
         }
 
         function showPreviousImage() { if (currentImageIndex > 0) showImageAtIndex(currentImageIndex - 1); }
@@ -355,8 +356,9 @@
 
         if (gallerySection) {
             gallerySection.addEventListener('click', (event) => {
-                if (event.target.classList.contains('gallery-item-clickable')) {
-                    openLightbox(event.target);
+                const clickedItem = event.target.closest('.gallery-item-clickable');
+                if (clickedItem) {
+                    openLightbox(clickedItem);
                 }
             });
         }
