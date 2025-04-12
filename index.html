@@ -21,22 +21,16 @@
             background-repeat: no-repeat; background-position: center center; background-size: contain;
             background-attachment: fixed; opacity: 0.25;
         }
-        /* Lightbox Overlay: Basic styles */
-        #lightbox-overlay {
-            z-index: 100; /* Ensure high z-index */
-        }
+        #lightbox-overlay { transition: opacity 0.3s ease-in-out; }
         #lightbox-overlay button { cursor: pointer; }
-        /* Lightbox Image: Basic styles */
-        #lightbox-image {
-            /* No special styles needed for basic show/hide */
-        }
-
         .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
         .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
         .divider-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 1.5s ease-in-out; }
         .fade-in-section.is-visible .divider-line { stroke-dashoffset: 0; }
-        #hero-image-container { perspective: 1000px; }
-        #hero-image { transition: transform 0.1s ease-out; will-change: transform; }
+        /* Removed perspective style, no longer needed */
+        /* #hero-image-container { perspective: 1000px; } */
+        /* Removed styles for #hero-image, replaced by video */
+
          .hotspot {
             position: absolute; width: 1.25rem; height: 1.25rem; background-color: rgba(255, 255, 255, 0.5);
             border-radius: 9999px; cursor: pointer; transition: all 0.2s ease-in-out; display: flex;
@@ -116,10 +110,15 @@
     </header>
 
     <section class="mb-20 text-center pt-16">
-         <div id="hero-image-container" class="w-full h-48 md:h-72 bg-gray-100 flex items-center justify-center mb-8 overflow-hidden">
-             <img id="hero-image" src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744274602/hero_yjoq8w.png"
-                  alt="Atmospheric landscape with trees and distant lights"
-                  class="w-full h-full object-contain">
+         {/* Container for the hero video */}
+         <div id="hero-image-container" class="w-full h-48 md:h-72 bg-black flex items-center justify-center mb-8 overflow-hidden"> {/* Changed bg to black for video */}
+             {/* Replaced img with video */}
+             <video class="w-full h-full object-cover"
+                    src="https://res.cloudinary.com/duhxa0mbi/video/upload/v1744442941/hero_jo2yx0.mp4"
+                    autoplay loop muted playsinline
+                    alt="Hero background video">
+                    Your browser does not support the video tag.
+             </video>
          </div>
          <div class="container mx-auto px-4 md:px-8">
              <h2 data-key="welcome-title" class="translatable text-3xl md:text-4xl font-bold mb-4 text-black mt-8" data-en="Welcome to Angsthase Digital Art" data-de="Willkommen bei Angsthase Digital Art">Welcome to Angsthase Digital Art</h2>
@@ -271,7 +270,7 @@
         </div>
     </footer>
 
-    <div id="lightbox-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center opacity-0 pointer-events-none z-[100] p-4 cursor-default">
+    <div id="lightbox-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden z-[100] p-4 cursor-default">
         <button id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold p-2 bg-black bg-opacity-30 rounded-full hover:bg-opacity-50 focus:outline-none hidden sm:block">&lt;</button>
         <img id="lightbox-image" src="" alt="Enlarged View" class="max-w-full max-h-full object-contain block">
         <button id="lightbox-next" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold p-2 bg-black bg-opacity-30 rounded-full hover:bg-opacity-50 focus:outline-none hidden sm:block">&gt;</button>
@@ -336,7 +335,7 @@
             if (!isNaN(clickedIndex)) {
                 console.log('Opening lightbox with index:', clickedIndex);
                 showImageAtIndex(clickedIndex);
-                lightboxOverlay.classList.add('is-active');
+                lightboxOverlay.classList.remove('hidden'); // Use hidden toggle
                 document.body.style.overflow = 'hidden';
             } else {
                  console.error("Could not get index for clicked item:", clickedImageElement);
@@ -345,11 +344,12 @@
 
         function closeLightbox() {
             console.log('Closing lightbox');
-            lightboxOverlay.classList.remove('is-active');
+            lightboxOverlay.classList.add('hidden'); // Use hidden toggle
             lightboxImage.src = "";
             currentImageIndex = -1;
             document.body.style.overflow = '';
         }
+
 
         function showPreviousImage() { if (currentImageIndex > 0) showImageAtIndex(currentImageIndex - 1); }
         function showNextImage() { if (currentImageIndex < galleryImageSources.length - 1) showImageAtIndex(currentImageIndex + 1); }
@@ -366,9 +366,15 @@
         lightboxClose.addEventListener('click', closeLightbox);
         lightboxPrev.addEventListener('click', showPreviousImage);
         lightboxNext.addEventListener('click', showNextImage);
-        lightboxOverlay.addEventListener('click', (event) => { if (event.target === lightboxOverlay) closeLightbox(); });
+        lightboxOverlay.addEventListener('click', (event) => {
+            // Close if clicking directly on the overlay background
+            if (event.target === lightboxOverlay) {
+                 closeLightbox();
+            }
+        });
         document.addEventListener('keydown', (event) => {
-            if (!lightboxOverlay.classList.contains('is-active')) return;
+            // Use check on overlay's classList directly
+            if (lightboxOverlay.classList.contains('hidden')) return;
             switch (event.key) {
                 case 'Escape': closeLightbox(); break;
                 case 'ArrowLeft': showPreviousImage(); break;
@@ -386,7 +392,7 @@
             touchStartX = 0; touchEndX = 0;
         }
 
-        window.addEventListener('resize', () => { if (lightboxOverlay.classList.contains('is-active')) showImageAtIndex(currentImageIndex); });
+        window.addEventListener('resize', () => { if (!lightboxOverlay.classList.contains('hidden')) showImageAtIndex(currentImageIndex); });
 
         const heroImage = document.getElementById('hero-image');
         const heroContainer = document.getElementById('hero-image-container');
@@ -477,4 +483,3 @@
 
 </body>
 </html>
-
