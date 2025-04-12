@@ -13,7 +13,7 @@
         html { scroll-behavior: smooth; }
         body { font-family: 'Lato', sans-serif; position: relative; min-height: 100vh; }
         h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', sans-serif; }
-        img { background-color: #f3f4f6; }
+        img, video { background-color: #f3f4f6; } /* Added video */
         .gallery-img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
         body::before {
             content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1;
@@ -21,16 +21,28 @@
             background-repeat: no-repeat; background-position: center center; background-size: contain;
             background-attachment: fixed; opacity: 0.25;
         }
-        #lightbox-overlay { transition: opacity 0.3s ease-in-out; }
+        #lightbox-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+            z-index: 100;
+        }
+        #lightbox-overlay.is-active {
+            opacity: 1;
+            pointer-events: auto;
+        }
         #lightbox-overlay button { cursor: pointer; }
+        #lightbox-image {
+            opacity: 1;
+            transform: scale(1);
+            transition: none;
+        }
         .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
         .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
         .divider-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 1.5s ease-in-out; }
         .fade-in-section.is-visible .divider-line { stroke-dashoffset: 0; }
-        /* Removed perspective style, no longer needed */
-        /* #hero-image-container { perspective: 1000px; } */
-        /* Removed styles for #hero-image, replaced by video */
-
+        /* #hero-image-container { perspective: 1000px; } */ /* Removed */
+        /* #hero-image { transition: transform 0.1s ease-out; will-change: transform; } */ /* Removed */
          .hotspot {
             position: absolute; width: 1.25rem; height: 1.25rem; background-color: rgba(255, 255, 255, 0.5);
             border-radius: 9999px; cursor: pointer; transition: all 0.2s ease-in-out; display: flex;
@@ -110,9 +122,8 @@
     </header>
 
     <section class="mb-20 text-center pt-16">
-         {/* Container for the hero video */}
-         <div id="hero-image-container" class="w-full h-48 md:h-72 bg-black flex items-center justify-center mb-8 overflow-hidden"> {/* Changed bg to black for video */}
-             {/* Replaced img with video */}
+         {/* Removed flex items-center justify-center from container */}
+         <div id="hero-image-container" class="w-full h-48 md:h-72 bg-black mb-8 overflow-hidden">
              <video class="w-full h-full object-cover"
                     src="https://res.cloudinary.com/duhxa0mbi/video/upload/v1744442941/hero_jo2yx0.mp4"
                     autoplay loop muted playsinline
@@ -367,13 +378,11 @@
         lightboxPrev.addEventListener('click', showPreviousImage);
         lightboxNext.addEventListener('click', showNextImage);
         lightboxOverlay.addEventListener('click', (event) => {
-            // Close if clicking directly on the overlay background
             if (event.target === lightboxOverlay) {
                  closeLightbox();
             }
         });
         document.addEventListener('keydown', (event) => {
-            // Use check on overlay's classList directly
             if (lightboxOverlay.classList.contains('hidden')) return;
             switch (event.key) {
                 case 'Escape': closeLightbox(); break;
