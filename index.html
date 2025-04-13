@@ -2,314 +2,482 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>RitterRun Enhanced - Bad Belzig (Mouse Click Jump)</title> <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-key="page-title" class="translatable" data-en="Angsthase Digital Art" data-de="Angsthase Digital Art">Angsthase Digital Art</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png">
     <style>
-        /* All CSS remains the same */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { width: 100%; height: 100%; overflow: hidden; background-color: #222; }
-        :root { --bb-green: #0ca644; --bb-blue: #0296c6; --bb-yellow: #f5d306; --bb-black: #151513; --bb-white: #ffffff; --font-pixel: 'Press Start 2P', cursive; --font-sans: 'Arial', sans-serif; }
-        body { display: flex; justify-content: center; align-items: center; margin: 0; font-family: var(--font-sans); }
-        #game-container { position: relative; border: 3px solid #555; overflow: hidden; background-color: var(--bb-blue); width: 800px; height: 400px; max-width: 100%; box-sizing: border-box; display: block; }
-        @media (max-width: 850px) { #game-container { width: 100vw; height: 50vw; max-height: 100vh; max-width: 200vh; max-width: 100vw; } #scoreDisplay, #livesDisplay { font-size: 1.2em; } .poi-overlay h3 { font-size: 1em; } .poi-overlay p { font-size: 0.8em; } #closePoiButton { font-size: 0.8em; } }
-        canvas { display: block; width: 100%; height: 100%; }
-        #knightImage { position: absolute; display: none; pointer-events: none; z-index: 10; image-rendering: pixelated; }
-        .ui-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); color: var(--bb-white); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; z-index: 30; padding: 20px; font-family: var(--font-pixel); line-height: 1.6; }
-        .ui-screen h1 { font-size: 2.5em; margin-bottom: 20px; color: var(--bb-yellow); text-shadow: 3px 3px 0px var(--bb-black); }
-        .ui-screen h2 { font-size: 2.2em; margin-bottom: 20px; color: #DC143C; text-shadow: 3px 3px 0px var(--bb-black); }
-        .ui-screen p { font-size: 1em; margin: 10px 0; }
-        .ui-button { padding: 15px 30px; font-size: 1.1em; font-family: var(--font-pixel); margin-top: 30px; cursor: pointer; background-color: #eee; border: 3px solid var(--bb-black); color: var(--bb-black); text-transform: uppercase; transition: background-color 0.15s ease, transform 0.1s ease; box-shadow: 4px 4px 0px var(--bb-black); }
-        .ui-button:hover { background-color: #ddd; }
-        .ui-button:active { background-color: #ccc; transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--bb-black); }
-        .instructions { margin-top: 25px; font-size: 0.8em !important; color: #ccc; line-height: 1.5; }
-        #scoreDisplay, #livesDisplay { position: absolute; top: 15px; font-size: 1.5em; font-family: var(--font-pixel); color: var(--bb-white); text-shadow: 2px 2px 0px var(--bb-black); z-index: 20; }
-        #scoreDisplay { left: 15px; }
-        #livesDisplay { right: 15px; }
-        .poi-overlay { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 600px; background-color: rgba(0, 0, 0, 0.85); border: 3px solid var(--bb-yellow); border-radius: 0; z-index: 50; color: var(--bb-white); padding: 15px 20px; text-align: center; font-family: var(--font-pixel); box-shadow: 4px 4px 0px rgba(0,0,0,0.5); display: none; cursor: pointer; }
-        .poi-overlay.visible { display: block !important; }
-        .poi-overlay h3 { margin-bottom: 10px; font-size: 1.1em; color: var(--bb-yellow); text-shadow: 2px 2px 0px var(--bb-black); }
-        .poi-overlay p { font-size: 0.9em; line-height: 1.6; color: var(--bb-white); margin-bottom: 15px; }
-        #closePoiButton { padding: 8px 15px; font-size: 0.9em; font-family: var(--font-pixel); cursor: pointer; background-color: #ccc; border: 2px solid var(--bb-black); color: var(--bb-black); margin-top: 10px; box-shadow: 2px 2px 0px var(--bb-black); }
-        #closePoiButton:hover { background-color: #bbb; }
-        #closePoiButton:active { background-color: #aaa; transform: translate(1px, 1px); box-shadow: 1px 1px 0px var(--bb-black); }
-        .hidden { display: none !important; }
-        #orientationMessage { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bb-black); color: var(--bb-white); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; z-index: 100; font-family: var(--font-pixel); padding: 20px; line-height: 1.8; font-size: 1.2em; display: none; }
-        #orientationMessage p { margin-bottom: 1em; }
-        @media (orientation: portrait) { #game-container { display: none; } #orientationMessage { display: flex; } }
-        @media (orientation: landscape) { #orientationMessage { display: none; } }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Lato', sans-serif; position: relative; min-height: 100vh; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', sans-serif; }
+        img, video { background-color: #f3f4f6; }
+        .gallery-img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1;
+            background-image: url('https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png');
+            background-repeat: no-repeat; background-position: center center; background-size: contain;
+            background-attachment: fixed; opacity: 0.25;
+        }
+        #lightbox-overlay {
+            z-index: 100;
+        }
+        #lightbox-overlay button { cursor: pointer; }
+        #lightbox-image { } /* No special styles */
+
+        .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
+        .divider-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 1.5s ease-in-out; }
+        .fade-in-section.is-visible .divider-line { stroke-dashoffset: 0; }
+        #hero-image-container { perspective: 1000px; }
+        #hero-image { transition: transform 0.1s ease-out; will-change: transform; }
+         .hotspot {
+            position: absolute; width: 1.25rem; height: 1.25rem; background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 9999px; cursor: pointer; transition: all 0.2s ease-in-out; display: flex;
+            align-items: center; justify-content: center; border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .hotspot:hover { transform: scale(1.2); background-color: rgba(255, 255, 255, 0.8); }
+        .hotspot::after { content: '+'; font-size: 0.875rem; color: rgba(0, 0, 0, 0.6); line-height: 1; }
+        .hotspot-tooltip {
+            position: absolute; background-color: rgba(0, 0, 0, 0.8); color: white; padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem; font-size: 0.75rem; line-height: 1rem; opacity: 0; visibility: hidden;
+            transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out; white-space: nowrap;
+            z-index: 10; pointer-events: none; transform: translate(-50%, -120%);
+        }
+        .hotspot-tooltip.is-visible { opacity: 1; visibility: visible; }
+         #cursor-spotlight {
+            position: fixed; width: 300px; height: 300px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+            pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); display: none; mix-blend-mode: screen;
+        }
+        .carousel-viewport {
+            width: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding-bottom: 1rem;
+            -webkit-overflow-scrolling: touch;
+        }
+        .carousel-viewport::-webkit-scrollbar { display: none; }
+        .carousel-viewport { -ms-overflow-style: none; scrollbar-width: none; }
+        .carousel-item {
+            display: inline-block;
+            flex-shrink: 0;
+            width: auto;
+            height: 6rem;
+            margin-right: 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            vertical-align: top;
+        }
+         .carousel-item img {
+             width: auto;
+             height: 100%;
+             object-fit: cover;
+         }
+         .gallery-grid-item {
+             aspect-ratio: 297 / 210;
+             background-color: #f3f4f6;
+             border-radius: 0.5rem;
+             overflow: hidden;
+             border: 1px solid #e5e7eb;
+         }
     </style>
 </head>
-<body>
-    <div id="orientationMessage">
-        <p>Please rotate your device to landscape mode to play.</p>
-        <p>Bitte drehe dein Gerät ins Querformat, um zu spielen.</p>
+<body class="bg-white text-gray-800 antialiased">
+
+    <header class="py-6 px-4 md:px-8 border-b border-gray-200 sticky top-0 z-30 bg-white/80 backdrop-blur-sm">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744213680/ah_bgyg03.png"
+                     alt="Angsthase Logo"
+                     class="w-10 h-10 rounded-full object-cover border border-gray-200">
+                <h1 class="text-2xl md:text-3xl font-bold text-black translatable" data-key="site-title" data-en="Angsthase Digital Art" data-de="Angsthase Digital Art">Angsthase Digital Art</h1>
+            </div>
+            <nav>
+                <ul class="flex space-x-4 md:space-x-6 text-gray-600 items-center">
+                    <li><a href="#gallery" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-500 translatable" data-key="nav-gallery" data-en="Gallery" data-de="Galerie">Gallery</a></li>
+                    <li><a href="#about-style" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-500 translatable" data-key="nav-about" data-en="About" data-de="Über">About</a></li>
+                    <li><a href="#contact" class="hover:text-slate-600 rounded p-1 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-500 translatable" data-key="nav-contact" data-en="Contact" data-de="Kontakt">Contact</a></li>
+                    <li>
+                        <button id="lang-toggle" class="ml-2 px-3 py-1 border border-gray-400 rounded-md text-xs hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-500">
+                            DE / EN
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="mb-20 text-center pt-16">
+         <div id="hero-image-container" class="w-full h-48 md:h-72 bg-black mb-8 overflow-hidden">
+             <video class="w-full h-full object-cover"
+                    src="https://res.cloudinary.com/duhxa0mbi/video/upload/v1744442941/hero_jo2yx0.mp4"
+                    autoplay muted playsinline
+                    alt="Hero background video">
+                    Your browser does not support the video tag.
+             </video>
+         </div>
+         <div class="container mx-auto px-4 md:px-8">
+             <h2 data-key="welcome-title" class="translatable text-3xl md:text-4xl font-bold mb-4 text-black mt-8" data-en="Welcome to Angsthase Digital Art" data-de="Willkommen bei Angsthase Digital Art">Welcome to Angsthase Digital Art</h2>
+             <p data-key="welcome-text" class="translatable text-gray-700 max-w-2xl mx-auto" data-en="Exploring themes through digital mediums. Browse the gallery to see the latest creations." data-de="Digitale Medien zur Erkundung von Themen. Durchsuchen Sie die Galerie nach den neuesten Kreationen.">Exploring themes through digital mediums. Browse the gallery to see the latest creations.</p>
+        </div>
+    </section>
+
+    <div class="fade-in-section container mx-auto px-4 md:px-8 my-16">
+         <svg width="100%" height="5" viewBox="0 0 1000 5" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-slate-500 block">
+            <line class="divider-line" x1="0" y1="2.5" x2="1000" y2="2.5" stroke="currentColor" stroke-width="1"/>
+        </svg>
     </div>
 
-    <div id="game-container">
-        <canvas id="gameCanvas"></canvas>
-        <img id="knightImage" src="" alt="Knight">
-        <div id="poiInfoOverlay" class="poi-overlay">
-            <h3 id="poiName">POI Name</h3>
-            <p id="poiInfoText">POI information will appear here.</p>
-            <button id="closePoiButton">Close</button>
+    <main class="container mx-auto px-4 md:px-8 py-16 relative z-10 -mt-16">
+
+        <section class="fade-in-section mb-20 flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            <div class="md:w-7/12 text-gray-700">
+                <h3 data-key="spotlight-title" class="translatable text-2xl font-bold mb-4 text-black" data-en="Project Spotlight" data-de="Projekt-Spotlight">Project Spotlight</h3>
+                <p data-key="spotlight-p1" class="translatable mb-4" data-en="Titled 'Café Corner, Potsdam Night', this piece highlights the contrast between the warm, inviting light spilling from the windows and the cool darkness of the surrounding night. Developed from photographic source material, the scene undergoes digital processing to enhance the atmospheric quality and painterly textures, particularly noticeable in the rendering of the reflections and the sky." data-de="Mit dem Titel ‚Café-Ecke, Potsdam Nacht‘ hebt dieses Werk den Kontrast zwischen dem warmen, einladenden Licht, das aus den Fenstern strömt, und der kühlen Dunkelheit der umgebenden Nacht hervor. Entwickelt aus fotografischem Ausgangsmaterial, durchläuft die Szene eine digitale Bearbeitung, um die atmosphärische Qualität und die malerischen Texturen zu verstärken, was besonders bei der Darstellung der Reflexionen und des Himmels auffällt.">
+                    Titled 'Café Corner, Potsdam Night', this piece highlights the contrast between the warm, inviting light spilling from the windows and the cool darkness of the surrounding night. Developed from photographic source material, the scene undergoes digital processing to enhance the atmospheric quality and painterly textures, particularly noticeable in the rendering of the reflections and the sky.
+                </p>
+                <p data-key="spotlight-p2" class="translatable" data-en="The focus is on capturing a specific feeling of quiet solitude often found in illuminated structures after dark. Digital brushwork aims to evoke mood rather than precise detail, blending observed reality with a more expressive interpretation of light and shadow." data-de="Der Fokus liegt darauf, ein spezifisches Gefühl der ruhigen Einsamkeit einzufangen, das oft in beleuchteten Strukturen nach Einbruch der Dunkelheit zu finden ist. Digitale Pinselstriche zielen darauf ab, Stimmung statt präziser Details hervorzurufen, indem beobachtete Realität mit einer ausdrucksstärkeren Interpretation von Licht und Schatten verschmolzen wird.">
+                    The focus is on capturing a specific feeling of quiet solitude often found in illuminated structures after dark. Digital brushwork aims to evoke mood rather than precise detail, blending observed reality with a more expressive interpretation of light and shadow.
+                </p>
+            </div>
+            <div class="md:w-5/12 md:-mr-6 lg:-mr-10 relative">
+                 <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/7_eiddxy.png"
+                     alt="Artwork Example 1: Café Corner, Potsdam Night" class="w-full h-auto rounded-lg border border-gray-200 block"
+                     onerror="this.onerror=null; this.src='https://placehold.co/600x400/E5E7EB/1F2937?text=Image+Error'; this.alt='Image failed to load';">
+                 <button class="hotspot" style="top: 30%; left: 40%;" data-tooltip-target="tooltip-1"></button>
+                 <div id="tooltip-1" class="hotspot-tooltip translatable" style="left: 40%;" data-key="tooltip-1" data-en="Focus on window light" data-de="Fokus auf Fensterlicht">Focus on window light</div>
+                 <button class="hotspot" style="top: 75%; left: 60%;" data-tooltip-target="tooltip-2"></button>
+                 <div id="tooltip-2" class="hotspot-tooltip translatable" style="left: 60%;" data-key="tooltip-2" data-en="Painterly reflections" data-de="Malerische Reflexionen">Painterly reflections</div>
+            </div>
+        </section>
+
+        <section class="fade-in-section mb-20 flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12">
+             <div class="md:w-7/12 text-gray-700">
+                <h3 data-key="another-title" class="translatable text-2xl font-bold mb-4 text-black" data-en="Another Piece / About" data-de="Weiteres Werk / Über">Another Piece / About</h3>
+                 <p data-key="another-p1" class="translatable mb-4" data-en="Titled 'Woodhouse, Baabe', this artwork captures a structure within the unique landscape of the Rügen coast. Developed from a photograph, the image has been digitally transformed to emphasize mood and atmosphere over strict realism." data-de="Mit dem Titel ‚Holzhaus, Baabe‘ fängt dieses Kunstwerk eine Struktur innerhalb der einzigartigen Landschaft der Küste Rügens ein. Entwickelt aus einer Fotografie, wurde das Bild digital transformiert, um Stimmung und Atmosphäre über strengen Realismus zu betonen.">
+                    Titled 'Woodhouse, Baabe', this artwork captures a structure within the unique landscape of the Rügen coast. Developed from a photograph, the image has been digitally transformed to emphasize mood and atmosphere over strict realism.
+                 </p>
+                 <p data-key="another-p2" class="translatable" data-en="The focus is on the interplay of light on the wooden surfaces and the surrounding environment, rendered with distinct painterly textures characteristic of the digital synthesis process. It aims to convey the quiet feeling of this specific place, blending observed reality with an expressive, atmospheric interpretation." data-de="Der Fokus liegt auf dem Zusammenspiel von Licht auf den Holzoberflächen und der umgebenden Umgebung, wiedergegeben mit den ausgeprägten malerischen Texturen, die für den digitalen Syntheseprozess charakteristisch sind. Es zielt darauf ab, das ruhige Gefühl dieses spezifischen Ortes zu vermitteln, indem die beobachtete Realität mit einer ausdrucksstärkeren, atmosphärischen Interpretation verschmolzen wird.">
+                    The focus is on the interplay of light on the wooden surfaces and the surrounding environment, rendered with distinct painterly textures characteristic of the digital synthesis process. It aims to convey the quiet feeling of this specific place, blending observed reality with an expressive, atmospheric interpretation.
+                 </p>
+            </div>
+           <div class="md:w-5/12 md:-ml-6 lg:-ml-10">
+                <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/9_gkmvef.png"
+                     alt="Artwork Example 2: Woodhouse, Baabe" class="w-full h-auto rounded-lg border border-gray-200"
+                     onerror="this.onerror=null; this.src='https://placehold.co/600x400/E5E7EB/1F2937?text=Image+Error'; this.alt='Image failed to load';">
+           </div>
+        </section>
+
+        <section id="about-style" class="fade-in-section mb-20 max-w-4xl mx-auto text-gray-700 pt-16 -mt-16">
+             <h3 data-key="about-title" class="translatable text-3xl font-bold mb-6 text-center text-black" data-en="About The Art Style" data-de="Über den Kunststil">About The Art Style</h3>
+             <p data-key="about-p1" class="translatable mb-4" data-en="The digital art originates from photographs, often capturing scenes from familiar places in Germany – from the streets of Potsdam and the Bad Belzig area to the unique landscapes of the Rügen coast. Each image undergoes extensive digital processing and synthesis, transforming these photographic moments. The aim is less about strict realism and more focused on evoking a specific mood and atmosphere inherent in the scene." data-de="Die digitale Kunst basiert auf Fotografien, die oft Szenen von vertrauten Orten in Deutschland festhalten – von den Straßen Potsdams und der Gegend um Bad Belzig bis zu den einzigartigen Landschaften der Küste Rügens. Jedes Bild durchläuft eine umfangreiche digitale Bearbeitung und Synthese, wodurch diese fotografischen Momente transformiert werden. Das Ziel ist weniger strenger Realismus, sondern vielmehr das Hervorrufen einer spezifischen Stimmung und Atmosphäre, die der Szene innewohnt.">
+                The digital art originates from photographs, often capturing scenes from familiar places in Germany – from the streets of Potsdam and the Bad Belzig area to the unique landscapes of the Rügen coast. Each image undergoes extensive digital processing and synthesis, transforming these photographic moments. The aim is less about strict realism and more focused on evoking a specific mood and atmosphere inherent in the scene.
+             </p>
+             <p data-key="about-p2" class="translatable mb-4" data-en="The resulting style is distinctly painterly, characterized by visible digital textures and brushwork that are particularly noticeable in skies, water, and shadow areas. There is a strong focus on the interplay of light – whether it's the warm glow of a window against the cool night, the transitional colours of dusk and dawn, or the quality of daylight on different surfaces. This digital synthesis process allows blending the observed reality captured in the source photograph with a more expressive, atmospheric interpretation." data-de="Der resultierende Stil ist deutlich malerisch, gekennzeichnet durch sichtbare digitale Texturen und Pinselstriche, die besonders in Himmeln, Wasser und Schattenbereichen auffallen. Ein starker Fokus liegt auf dem Zusammenspiel von Licht – sei es das warme Leuchten eines Fensters gegen die kühle Nacht, die Übergangsfarben der Dämmerung und des Morgengrauens oder die Qualität des Tageslichts auf verschiedenen Oberflächen. Dieser digitale Syntheseprozess ermöglicht es, die in der Ausgangsfotografie festgehaltene beobachtete Realität mit einer ausdrucksstärkeren, atmosphärischen Interpretation zu verschmelzen.">
+                The resulting style is distinctly painterly, characterized by visible digital textures and brushwork that are particularly noticeable in skies, water, and shadow areas. There is a strong focus on the interplay of light – whether it's the warm glow of a window against the cool night, the transitional colours of dusk and dawn, or the quality of daylight on different surfaces. This digital synthesis process allows blending the observed reality captured in the source photograph with a more expressive, atmospheric interpretation.
+             </p>
+             <p data-key="about-p3" class="translatable" data-en="Through subjects often featuring architecture, streetscapes, and landscapes, themes of quiet, solitude, and the unique feeling of a place at a particular moment are explored. The goal is to create atmospheric digital paintings that invite contemplation and offer a distinctive view of these locations, filtered through this artistic process." data-de="Durch Motive, die oft Architektur, Straßenszenen und Landschaften zeigen, werden Themen wie Ruhe, Einsamkeit und das einzigartige Gefühl eines Ortes zu einem bestimmten Zeitpunkt erforscht. Das Ziel ist es, atmosphärische digitale Gemälde zu schaffen, die zur Kontemplation einladen und einen unverwechselbaren Blick auf diese Orte bieten, gefiltert durch diesen künstlerischen Prozess.">
+                Through subjects often featuring architecture, streetscapes, and landscapes, themes of quiet, solitude, and the unique feeling of a place at a particular moment are explored. The goal is to create atmospheric digital paintings that invite contemplation and offer a distinctive view of these locations, filtered through this artistic process.
+             </p>
+        </section>
+
+        <section id="gallery" class="fade-in-section mb-20 pt-16 -mt-16">
+            <h3 data-key="gallery-title" class="translatable text-3xl font-bold mb-8 text-center text-black" data-en="Gallery" data-de="Galerie">Gallery</h3>
+            <div class="carousel-viewport mb-8">
+                 <div class="carousel-track-to-be-removed">
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/5_ulpq6j.png" alt="Pedestrians walk past brightly lit modern shopfronts on a street at night." class="gallery-img gallery-item-clickable"></div>
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/8_vtftql.png" alt="Illuminated building with a tower and adjacent structures on a street at night." class="gallery-img gallery-item-clickable"></div>
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209002/6_typwgx.png" alt="Street intersection at night with glowing streetlights and dark buildings." class="gallery-img gallery-item-clickable"></div>
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/4_null04.png" alt="Modern building with large, lit glass front at night." class="gallery-img gallery-item-clickable"></div>
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/3_cyiqpk.png" alt="Colourful buildings reflected in harbour water with small boats at night." class="gallery-img gallery-item-clickable"></div>
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/1_sbzyhy.png" alt="Street corner with illuminated traditional buildings at night." class="gallery-img gallery-item-clickable"></div>
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209000/13_at5ibg.png" alt="Wooden pier with railings extending into calm water under a pale sky." class="gallery-img gallery-item-clickable"></div>
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209009/14_lnxo5n.png" alt="Long white pier with a building at the end (Sellin Pier) stretching onto a sandy beach." class="gallery-img gallery-item-clickable"></div>
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209008/11_wcbenb.png" alt="Houses on a small hill among bare trees, lit up at dusk." class="gallery-img gallery-item-clickable"></div>
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209007/10_to7taw.png" alt="[Describe image 10_to7taw.png]" class="gallery-img gallery-item-clickable"></div>
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/2_t9vs7f.png" alt="Long, low building illuminated at night, seen across a road." class="gallery-img gallery-item-clickable"></div>
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/7_eiddxy.png" alt="Café Corner, Potsdam Night" class="gallery-img gallery-item-clickable"></div>
+                     <div class="carousel-item"><img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/9_gkmvef.png" alt="Woodhouse, Baabe" class="gallery-img gallery-item-clickable"></div>
+                 </div>
+             </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                 <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/5_ulpq6j.png" alt="Pedestrians walk past brightly lit modern shopfronts on a street at night." class="gallery-img gallery-item-clickable">
+                </div>
+                <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/8_vtftql.png" alt="Illuminated building with a tower and adjacent structures on a street at night." class="gallery-img gallery-item-clickable">
+                </div>
+                <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209002/6_typwgx.png" alt="Street intersection at night with glowing streetlights and dark buildings." class="gallery-img gallery-item-clickable">
+                </div>
+                 <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/4_null04.png" alt="Modern building with large, lit glass front at night." class="gallery-img gallery-item-clickable">
+                </div>
+                 <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/3_cyiqpk.png" alt="Colourful buildings reflected in harbour water with small boats at night." class="gallery-img gallery-item-clickable">
+                </div>
+                 <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/1_sbzyhy.png" alt="Street corner with illuminated traditional buildings at night." class="gallery-img gallery-item-clickable">
+                </div>
+                 <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209000/13_at5ibg.png" alt="Wooden pier with railings extending into calm water under a pale sky." class="gallery-img gallery-item-clickable">
+                </div>
+                 <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209009/14_lnxo5n.png" alt="Long white pier with a building at the end (Sellin Pier) stretching onto a sandy beach." class="gallery-img gallery-item-clickable">
+                </div>
+                 <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209008/11_wcbenb.png" alt="Houses on a small hill among bare trees, lit up at dusk." class="gallery-img gallery-item-clickable">
+                </div>
+                 <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209007/10_to7taw.png" alt="[Describe image 10_to7taw.png]" class="gallery-img gallery-item-clickable">
+                </div>
+                 <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209001/2_t9vs7f.png" alt="Long, low building illuminated at night, seen across a road." class="gallery-img gallery-item-clickable">
+                </div>
+                 <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209003/7_eiddxy.png" alt="Café Corner, Potsdam Night" class="gallery-img gallery-item-clickable">
+                </div>
+                 <div class="gallery-grid-item">
+                    <img src="https://res.cloudinary.com/duhxa0mbi/image/upload/v1744209004/9_gkmvef.png" alt="Woodhouse, Baabe" class="gallery-img gallery-item-clickable">
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="fade-in-section mb-20 pt-16 -mt-16">
+             <h3 data-key="contact-title" class="translatable text-3xl font-bold mb-8 text-center text-black" data-en="Contact" data-de="Kontakt">Contact</h3>
+             <p data-key="contact-prompt" class="translatable text-center text-gray-700 mb-2" data-en="If you have any questions about these artworks, would like to buy any, or wish to commission a piece, please contact me at:" data-de="Wenn Sie Fragen zu diesen Kunstwerken haben, eines kaufen möchten oder ein Werk in Auftrag geben wollen, kontaktieren Sie mich bitte unter:">
+                 If you have any questions about these artworks, would like to buy any, or wish to commission a piece, please contact me at:
+             </p>
+             <p class="text-center text-gray-700">
+                Email: <a href="mailto:angsthasedigitalstudio@gmail.com" class="text-gray-800 hover:text-slate-600 underline focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-500 rounded">angsthasedigitalstudio@gmail.com</a>
+             </p>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-100 py-8 px-4 md:px-8 mt-16">
+        <div class="container mx-auto text-center text-gray-600">
+            <div class="mb-4">
+                <a href="#" class="hover:text-slate-600 px-2 translatable focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-500 rounded" data-key="footer-privacy" data-en="Privacy Policy" data-de="Datenschutzrichtlinie">Privacy Policy</a> |
+                <a href="#" class="hover:text-slate-600 px-2 translatable focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-500 rounded" data-key="footer-terms" data-en="Terms of Service" data-de="Nutzungsbedingungen">Terms of Service</a> |
+                <a href="#" class="hover:text-slate-600 px-2 translatable focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-500 rounded" data-key="footer-imprint" data-en="Impressum" data-de="Impressum">Impressum</a>
+            </div>
+            <p data-key="footer-copy" class="translatable" data-en="&copy; 2025 Angsthase Digital Art. All rights reserved." data-de="© 2025 Angsthase Digital Art. Alle Rechte vorbehalten.">&copy; 2025 Angsthase Digital Art. All rights reserved.</p>
         </div>
-        <div id="startScreen" class="ui-screen">
-            <h1>RitterRun</h1>
-            <p>Explore Bad Belzig!</p>
-            <p>High Score: <span id="startHighScore">0</span></p>
-            <button id="startButton" class="ui-button">Start Game</button>
-            <p class="instructions">Press SPACE or Click Start<br>Press SPACE to Jump</p>
-        </div>
-        <div id="gameOverScreen" class="ui-screen hidden">
-            <h2>Game Over!</h2>
-            <p>Score: <span id="finalScore">0</span></p>
-            <p>High Score: <span id="gameOverHighScore">0</span></p>
-            <button id="restartButton" class="ui-button">Restart</button>
-        </div>
-        <div id="scoreDisplay" class="hidden">Score: <span id="currentScore">0</span></div>
-        <div id="livesDisplay" class="hidden">Lives: <span id="currentLives">5</span></div>
+    </footer>
+
+    <div id="lightbox-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden z-[100] p-4 cursor-default">
+        <button id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold p-2 bg-black bg-opacity-30 rounded-full hover:bg-opacity-50 focus:outline-none hidden sm:block">&lt;</button>
+        <img id="lightbox-image" src="" alt="Enlarged View" class="max-w-full max-h-full object-contain block">
+        <button id="lightbox-next" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold p-2 bg-black bg-opacity-30 rounded-full hover:bg-opacity-50 focus:outline-none hidden sm:block">&gt;</button>
+        <button id="lightbox-close" class="absolute top-5 right-6 text-white text-4xl leading-none font-bold hover:text-gray-300 focus:outline-none">&times;</button>
     </div>
+
+    <div id="cursor-spotlight"></div>
 
     <script>
-        // --- Strict mode and IIFE ---
-        (function() {
-            'use strict';
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+        const observerCallback = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    const line = entry.target.querySelector('.divider-line');
+                    if (line) { }
+                     if (!entry.target.querySelector('.divider-line')) { observer.unobserve(entry.target); }
+                     if (entry.target.querySelector('.divider-line')) { observer.unobserve(entry.target); }
+                }
+            });
+        };
+        const scrollObserver = new IntersectionObserver(observerCallback, observerOptions);
+        const elementsToAnimate = document.querySelectorAll('.fade-in-section');
+        elementsToAnimate.forEach(el => { scrollObserver.observe(el); });
 
-            // --- DOM Element References ---
-            const canvas = document.getElementById('gameCanvas');
-            const gameContainer = document.getElementById('game-container');
-            // ... (other refs remain the same) ...
-            const startScreen = document.getElementById('startScreen');
-            const gameOverScreen = document.getElementById('gameOverScreen');
-            const startButton = document.getElementById('startButton');
-            const restartButton = document.getElementById('restartButton');
-            const scoreDisplay = document.getElementById('scoreDisplay');
-            const currentScoreSpan = document.getElementById('currentScore');
-            const finalScoreSpan = document.getElementById('finalScore');
-            const startHighScoreSpan = document.getElementById('startHighScore');
-            const gameOverHighScoreSpan = document.getElementById('gameOverHighScore');
-            const poiOverlay = document.getElementById('poiInfoOverlay');
-            const poiNameEl = document.getElementById('poiName');
-            const poiInfoTextEl = document.getElementById('poiInfoText');
-            const closePoiButton = document.getElementById('closePoiButton');
-            const livesDisplay = document.getElementById('livesDisplay');
-            const currentLivesSpan = document.getElementById('currentLives');
-            const knightImageEl = document.getElementById('knightImage');
+        const lightboxOverlay = document.getElementById('lightbox-overlay');
+        const lightboxImage = document.getElementById('lightbox-image');
+        const lightboxClose = document.getElementById('lightbox-close');
+        const lightboxPrev = document.getElementById('lightbox-prev');
+        const lightboxNext = document.getElementById('lightbox-next');
+        const gallerySection = document.getElementById('gallery');
+        let galleryImageSources = [];
+        let currentImageIndex = -1;
+        let touchStartX = 0;
+        let touchEndX = 0;
 
-
-            // --- Canvas and Context ---
-            let ctx;
-            let canvasWidth;
-            let canvasHeight;
-
-            // --- Essential Element Check ---
-            if (!canvas || !canvas.getContext || !gameContainer) { /* ... */ return; }
-            ctx = canvas.getContext('2d');
-            const requiredElements = { startScreen, gameOverScreen, startButton, restartButton, scoreDisplay, currentScoreSpan, finalScoreSpan, startHighScoreSpan, gameOverHighScoreSpan, poiOverlay, poiNameEl, poiInfoTextEl, closePoiButton, livesDisplay, currentLivesSpan, knightImageEl };
-            for (const key in requiredElements) { if (!requiredElements[key]) { console.error(`Fatal Error: UI element '${key}' not found!`); alert(`Fatal Error: UI element missing (${key})!`); return; } }
-
-            // --- Game States ---
-            const GameState = Object.freeze({ MENU: 'MENU', PLAYING: 'PLAYING', GAME_OVER: 'GAME_OVER', LOADING: 'LOADING' });
-            let currentGameState = GameState.LOADING;
-
-            // --- Collision Types ---
-            const CollisionType = Object.freeze({ NONE: 0, TOP: 1, SIDE: 2 });
-
-            // --- Game Constants ---
-            const LIVES_START_COUNT = 5;
-            const INVINCIBILITY_DURATION_MS = 1000;
-            const GROUND_HEIGHT_PERCENT = 0.075;
-            const PLAYER_INITIAL_X_PERCENT = 0.075;
-            const PLAYER_WIDTH_PERCENT_DESKTOP = 0.05;
-            const PLAYER_HEIGHT_PERCENT_DESKTOP = 0.10;
-            const PLAYER_WIDTH_PERCENT_MOBILE = 0.07;
-            const PLAYER_HEIGHT_PERCENT_MOBILE = 0.14;
-            const PLAYER_GRAVITY_FACTOR = 1300;
-            const PLAYER_JUMP_FACTOR = -40;
-            const PLAYER_BOUNCE_POWER_MULTIPLIER = 0.8;
-            const OBSTACLE_STONE_WIDTH_PERCENT = 0.044;
-            const OBSTACLE_STONE_HEIGHT_PERCENT = 0.088;
-            const OBSTACLE_TRACTOR_WIDTH_PERCENT = 0.088;
-            const OBSTACLE_TRACTOR_HEIGHT_PERCENT = 0.113;
-            const POI_SIGN_WIDTH_PERCENT = 0.113;
-            const POI_SIGN_HEIGHT_PERCENT = 0.275;
-            const INITIAL_GAME_SPEED_FACTOR = 0.375;
-            const SPEED_INCREASE_INTERVAL_SCORE = 400;
-            const SPEED_INCREASE_AMOUNT_FACTOR = 0.025;
-            const BACKGROUND_SWITCH_SCORE_INTERVAL = 1000;
-            const POI_SPAWN_CHANCE = 0.15;
-            const OBSTACLE_BASE_SPAWN_TIME_MS = 1800;
-            const OBSTACLE_MIN_SPAWN_TIME_MS = 800;
-            const COLLISION_LANDING_TOLERANCE_FACTOR = 0.045;
-            const MOBILE_BREAKPOINT_WIDTH = 850;
-
-            // --- Game Variables ---
-            let score = 0; let highScore = 0; let playerLives = LIVES_START_COUNT; let playerInvincibleUntil = 0;
-            let player = { x: 0, y: 0, width: 0, height: 0, dx: 0, dy: 0, gravity: 0, jumpPower: 0, grounded: true };
-            let obstacles = []; let gameSpeed = 0; let nextSpeedIncreaseScore = SPEED_INCREASE_INTERVAL_SCORE;
-            let bgX = 0; let currentBackgroundIndex = 0; let nextBackgroundSwitchScore = BACKGROUND_SWITCH_SCORE_INTERVAL;
-            let nextObstacleSpawnTime = 0; let nextPoiIndex = 0; let lastTime = 0;
-            let gameInitialized = false; let isPaused = false; let groundHeightPx = 0; let collisionLandingTolerancePx = 0;
-            let currentKnightVisualState = null;
-
-            // --- Graphics Assets ---
-            const assets = { /* ... */ knight_run: { img: new Image(), loaded: false, src: 'assets/knight_run.gif' }, knight_jump: { img: new Image(), loaded: false, src: 'assets/knight_jump.png' }, stone: { img: new Image(), loaded: false, src: 'assets/stone.png' }, sign: { img: new Image(), loaded: false, src: 'assets/sign.png' }, tractor: { img: new Image(), loaded: false, src: 'assets/tractor.png' }, background1: { img: new Image(), loaded: false, src: 'assets/background1.png' }, background2: { img: new Image(), loaded: false, src: 'assets/background2.png' }, background3: { img: new Image(), loaded: false, src: 'assets/background3.png' } };
-            const numBackgrounds = 3;
-            let assetsLoadedCount = 0; let totalAssets = Object.keys(assets).length; let allAssetsLoaded = false;
-
-            // --- Obstacle/POI Definitions ---
-            const regularObstacleTypes = [ /* ... */ { assetKey: 'stone', widthPercent: OBSTACLE_STONE_WIDTH_PERCENT, heightPercent: OBSTACLE_STONE_HEIGHT_PERCENT }, { assetKey: 'tractor', widthPercent: OBSTACLE_TRACTOR_WIDTH_PERCENT, heightPercent: OBSTACLE_TRACTOR_HEIGHT_PERCENT } ];
-            const poiSignDimensions = { widthPercent: POI_SIGN_WIDTH_PERCENT, heightPercent: POI_SIGN_HEIGHT_PERCENT };
-
-            // --- POI Data Structure ---
-            const poiData = [ /* ... */ { id: 1, name: "SteinTherme", info: "Known for its unique thermal saltwater pools and health benefits. | Bekannt für ihre einzigartigen Thermalsolebecken und Gesundheitsvorteile." }, { id: 2, name: "Freibad", info: "The popular outdoor swimming pool, perfect for summer days. | Das beliebte Freibad, perfekt für Sommertage." }, { id: 3, name: "Kulturzentrum & Bibliothek", info: "A cultural hub with its distinctive red-brick facade and arched windows. | Ein kultureller Mittelpunkt mit markanter roter Backsteinfassade und Bogenfenstern." }, { id: 4, name: "Fläming Bahnhof", info: "The local train station connecting Bad Belzig to the region. | Der lokale Bahnhof, der Bad Belzig mit der Region verbindet." }, { id: 5, name: "Postmeilensäule", info: "A historic post mile marker showing distances on old postal routes. | Ein historischer Postmeilenstein, der Entfernungen auf alten Postrouten anzeigt." }, { id: 6, name: "Rathaus & Tourist-Information", info: "The town hall, center of local government and visitor information. | Rathaus, Zentrum der Kommunalverwaltung und Besucherinformation." }, { id: 7, name: "Burg Eisenhardt", info: "Well-preserved medieval castle, vital to the region's history and defense. | Gut erhaltene mittelalterliche Burg, entscheidend für die Geschichte und Verteidigung der Region." } ];
-
-            // --- Asset Loading Functions ---
-            function assetLoaded(assetKey) { /* ... */ console.log(`Asset loaded: ${assetKey}`); assets[assetKey].loaded = true; assetsLoadedCount++; if (assetsLoadedCount === totalAssets) { console.log("All assets loaded."); allAssetsLoaded = true; if (currentGameState === GameState.LOADING) { initGame(); } } }
-            function assetLoadError(assetKey) { /* ... */ console.error(`Failed to load asset: ${assets[assetKey].src}. Check path and file existence.`); alert(`Error loading image: ${assets[assetKey].src}\nGame might not display correctly.`); assetsLoadedCount++; if (assetsLoadedCount === totalAssets) { allAssetsLoaded = true; if (currentGameState === GameState.LOADING) { initGame(); } } }
-            function loadAssets() { /* ... */ console.log("Starting asset loading..."); currentGameState = GameState.LOADING; for (const key in assets) { if (Object.prototype.hasOwnProperty.call(assets, key) && assets[key].img) { assets[key].img.src = assets[key].src; assets[key].img.onload = () => assetLoaded(key); assets[key].img.onerror = () => assetLoadError(key); } } }
-
-            // --- High Score Handling ---
-            function loadHighScore() { /* ... */ try { const savedScore = localStorage.getItem('ritterRunHighScore'); highScore = savedScore ? parseInt(savedScore, 10) : 0; if (isNaN(highScore)) highScore = 0; startHighScoreSpan.textContent = highScore; gameOverHighScoreSpan.textContent = highScore; } catch (e) { console.error("LS Error Load HS:", e); highScore = 0; } }
-            function saveHighScore() { /* ... */ if (score > highScore) { highScore = score; try { localStorage.setItem('ritterRunHighScore', highScore.toString()); gameOverHighScoreSpan.textContent = highScore; } catch (e) { console.error("LS Error Save HS:", e); } } }
-
-            // --- Sound Playing Helper (Stub) ---
-            function playSound(soundId) { console.log(`Playing sound: ${soundId}`); }
-
-            // --- Reset Game Variables ---
-            function resetGame() { /* ... */
-                score = 0; playerLives = LIVES_START_COUNT; playerInvincibleUntil = 0; obstacles = [];
-                groundHeightPx = canvasHeight * GROUND_HEIGHT_PERCENT; collisionLandingTolerancePx = canvasHeight * COLLISION_LANDING_TOLERANCE_FACTOR; gameSpeed = canvasWidth * INITIAL_GAME_SPEED_FACTOR;
-                player.gravity = canvasHeight / PLAYER_GRAVITY_FACTOR; player.jumpPower = canvasHeight / PLAYER_JUMP_FACTOR;
-                const isMobile = window.innerWidth <= MOBILE_BREAKPOINT_WIDTH;
-                console.log(`isMobile check (width <= ${MOBILE_BREAKPOINT_WIDTH}): ${isMobile}`);
-                if (isMobile) { player.width = canvasWidth * PLAYER_WIDTH_PERCENT_MOBILE; player.height = canvasHeight * PLAYER_HEIGHT_PERCENT_MOBILE; }
-                else { player.width = canvasWidth * PLAYER_WIDTH_PERCENT_DESKTOP; player.height = canvasHeight * PLAYER_HEIGHT_PERCENT_DESKTOP; }
-                player.x = canvasWidth * PLAYER_INITIAL_X_PERCENT; player.y = canvasHeight - groundHeightPx - player.height; player.dy = 0; player.grounded = true;
-                nextSpeedIncreaseScore = SPEED_INCREASE_INTERVAL_SCORE; bgX = 0; currentBackgroundIndex = 0; nextBackgroundSwitchScore = BACKGROUND_SWITCH_SCORE_INTERVAL;
-                currentScoreSpan.textContent = score; currentLivesSpan.textContent = playerLives; nextObstacleSpawnTime = 0; nextPoiIndex = 0; isPaused = false;
-                poiOverlay.classList.remove('visible'); knightImageEl.style.display = 'none'; currentKnightVisualState = null;
-                console.log(`Game Reset - Speed: ${gameSpeed.toFixed(1)}, Player Size: ${player.width.toFixed(0)}x${player.height.toFixed(0)}, Gravity: ${player.gravity.toFixed(2)}, Jump: ${player.jumpPower.toFixed(1)}`);
+        const gridItems = document.querySelectorAll('#gallery .grid .gallery-item-clickable');
+        gridItems.forEach((item, index) => {
+            galleryImageSources.push(item.src);
+            item.setAttribute('data-index', index);
+        });
+        const carouselItems = document.querySelectorAll('.carousel-viewport .gallery-item-clickable');
+        carouselItems.forEach(item => {
+            const itemSrc = item.src;
+            const uniqueIndex = galleryImageSources.findIndex(src => src === itemSrc);
+            if (uniqueIndex !== -1) {
+                item.setAttribute('data-index', uniqueIndex);
             }
+        });
 
-            // --- Update Functions ---
-            function updatePlayer(dt) { /* ... */ if (!player.grounded) { player.dy += player.gravity; player.y += player.dy * dt * 60; } const groundLevel = canvasHeight - groundHeightPx - player.height; if (player.y >= groundLevel) { player.y = groundLevel; player.dy = 0; if (!player.grounded) { player.grounded = true; } } }
-            function updateObstacles(dt, currentTime) { /* ... */
-                 if (currentTime >= nextObstacleSpawnTime) { /* ... spawning logic ... */
-                    let newObjectData = null; const willSpawnPOI = Math.random() < POI_SPAWN_CHANCE; const canSpawnPOI = nextPoiIndex < poiData.length && assets.sign.loaded; const spawnPOI = willSpawnPOI && canSpawnPOI;
-                    if (spawnPOI) { const poi = poiData[nextPoiIndex]; const objWidth = canvasWidth * poiSignDimensions.widthPercent; const objHeight = canvasHeight * poiSignDimensions.heightPercent; newObjectData = { isPOI: true, poiId: poi.id, passed: false, x: canvasWidth, y: canvasHeight - groundHeightPx - objHeight, width: objWidth, height: objHeight, assetKey: 'sign' }; nextPoiIndex++; }
-                    else { if (regularObstacleTypes.length > 0) { const typeIndex = Math.floor(Math.random() * regularObstacleTypes.length); const type = regularObstacleTypes[typeIndex]; if (assets[type.assetKey] && assets[type.assetKey].loaded) { const objWidth = canvasWidth * type.widthPercent; const objHeight = canvasHeight * type.heightPercent; newObjectData = { isPOI: false, x: canvasWidth, y: canvasHeight - groundHeightPx - objHeight, width: objWidth, height: objHeight, assetKey: type.assetKey, isKnocked: false }; } } }
-                    if (newObjectData) { obstacles.push(newObjectData); }
-                    const speedFactor = gameSpeed / (canvasWidth * INITIAL_GAME_SPEED_FACTOR); const currentSpawnTime = OBSTACLE_BASE_SPAWN_TIME_MS / Math.max(1, speedFactor); const nextSpawnDelay = Math.max(OBSTACLE_MIN_SPAWN_TIME_MS, currentSpawnTime) + (Math.random() * 300 - 150); nextObstacleSpawnTime = currentTime + nextSpawnDelay;
-                 }
-                 const movement = gameSpeed * dt;
-                 for (let i = obstacles.length - 1; i >= 0; i--) { /* ... movement, POI trigger, removal ... */
-                    const obj = obstacles[i]; if (obj.isKnocked) { obj.y += (canvasHeight * 1.25) * dt; } else { obj.x -= movement; }
-                    if (obj.isPOI && !obj.passed) { const triggerPoint = obj.x; const playerRightEdge = player.x + player.width; if (playerRightEdge > triggerPoint) { console.log(`>>> POI TRIGGERED! ID: ${obj.poiId}`); displayPOIInfo(obj.poiId); obj.passed = true; score += 50; currentScoreSpan.textContent = score; playSound('poi'); } }
-                    if (obj.x + obj.width < -100 || obj.y > canvasHeight + obj.height + 50) { obstacles.splice(i, 1); }
-                 }
+        function showImageAtIndex(index) {
+            if (index < 0 || index >= galleryImageSources.length) return;
+            lightboxImage.src = galleryImageSources[index];
+            currentImageIndex = index;
+            const isSmallScreen = window.innerWidth < 640;
+            lightboxPrev.classList.toggle('hidden', index === 0 || isSmallScreen);
+            lightboxNext.classList.toggle('hidden', index === galleryImageSources.length - 1 || isSmallScreen);
+        }
+
+        function openLightbox(clickedImageElement) {
+            const clickedIndex = parseInt(clickedImageElement.dataset.index, 10);
+            if (!isNaN(clickedIndex)) {
+                console.log('Opening lightbox with index:', clickedIndex);
+                showImageAtIndex(clickedIndex);
+                lightboxOverlay.classList.remove('hidden'); // Use hidden toggle
+                document.body.style.overflow = 'hidden';
+            } else {
+                 console.error("Could not get index for clicked item:", clickedImageElement);
+            }
+        }
+
+        function closeLightbox() {
+            console.log('Closing lightbox');
+            lightboxOverlay.classList.add('hidden'); // Use hidden toggle
+            lightboxImage.src = "";
+            currentImageIndex = -1;
+            document.body.style.overflow = '';
+        }
+
+
+        function showPreviousImage() { if (currentImageIndex > 0) showImageAtIndex(currentImageIndex - 1); }
+        function showNextImage() { if (currentImageIndex < galleryImageSources.length - 1) showImageAtIndex(currentImageIndex + 1); }
+
+        if (gallerySection) {
+            gallerySection.addEventListener('click', (event) => {
+                const clickedItem = event.target.closest('.gallery-item-clickable');
+                if (clickedItem) {
+                    openLightbox(clickedItem);
+                }
+            });
+        }
+
+        lightboxClose.addEventListener('click', closeLightbox);
+        lightboxPrev.addEventListener('click', showPreviousImage);
+        lightboxNext.addEventListener('click', showNextImage);
+        lightboxOverlay.addEventListener('click', (event) => {
+            if (event.target === lightboxOverlay) {
+                 closeLightbox();
+            }
+        });
+        document.addEventListener('keydown', (event) => {
+            if (lightboxOverlay.classList.contains('hidden')) return;
+            switch (event.key) {
+                case 'Escape': closeLightbox(); break;
+                case 'ArrowLeft': showPreviousImage(); break;
+                case 'ArrowRight': showNextImage(); break;
+            }
+        });
+
+        lightboxImage.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+        lightboxImage.addEventListener('touchend', (e) => { touchEndX = e.changedTouches[0].screenX; handleSwipeGesture(); }, { passive: true });
+        function handleSwipeGesture() {
+            const swipeThreshold = 50;
+            const distance = touchEndX - touchStartX;
+            if (distance > swipeThreshold) showPreviousImage();
+            else if (distance < -swipeThreshold) showNextImage();
+            touchStartX = 0; touchEndX = 0;
+        }
+
+        window.addEventListener('resize', () => { if (!lightboxOverlay.classList.contains('hidden')) showImageAtIndex(currentImageIndex); });
+
+        const heroImage = document.getElementById('hero-image');
+        const heroContainer = document.getElementById('hero-image-container');
+
+        if (heroImage && heroContainer) {
+            heroContainer.addEventListener('mousemove', (e) => {
+                const rect = heroContainer.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                const maxRot = 3;
+                const rotY = (x / (rect.width / 2)) * maxRot;
+                const rotX = (-y / (rect.height / 2)) * maxRot;
+                heroImage.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.03)`;
+            });
+            heroContainer.addEventListener('mouseleave', () => {
+                heroImage.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+            });
+        } else {
+             const potentialHeroContainer = document.querySelector('section > div > img#hero-image')?.parentElement;
+             if (potentialHeroContainer && !potentialHeroContainer.id) {
+                 potentialHeroContainer.id = 'hero-image-container';
              }
-            function checkCollisions() { /* ... */ const now = performance.now(); if (now < playerInvincibleUntil) { return { type: CollisionType.NONE }; } const playerRect = { x: player.x + (player.width * 0.1), y: player.y + (player.height * 0.1), width: player.width * 0.8, height: player.height * 0.8, bottom: player.y + player.height, right: player.x + player.width }; for (const obstacle of obstacles) { if (obstacle.isPOI || obstacle.isKnocked) { continue; } const obstacleRect = { x: obstacle.x, y: obstacle.y, width: obstacle.width, height: obstacle.height, top: obstacle.y, right: obstacle.x + obstacle.width }; if (playerRect.x < obstacleRect.right && playerRect.right > obstacleRect.x && playerRect.y < obstacleRect.y + obstacleRect.height && playerRect.bottom > obstacleRect.top) { const isFalling = player.dy >= 0; const landedOnTop = playerRect.bottom >= obstacleRect.top && playerRect.bottom <= obstacleRect.top + collisionLandingTolerancePx; if (isFalling && landedOnTop) { console.log(`Collision: TOP on ${obstacle.assetKey}`); return { type: CollisionType.TOP, obstacle: obstacle }; } console.warn(`Collision: SIDE with ${obstacle.assetKey}`); return { type: CollisionType.SIDE }; } } return { type: CollisionType.NONE }; }
-            function updateScoreAndSpeed() { /* ... */ score++; currentScoreSpan.textContent = score; if (score >= nextSpeedIncreaseScore) { gameSpeed += canvasWidth * SPEED_INCREASE_AMOUNT_FACTOR; nextSpeedIncreaseScore += SPEED_INCREASE_INTERVAL_SCORE; console.log(`Speed increased to: ${gameSpeed.toFixed(1)}`); } if (score >= nextBackgroundSwitchScore) { currentBackgroundIndex = (currentBackgroundIndex + 1) % numBackgrounds; nextBackgroundSwitchScore += BACKGROUND_SWITCH_SCORE_INTERVAL; console.log(`Background switched to index: ${currentBackgroundIndex}`); } }
+        }
 
-            // --- Draw Functions ---
-            function drawBackground(dt) { /* ... */ const currentBgIndex = currentBackgroundIndex + 1; const currentAssetKey = `background${currentBgIndex}`; const currentAsset = assets[currentAssetKey]; const bgMovement = isPaused ? 0 : (gameSpeed / 2) * dt; bgX -= bgMovement; if (bgX <= -canvasWidth) { bgX += canvasWidth; } if (currentAsset && currentAsset.loaded) { ctx.drawImage(currentAsset.img, bgX, 0, canvasWidth, canvasHeight); ctx.drawImage(currentAsset.img, bgX + canvasWidth, 0, canvasWidth, canvasHeight); } else { ctx.fillStyle = '#87CEEB'; ctx.fillRect(0, 0, canvasWidth, canvasHeight); } ctx.fillStyle = '#228B22'; ctx.fillRect(0, canvasHeight - groundHeightPx, canvasWidth, groundHeightPx); }
-            function drawObstacles() { /* ... */ for (const obj of obstacles) { if (assets[obj.assetKey] && assets[obj.assetKey].loaded) { ctx.drawImage(assets[obj.assetKey].img, obj.x, obj.y, obj.width, obj.height); } else { ctx.fillStyle = obj.isPOI ? 'blue' : 'red'; ctx.fillRect(obj.x, obj.y, obj.width, obj.height); } } }
-            function updateKnightVisuals() { /* ... */ const now = performance.now(); let targetState = player.grounded ? 'run' : 'jump'; let targetSrc = player.grounded ? assets.knight_run.src : assets.knight_jump.src; if (targetState !== currentKnightVisualState || !knightImageEl.src) { if ((targetState === 'run' && assets.knight_run.loaded) || (targetState === 'jump' && assets.knight_jump.loaded)) { if (knightImageEl.src !== targetSrc) { knightImageEl.src = targetSrc; console.log(`Set knight visual state to: ${targetState}`); } currentKnightVisualState = targetState; } } let currentOpacity = 1; if (now < playerInvincibleUntil) { if (Math.floor(now / 100) % 2 !== 0) { currentOpacity = 0.4; } } knightImageEl.style.opacity = currentOpacity; knightImageEl.style.left = `${player.x}px`; knightImageEl.style.top = `${player.y}px`; knightImageEl.style.width = `${player.width}px`; knightImageEl.style.height = `${player.height}px`; if (currentGameState === GameState.PLAYING || currentGameState === GameState.GAME_OVER || currentGameState === GameState.MENU) { if (knightImageEl.style.display === 'none') { knightImageEl.style.display = 'block'; } } else { knightImageEl.style.display = 'none'; } }
+        const hotspots = document.querySelectorAll('.hotspot');
+        hotspots.forEach(hotspot => {
+            const tooltipId = hotspot.getAttribute('data-tooltip-target');
+            const tooltip = document.getElementById(tooltipId);
 
-            function displayPOIInfo(poiId) { /* ... */ const poi = poiData.find(p => p.id === poiId); if (!poi) { console.warn(`POI data not found for ID: ${poiId}`); return; } isPaused = true; console.log(`>>> Game PAUSED for POI ID: ${poiId}`); poiNameEl.textContent = poi.name; const infoParts = poi.info.split('|').map(s => s.trim()); const formattedInfo = infoParts.join('<br><br>'); poiInfoTextEl.innerHTML = formattedInfo; console.log(">>> Set POI text using .innerHTML"); poiOverlay.classList.add('visible'); console.log(">>> Added 'visible' class to poiOverlay."); }
-            function closePoiOverlay() { /* ... */ console.log("closePoiOverlay function called by event"); poiOverlay.classList.remove('visible'); isPaused = false; lastTime = performance.now(); console.log(">>> Closed POI Overlay. Game RESUMED."); }
-
-            function gameLoop(timestamp) { /* ... */
-                 const dt = (timestamp - lastTime) / 1000 || 0; if (!isPaused) { lastTime = timestamp; }
-                 if (currentGameState === GameState.PLAYING && !isPaused) { /* ... collision checks, updates ... */
-                    let collisionHandledThisFrame = false; const collisionResult = checkCollisions();
-                    if (collisionResult.type === CollisionType.SIDE) { playSound('hit'); playerLives--; currentLivesSpan.textContent = playerLives; collisionHandledThisFrame = true; if (playerLives > 0) { console.log(`Life lost! ${playerLives} remaining.`); player.y = canvasHeight - groundHeightPx - player.height; player.dy = 0; player.grounded = true; playerInvincibleUntil = performance.now() + INVINCIBILITY_DURATION_MS; console.log(`Player invincible until ${playerInvincibleUntil.toFixed(0)}`); } else { console.warn("GAME OVER - No lives left."); currentGameState = GameState.GAME_OVER; saveHighScore(); finalScoreSpan.textContent = score; gameOverHighScoreSpan.textContent = highScore; gameOverScreen.classList.remove('hidden'); scoreDisplay.classList.add('hidden'); livesDisplay.classList.add('hidden'); knightImageEl.style.display = 'none'; if (poiOverlay.classList.contains('visible')) { closePoiOverlay(); } } }
-                    else if (collisionResult.type === CollisionType.TOP) { player.y = collisionResult.obstacle.y - player.height; player.dy = player.jumpPower * PLAYER_BOUNCE_POWER_MULTIPLIER; player.grounded = false; playSound('bounce'); collisionResult.obstacle.isKnocked = true; console.log(`Knocked off: ${collisionResult.obstacle.assetKey}`); updatePlayer(dt); collisionHandledThisFrame = true; }
-                    if (!collisionHandledThisFrame) { updatePlayer(dt); } if (currentGameState === GameState.PLAYING) { updateObstacles(dt, timestamp); updateScoreAndSpeed(); } }
-                 ctx.clearRect(0, 0, canvasWidth, canvasHeight); drawBackground(dt); drawObstacles(); updateKnightVisuals();
-                 if (currentGameState === GameState.LOADING) { /* ... draw loading ... */ ctx.fillStyle = 'white'; ctx.font = '20px ' + getComputedStyle(document.body).getPropertyValue('--font-pixel'); ctx.textAlign = 'center'; ctx.fillText('Loading Assets...', canvasWidth / 2, canvasHeight / 2); }
-                requestAnimationFrame(gameLoop);
+            if (tooltip) {
+                hotspot.addEventListener('mouseenter', () => {
+                    tooltip.style.left = hotspot.style.left;
+                    tooltip.classList.add('is-visible');
+                });
+                hotspot.addEventListener('mouseleave', () => {
+                    tooltip.classList.remove('is-visible');
+                });
             }
+        });
 
-            function startGame() { /* ... */ console.log("Attempting startGame(). Current state:", currentGameState, "Assets loaded?", allAssetsLoaded); if (currentGameState === GameState.PLAYING || !allAssetsLoaded) { console.log("startGame() aborted."); return; } console.log("Executing startGame()..."); resetGame(); currentGameState = GameState.PLAYING; startScreen.classList.add('hidden'); gameOverScreen.classList.add('hidden'); scoreDisplay.classList.remove('hidden'); livesDisplay.classList.remove('hidden'); knightImageEl.style.display = 'block'; knightImageEl.style.opacity = '1'; currentKnightVisualState = null; updateKnightVisuals(); playSound('start'); lastTime = performance.now(); }
-            function restartGame() { /* ... */ console.log("Attempting restartGame(). Current state:", currentGameState); if (currentGameState === GameState.PLAYING || !allAssetsLoaded) return; console.log("Executing restartGame()..."); startGame(); }
-            function handleJumpInput() { /* ... */ if (currentGameState === GameState.PLAYING && !isPaused && player.grounded) { player.dy = player.jumpPower; player.grounded = false; playSound('jump'); } }
+        const spotlight = document.getElementById('cursor-spotlight');
+        if (spotlight) {
+            document.body.addEventListener('mousemove', (e) => {
+                spotlight.style.left = `${e.pageX}px`;
+                spotlight.style.top = `${e.pageY}px`;
+            });
+            document.body.addEventListener('mouseenter', () => {
+                 spotlight.style.display = 'block';
+            });
+             document.body.addEventListener('mouseleave', () => {
+                 spotlight.style.display = 'none';
+            });
+        }
 
-            // --- Input Event Handlers ---
-            function handleKeyDown(e) { /* ... */ if ((e.key === 'Enter' || e.keyCode === 13) && isPaused && poiOverlay.classList.contains('visible')) { e.preventDefault(); console.log("Enter key pressed while POI visible. Closing POI."); closePoiOverlay(); return; } if (e.key === ' ' || e.code === 'Space') { e.preventDefault(); if (!allAssetsLoaded) return; switch (currentGameState) { case GameState.PLAYING: handleJumpInput(); break; case GameState.MENU: startGame(); break; case GameState.GAME_OVER: restartGame(); break; } } }
-            // --- MODIFIED: handleMouseClick (New function for mouse input) ---
-            function handleMouseClick(e) {
-                 // Ignore clicks on buttons within the overlay
-                 if (e.target === closePoiButton || e.target === startButton || e.target === restartButton) {
-                     return;
-                 }
-                 console.log("Mouse click detected. Current state:", currentGameState, "Assets loaded?", allAssetsLoaded, "Target:", e.target.id);
-                 if (!allAssetsLoaded) return;
+        const langToggleButton = document.getElementById('lang-toggle');
+        const translatableElements = document.querySelectorAll('.translatable');
+        let currentLang = localStorage.getItem('preferredLang') || 'en';
 
-                 // If POI is visible, let its own click listener handle it (added in initGame)
-                 if (isPaused && poiOverlay.classList.contains('visible')) {
-                     console.log("Mouse click ignored: POI overlay is visible.");
-                     return;
-                 }
+        function setLanguage(lang) {
+            translatableElements.forEach(el => {
+                const textEn = el.dataset.en;
+                const textDe = el.dataset.de;
+                if (lang === 'de' && textDe && !textDe.startsWith('[')) {
+                    el.innerHTML = textDe;
+                } else {
+                    el.innerHTML = textEn;
+                }
+                document.documentElement.lang = lang;
+                langToggleButton.textContent = lang === 'en' ? 'DE' : 'EN';
+            });
+            localStorage.setItem('preferredLang', lang);
+            currentLang = lang;
+        }
 
-                 switch (currentGameState) {
-                     case GameState.PLAYING:
-                         handleJumpInput(); // Jump if playing and not paused
-                         break;
-                     case GameState.MENU:
-                         startGame(); // Start game from menu on click
-                         break;
-                     case GameState.GAME_OVER:
-                         restartGame(); // Restart game from game over on click
-                         break;
-                 }
+        translatableElements.forEach(el => {
+            if (!el.dataset.en) {
+                el.dataset.en = el.innerHTML.trim();
             }
-            function handleScreenTouch(e) { /* ... */ e.preventDefault(); if (!allAssetsLoaded) return; /* Let overlay listener handle close */ switch (currentGameState) { case GameState.PLAYING: if (!isPaused) { handleJumpInput(); } break; case GameState.MENU: if (e.target === startButton || e.target === canvas || e.target === gameContainer) { startGame(); } break; case GameState.GAME_OVER: if (e.target === restartButton || e.target === canvas || e.target === gameContainer) { restartGame(); } break; } }
+        });
+        setLanguage(currentLang);
 
-             function resizeCanvas() { /* ... */ const containerWidth = gameContainer.clientWidth; const containerHeight = gameContainer.clientHeight; canvasWidth = containerWidth; canvasHeight = containerHeight; canvas.width = canvasWidth; canvas.height = canvasHeight; console.log(`Canvas resized to: ${canvasWidth}x${canvasHeight}`); if (gameInitialized) { console.log("Recalculating dynamic values on resize..."); resetGame(); currentGameState = GameState.MENU; startScreen.classList.remove('hidden'); gameOverScreen.classList.add('hidden'); scoreDisplay.classList.add('hidden'); livesDisplay.classList.add('hidden'); knightImageEl.style.display = 'none'; } }
+        langToggleButton.addEventListener('click', () => {
+            const newLang = currentLang === 'en' ? 'de' : 'en';
+            setLanguage(newLang);
+        });
 
-            // --- MODIFIED: Initial Setup (Adds mouse click listener) ---
-            function initGame() {
-                if (gameInitialized || !allAssetsLoaded) return;
-                console.log("Initializing Game...");
-                gameInitialized = true;
-                if (!assets.knight_run.loaded || !assets.knight_jump.loaded) { console.error("Knight run/jump assets failed to load! Cannot start."); alert("Error: Essential knight images failed to load. Please check paths or refresh."); return; }
-                loadHighScore(); resizeCanvas(); startScreen.classList.remove('hidden'); gameOverScreen.classList.add('hidden'); scoreDisplay.classList.add('hidden'); livesDisplay.classList.add('hidden'); poiOverlay.classList.remove('visible'); knightImageEl.style.display = 'none';
-
-                 // Remove potentially old listeners first
-                 startButton.removeEventListener('click', startGame);
-                 restartButton.removeEventListener('click', restartGame);
-                 document.removeEventListener('keydown', handleKeyDown);
-                 gameContainer.removeEventListener('touchstart', handleScreenTouch);
-                 gameContainer.removeEventListener('click', handleMouseClick); // Remove old mouse listener
-                 window.removeEventListener('resize', resizeCanvas);
-                 closePoiButton.removeEventListener('click', closePoiOverlay);
-                 poiOverlay.removeEventListener('click', closePoiOverlay);
-
-                 // Add listeners
-                 console.log("Attaching listeners...");
-                 startButton.addEventListener('click', startGame);
-                 restartButton.addEventListener('click', restartGame);
-                 document.addEventListener('keydown', handleKeyDown);
-                 gameContainer.addEventListener('touchstart', handleScreenTouch, { passive: false });
-                 gameContainer.addEventListener('click', handleMouseClick); // NEW: Add mouse click listener
-                 window.addEventListener('resize', resizeCanvas);
-                 closePoiButton.addEventListener('click', closePoiOverlay);
-                 poiOverlay.addEventListener('click', closePoiOverlay);
-                 console.log("Event listeners attached.");
-
-                 currentGameState = GameState.MENU;
-                 console.log("Set gameState to MENU");
-                 lastTime = performance.now();
-                 requestAnimationFrame(gameLoop);
-                 console.log("Initial game loop requested.");
-            }
-
-            // --- Start Asset Loading ---
-            document.addEventListener('DOMContentLoaded', () => { console.log("DOM Ready. Starting asset load."); loadAssets(); });
-
-        })(); // End of IIFE
     </script>
+
 </body>
 </html>
